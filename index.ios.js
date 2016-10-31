@@ -20,7 +20,7 @@ export default class Honeypet extends Component {
           Welcome to React Native!
         </Text>
         <Text style={styles.instructions}>
-          To get started,
+          To get started,tttt
         </Text>
         <Text style={styles.instructions}>
           Press Cmd+R to reload,{'\n'}
