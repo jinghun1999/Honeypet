@@ -2,44 +2,74 @@
  * Created by User on 2016-10-25.
  */
 'use strict';
+import { createAction } from 'redux-actions';
+import * as types from './types';
+import * as userService from '../service/userService';
 
-import { Alert } from 'react-native';
-import * as TYPES from './types';
-
-let testUser = {
-    'name': '18307722503',
-    'age': '30',
-    'avatar': 'https://avatars1.githubusercontent.com/u/1439939?v=3&s=460'
-};
-
-let skipUser = {
-    'name': 'guest',
-    'age': 20,
-    'avatar': 'https://avatars1.githubusercontent.com/u/1439939?v=3&s=460',
-};
-
-export function logIn(opt){
-    return (dispatch) => {
-        dispatch({'type': TYPES.LOGGED_DOING});
-        let inner_get = fetch('http://www.baidu.com')
-            .then((res)=>{
-                dispatch({'type': TYPES.LOGGED_IN, user: testUser});
-            }).catch((e)=>{
-                Alert.alert(e.message);
-                dispatch({'type': TYPES.LOGGED_ERROR, error: e});
-            });
+export const login = createAction(
+    types.LOGIN,
+    async({username, password})=> {
+        return await userService.login(username, password);
+    },
+    ({username, resolved, rejected})=> {
+        return {
+            username,
+            resolved,
+            rejected
+        }
     }
-}
+);
 
-export function skipLogin(){
-    return {
-        'type': TYPES.LOGGED_IN,
-        'user': skipUser,
+export const refreshToken = createAction(
+    types.REFRESH_TOKEN,
+    async({token})=> {
+        return await userService.refreshToken(token);
+    },
+    ({token, resolved, rejected})=> {
+        return {
+            token,
+            resolved,
+            rejected
+        }
     }
-}
+);
 
-export function logOut(){
-    return {
-        'type': TYPES.LOGGED_OUT
+export const getUserInfo = createAction(
+    types.FETCH_USER_INFO,
+    async()=> {
+        return await userService.getUserInfo();
+    },
+    ({resolved, rejected} = {})=> {
+        return {
+            resolved,
+            rejected
+        }
     }
-}
+)
+
+export const getUserAssetByCategory = createAction(
+    types.FETCH_USER_ASSET,
+    async(category, params = {})=> {
+        params.pageIndex = 1;
+        return await userService.getUserAsset(category, params);
+    },
+    (category)=> {
+        return {
+            pending: true,
+            category
+        }
+    }
+)
+
+export const getUserAssetByCategoryWithPage = createAction(
+    types.FETCH_USER_ASSET_WITHPAGE,
+    async(category, params)=> {
+        return await userService.getUserAsset(category, params);
+    },
+    (category)=> {
+        return {
+            pending: true,
+            category
+        }
+    }
+);
