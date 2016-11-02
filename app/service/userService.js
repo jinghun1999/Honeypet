@@ -17,6 +17,14 @@ export function login(username, password){
     };
     return requestService.post(fetchApi, data, headers);
 }
+export function getVerifycode(username){
+    let fetchApi = dataApi.user.auth;
+    let data =  `grant_type=password&username=${username}&password=${password}`.replace(/\+/g, "%2B");
+    let headers = {
+        'Authorization': "Basic " + Base64.btoa(`${authData.clientId}:${authData.clientSecret}`)
+    };
+    return requestService.post(fetchApi, data, headers);
+}
 
 export function refreshToken(token){
     let fetchApi = dataApi.user.auth;

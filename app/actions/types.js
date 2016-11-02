@@ -24,6 +24,7 @@ export const FETCH_AUTHOR_POSTS = 'FETCH_AUTHOR_POSTS';
 
 //user
 export const LOGIN = 'LOGIN';
+export const USER_GETVERIFYCODE = 'USER_GETVERIFYCODE';
 export const REFRESH_TOKEN = 'REFRESH_TOKEN';
 export const FETCH_USER_INFO = 'FETCH_USER_INFO';
 export const FETCH_USER_ASSET = 'FETCH_USER_ASSET';

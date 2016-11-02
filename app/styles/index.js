@@ -427,9 +427,10 @@ export const ComponentStyles = StyleSheet.create({
     },
 
     input_control:{
-        paddingVertical: StyleConfig.space_3,
-        borderBottomWidth:.5,
-        borderBottomColor: StyleConfig.color_dark
+        paddingVertical: StyleConfig.space_1,
+        borderWidth:.5,
+        backgroundColor:'#fff',
+        borderColor: '#EEE9E9'
     },
 
     input:{

@@ -31,7 +31,7 @@ const backgroundImageSource = getImageSource(8);
 
 class LoginPage extends Component {
 
-    constructor (props) {
+    constructor(props) {
         super(props);
         this.state = {
             username: '1',
@@ -44,7 +44,7 @@ class LoginPage extends Component {
         this.timer && TimerMixin.clearTimeout(this.timer);
     }
 
-    encryptData(data){
+    encryptData(data) {
         let encrypt = new JSEncrypt({
             default_key_size: 1024,
             default_public_exponent: '010001'
@@ -53,81 +53,101 @@ class LoginPage extends Component {
         return encrypt.encrypt(data);
     }
 
-    loginValidator(){
+    loginValidator() {
         let username = this.state.username;
         let password = this.state.password;
         let message;
-        if(!_.trim(username)){
-            message = "请输入登录用户名";
+        if (!_.trim(username)) {
+            message = "请输入手机号码";
         }
-        else if(!_.trim(password)){
-            message = "请输入登录密码";
+        else if (!_.trim(password)) {
+            message = "请输入验证码";
         }
-        if(message){
+        if (message) {
             Toast.show(message);
             return false;
         }
         username = this.encryptData(username);
         password = this.encryptData(password);
-        return{
+        return {
             username,
             password
         };
     }
 
-    handleLogin(){
+    handleLogin() {
         const loginData = this.loginValidator();
-        if(loginData){
+        if (loginData) {
             this.setState({pending: true});
             this.props.userAction.login({
                 username: loginData.username,
                 password: loginData.password,
-                resolved: (data)=>{
+                resolved: (data)=> {
                     data.username = loginData.username;
                     data.password = loginData.password;
                     this.handleLoginResolved(data);
                 },
-                rejected: (data)=>{
+                rejected: (data)=> {
                     this.handleLoginRejected(data);
                 }
             });
         }
     }
 
-    handleLoginResolved(data){
+    handleSend() {
+        let username = this.state.username;
+        if (username === null || username.length !== 11) {
+            Toast.show("请输入正确的手机号");
+            return false;
+        }else{
+            this.setState({pending: true});
+            this.props.userAction.getVerifycode({
+                username: loginData.username,
+                resolved: (data)=> {
+                    data.username = loginData.username;
+                    this.handleLoginResolved(data);
+                },
+                rejected: (data)=> {
+                    this.handleLoginRejected(data);
+                }
+            });
+        }
+    }
+
+    handleLoginResolved(data) {
         this.props.configAction.updateConfig({
             key: storageKey.USER_TOKEN,
             value: data
         });
 
-        Toast.show("恭喜你，登录成功");
+        Toast.show("恭喜您，登录成功");
 
         this.timer = TimerMixin.setTimeout(() => {
             this.props.router.replace(ViewPage.home());
         }, 2000);
     }
 
-    handleLoginRejected(data){
+    handleLoginRejected(data) {
         this.setState({pending: false});
-        Toast.show("登录失败，请检查账号密码是否正确");
+        Toast.show("登录失败，请检查验证码是否正确");
     }
 
-    handleRegisterPress(){
+    handleRegisterPress() {
         openLink(Config.appInfo.registerUri)
     }
 
-    renderHeader(){
+    renderHeader() {
         return (
             <View style={[ CommonStyles.m_b_4 ]}>
                 <Image
                     style={ ComponentStyles.header_img }
-                    source={ backgroundImageSource } />
+                    source={ backgroundImageSource }/>
                 <Logo style={ [ComponentStyles.pos_absolute, styles.header_logo] }/>
             </View>
         );
     }
 
-    renderFormPanel(){
+    renderFormPanel() {
         return (
             <View style={ [ CommonStyles.m_a_4 ] }>
                 { this.renderUserName() }
@@ -137,7 +157,7 @@ class LoginPage extends Component {
         );
     }
 
-    renderCopyRight(){
+    renderCopyRight() {
         return (
             <View style={ [ styles.footer_copyright ]}>
                 <Text style={ [ CommonStyles.text_center, CommonStyles.m_b_4, CommonStyles.text_muted ] }>
@@ -147,41 +167,59 @@ class LoginPage extends Component {
         )
     }
 
-    renderUserName(){
+    renderUserName() {
         return (
-            <View style={ [ComponentStyles.input_control ] }>
-                <TextInput
-                    ref="txtUserName"
-                    maxLength = { 40 }
-                    blurOnSubmit= {true}
-                    style={ [ComponentStyles.input ] }
-                    placeholder={'请输入用户名'}
-                    placeholderTextColor={ StyleConfig.color_gray }
-                    underlineColorAndroid = { 'transparent' }
-                    onChangeText = {(val)=>this.setState({username: val})}
-                    value={ this.state.username } />
+            <View style={ [ComponentStyles.input_control ,{flexDirection:'row', borderBottomWidth:0}] }>
+                <View
+                    style={{width:40,justifyContent:'center', alignItems:'center', borderRightWidth:.5,borderRightColor:'#EEE9E9', marginRight:5,}}>
+                    <Text>+86</Text>
+                </View>
+                <View style={{flex:1,}}>
+                    <TextInput
+                        ref="txtUserName"
+                        maxLength={ 11 }
+                        keyboardType={'numeric'}
+                        blurOnSubmit={true}
+                        style={ [ComponentStyles.input ] }
+                        placeholder={'请输入手机号码'}
+                        placeholderTextColor={ StyleConfig.color_gray }
+                        underlineColorAndroid={ 'transparent' }
+                        onChangeText={(val)=>this.setState({username: val})}
+                        value={ this.state.username }/>
+                </View>
             </View>
         )
     }
 
-    renderPassword(){
+    renderPassword() {
         return (
-            <View style={ [ComponentStyles.input_control ] }>
-                <TextInput
-                    ref="txtPassword"
-                    maxLength = { 40 }
-                    style={ [ComponentStyles.input ] }
-                    blurOnSubmit= {true}
-                    placeholder={'请输入密码'}
-                    placeholderTextColor={ StyleConfig.color_gray }
-                    underlineColorAndroid = { 'transparent' }
-                    onChangeText = {(val)=>this.setState({password: val})}
-                    value={ this.state.password } />
+            <View style={ [ComponentStyles.input_control,{flexDirection:'row', paddingHorizontal:5,} ] }>
+                <View style={{flex:1,}}>
+                    <TextInput
+                        ref="txtPassword"
+                        maxLength={ 6 }
+                        keyboardType={'numeric'}
+                        style={ [ComponentStyles.input ] }
+                        blurOnSubmit={true}
+                        placeholder={'请输入验证码'}
+                        placeholderTextColor={ StyleConfig.color_gray }
+                        underlineColorAndroid={ 'transparent' }
+                        onChangeText={(val)=>this.setState({password: val})}
+                        value={ this.state.password }/>
+                </View>
+                <TouchableOpacity
+                    activeOpacity={ StyleConfig.touchable_press_opacity }
+                    style={{justifyContent:'center', paddingLeft:5, alignItems:'center', borderLeftWidth:.5,borderLeftColor:'#EEE9E9', marginRight:5,}}
+                    onPress={()=>this.handleSend()}>
+                    <Text>
+                        发送验证码
+                    </Text>
+                </TouchableOpacity>
             </View>
         )
     }
 
-    renderLoginButton(){
+    renderLoginButton() {
         return (
             <TouchableOpacity
                 activeOpacity={ StyleConfig.touchable_press_opacity }
@@ -194,31 +232,19 @@ class LoginPage extends Component {
         )
     }
 
-    renderRegisterButton(){
-        return (
-            <TouchableOpacity
-                onPress = {()=>this.handleRegisterPress()}
-                activeOpacity={ StyleConfig.touchable_press_opacity }>
-                <Text style={ CommonStyles.text_gray }>
-                    没有账号，点此注册
-                </Text>
-            </TouchableOpacity>
-        )
-    }
-
-    renderPending(){
-        if(this.state.pending === true){
+    renderPending() {
+        if (this.state.pending === true) {
             return (
                 <Spinner style={ ComponentStyles.pending_container }/>
             )
         }
     }
 
-    renderButtons(){
+    renderButtons() {
         return (
-            <View style={ [ CommonStyles.flexRow, CommonStyles.flexItemsMiddle, CommonStyles.flexItemsBetween, CommonStyles.m_t_4 ] }>
+            <View
+                style={ [ CommonStyles.flexRow, CommonStyles.flexItemsMiddle, CommonStyles.flexItemsBetween, CommonStyles.m_t_4 ] }>
                 { this.renderLoginButton() }
-                { this.renderRegisterButton() }
             </View>
         )
     }
@@ -236,21 +262,19 @@ class LoginPage extends Component {
 }
 
 export const styles = StyleSheet.create({
-    header_logo:{
+    header_logo: {
         left: StyleConfig.screen_width / 2 - StyleConfig.avatarSize_lg / 2,
         bottom: StyleConfig.avatarSize_lg / 2 - StyleConfig.avatarSize_lg
     },
     footer_copyright: {
-        flex:1,
-        justifyContent:'flex-end'
+        flex: 1,
+        justifyContent: 'flex-end'
     }
 });
 
-export default connect((state, props) => ({
-
-}), dispatch => ({
-    userAction : bindActionCreators(UserAction, dispatch),
-    configAction : bindActionCreators(ConfigAction, dispatch)
+export default connect((state, props) => ({}), dispatch => ({
+    userAction: bindActionCreators(UserAction, dispatch),
+    configAction: bindActionCreators(ConfigAction, dispatch)
 }), null, {
     withRef: true
 })(LoginPage);

@@ -20,6 +20,19 @@ export const login = createAction(
     }
 );
 
+export const getVerifycode = createAction(
+    types.USER_GETVERIFYCODE,
+    async({username})=>{
+        return await userService.getVerifycode(username);
+    },
+    ({username, resolved, rejected})=>{
+        return {
+            username,
+            resolved,
+            rejected
+        }
+    }
+)
 export const refreshToken = createAction(
     types.REFRESH_TOKEN,
     async({token})=> {

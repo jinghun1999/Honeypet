@@ -51,6 +51,7 @@ export default  {
     user: {
         info: "api/Users",
         auth: "token",
+        verify_code: "api/GetVerifyCode",
         home: "api/blogs/<%=blogger%>/posts?pageIndex=<%=pageIndex%>",
         blink: "api/statuses/@my?pageIndex=<%=pageIndex%>&pageSize=<%=pageSize%>",
         question: "api/questions/@myquestion?pageIndex=<%=pageIndex%>&pageSize=<%=pageSize%>",
