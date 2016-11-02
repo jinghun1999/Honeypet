@@ -19,7 +19,7 @@ export default {
         declare: '本软件内容来源于宠宝官方接口，版权归宠宝及原作者所有。'
     },
     commentTail: ' 【from [url=http://fir.im/togayther]rn-cnblogs[/url]】',
-    apiDomain: 'http://api..com/'
+    apiDomain: 'http://test.tuoruimed.com/Honeypet/'
 };
 
 export const postCategory = {

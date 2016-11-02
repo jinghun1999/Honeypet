@@ -11,11 +11,11 @@ import dataApi from '../config/api';
 
 export function login(username, password){
     let fetchApi = dataApi.user.auth;
-    let data =  `grant_type=password&username=${username}&password=${password}`.replace(/\+/g, "%2B");
+    let data =  `?m=${username}&r=${password}`.replace(/\+/g, "%2B");
     let headers = {
         'Authorization': "Basic " + Base64.btoa(`${authData.clientId}:${authData.clientSecret}`)
     };
-    return requestService.post(fetchApi, data, headers);
+    return requestService.get(fetchApi+data);
 }
 export function getVerifycode(username){
     let fetchApi = dataApi.user.auth;

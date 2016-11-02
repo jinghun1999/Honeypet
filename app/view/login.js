@@ -34,8 +34,8 @@ class LoginPage extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            username: '1',
-            password: '111',
+            username: '12345678900',
+            password: '123',
             pending: false
         };
     }
@@ -67,8 +67,8 @@ class LoginPage extends Component {
             Toast.show(message);
             return false;
         }
-        username = this.encryptData(username);
-        password = this.encryptData(password);
+        //username = this.encryptData(username);
+        //password = this.encryptData(password);
         return {
             username,
             password
@@ -102,9 +102,9 @@ class LoginPage extends Component {
         }else{
             this.setState({pending: true});
             this.props.userAction.getVerifycode({
-                username: loginData.username,
+                username: username,
                 resolved: (data)=> {
-                    data.username = loginData.username;
+                    data.username = username;
                     this.handleLoginResolved(data);
                 },
                 rejected: (data)=> {
@@ -115,13 +115,15 @@ class LoginPage extends Component {
     }
 
     handleLoginResolved(data) {
+        if(!data.Sign){
+            Toast.show("登录失败，手机号或验证码错误");
+            return;
+        }
         this.props.configAction.updateConfig({
             key: storageKey.USER_TOKEN,
-            value: data
+            value: data.Message.SafetyCode
         });
-
         Toast.show("恭喜您，登录成功");
-
         this.timer = TimerMixin.setTimeout(() => {
             this.props.router.replace(ViewPage.home());
         }, 2000);
@@ -129,7 +131,7 @@ class LoginPage extends Component {
 
     handleLoginRejected(data) {
         this.setState({pending: false});
-        Toast.show("登录失败，请检查验证码是否正确");
+        Toast.show("登录失败，请重试");
     }
 
     handleRegisterPress() {

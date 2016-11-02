@@ -2,9 +2,9 @@
  * Created by User on 2016-10-26.
  */
 'use strict';
-/*
+
 export { default as Home} from './home';
-export { default as Post} from './post';
+ /*export { default as Post} from './post';
 export { default as Search} from './search';
 export { default as About} from './about';
 export { default as Author} from './author';

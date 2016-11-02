@@ -50,7 +50,7 @@ export default  {
     },
     user: {
         info: "api/Users",
-        auth: "token",
+        auth: "api/token",
         verify_code: "api/GetVerifyCode",
         home: "api/blogs/<%=blogger%>/posts?pageIndex=<%=pageIndex%>",
         blink: "api/statuses/@my?pageIndex=<%=pageIndex%>&pageSize=<%=pageSize%>",
