@@ -21,6 +21,7 @@ import Logo from '../components/logo';
 import ViewPage from './view';
 import { CommonStyles, ComponentStyles, StyleConfig } from '../styles';
 import Toast from 'react-native-root-toast';
+import NetUtil from '../util/NetUtil';
 const backgroundImageSource = getImageSource(8);
 const hintText = "提示：进一步使用，需要先授权登录。使用您的手机号码一键获得验证码，使用验证码直接登陆本软件。";
 const declareText = "声明：本软件需要在联网环境中使用，可能会消耗您的移动数据，我们不会以任何形式使用和传播您的账户信息，请放心使用。";
@@ -39,45 +40,31 @@ class StartupPage extends Component {
         this.timer && TimerMixin.clearTimeout(this.timer);
     }
 
+    componentDidMount() {
+
+    }
+
     checkUserToken() {
-        storage.load({
-            key: storageKey.USER_TOKEN,
-            autoSync: true,
-            syncInBackground: false
-        }).then(ret=> {
+        const _this = this;
+        NetUtil.getAuth(function (ret) {
+            //Toast.show(ret)
             if (ret && ret.SafetyCode && ret.Expiration) {
-                this.refreshUserToken(ret);
-                //this.handleLoginResolved(data);
+                _this.handleLoginResolved(ret);
             } else {
-                this.onCheckUserTokenRejected();
+                _this.onCheckUserTokenRejected();
             }
-        }).catch(err=> {
-            this.onCheckUserTokenRejected();
+        }, function (msg) {
+            _this.onCheckUserTokenRejected(msg);
         });
     }
 
-    onCheckUserTokenRejected() {
+    onCheckUserTokenRejected(msg) {
         NetInfo.fetch().then((netinfo=> {
+            Toast.show(msg);
             if (netinfo.toUpperCase() != 'NONE') {
                 this.showLoginModal();
             }
         }));
-    }
-
-    refreshUserToken(tokenData) {
-        const { userAction, router } = this.props;
-        userAction.login({
-            username: tokenData.username,
-            password: tokenData.password,
-            resolved: (data)=> {
-                data.username = tokenData.username;
-                data.password = tokenData.password;
-                this.handleLoginResolved(data);
-            },
-            rejected: (data)=> {
-                this.showLoginModal();
-            }
-        });
     }
 
     handleLoginResolved(data) {

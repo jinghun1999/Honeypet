@@ -4,6 +4,7 @@ import React, {
     } from 'react';
 import Util from './Util';
 import Global from './Global';
+import Config, { storageKey } from '../config';
 import Toast from 'react-native-root-toast';
 class NetUtil extends React.Component {
 
@@ -78,19 +79,11 @@ class NetUtil extends React.Component {
 
     static getAuth(success, error) {
         storage.load({
-            key: 'USER',
+            key: storageKey.USER_TOKEN,
             autoSync: true,
             syncInBackground: true
         }).then(user => {
-            storage.load({
-                key: 'HOSPITAL',
-                autoSync: false,
-                syncInBackground: false
-            }).then(hos=> {
-                success(user.user, hos);
-            }).catch(e=> {
-                success(user.user, {});
-            })
+            success(user);
         }).catch(err => {
             switch (err.name) {
                 case 'NotFoundError':
@@ -131,7 +124,7 @@ class NetUtil extends React.Component {
             if (lg.Sign && lg.Message) {
                 /*保存登陆信息*/
                 storage.save({
-                    key: 'LoginData',
+                    key: storageKey.USER_TOKEN,
                     rawData: {
                         identity: phone,
                         password: pwd,

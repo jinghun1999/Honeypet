@@ -34,7 +34,7 @@ class LoginPage extends Component {
         this.state = {
             username: '12345678900',
             password: '123',
-            pending: false
+            loading: false
         };
     }
 
@@ -77,7 +77,7 @@ class LoginPage extends Component {
         const loginData = this.loginValidator();
         const _this = this;
         if (loginData) {
-            this.setState({pending: true});
+            this.setState({loading: true});
             NetUtil.login(loginData.username, loginData.password, function(ok, msg){
                 if(ok){
                     const {navigator} = _this.props;
@@ -99,7 +99,7 @@ class LoginPage extends Component {
             Toast.show("请输入正确的手机号");
             return false;
         }else{
-            this.setState({pending: true});
+            this.setState({loading: true});
             this.props.userAction.getVerifycode({
                 username: username,
                 resolved: (data)=> {
@@ -129,7 +129,7 @@ class LoginPage extends Component {
     }
 
     handleLoginRejected(data) {
-        this.setState({pending: false});
+        this.setState({loading: false});
         Toast.show("登录失败，请重试");
     }
 
@@ -233,8 +233,8 @@ class LoginPage extends Component {
         )
     }
 
-    renderPending() {
-        if (this.state.pending === true) {
+    renderLoading() {
+        if (this.state.loading === true) {
             return (
                 <Spinner style={ ComponentStyles.pending_container }/>
             )
@@ -256,7 +256,7 @@ class LoginPage extends Component {
                 { this.renderHeader() }
                 { this.renderFormPanel() }
                 { this.renderCopyRight() }
-                { this.renderPending() }
+                { this.renderLoading() }
             </View>
         );
     }

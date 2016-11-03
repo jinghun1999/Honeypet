@@ -41,6 +41,6 @@ export const authData = {
 export const pageSize = 10;
 
 export const storageKey = {
-    OFFLINE_POSTS: "OFFLINE_POSTS",
-    USER_TOKEN: "USER_TOKEN"
+    OFFLINE_POSTS: "OFFLINEPOSTS",
+    USER_TOKEN: "USERTOKEN"
 };

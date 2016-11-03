@@ -28,4 +28,18 @@ export default ViewPage = {
             name: 'login'
         }
     },
+    message: ()=>{
+        return {
+            component: Page.Message,
+            name: 'message',
+            id: 'main',
+        }
+    },
+    uc: ()=>{
+        return {
+            component: Page.UC,
+            name: 'uc',
+            id: 'main',
+        }
+    },
 }

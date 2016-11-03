@@ -16,13 +16,14 @@ import {
 
 import TimerMixin from 'react-timer-mixin';
 import Icon from 'react-native-vector-icons/Ionicons';
-//import PureRenderMixin from 'react-addons-pure-render-mixin';
 import Config, { postCategory } from '../config';
 import { getImageSource, logoImage } from '../common';
 import ViewPage from './view';
 import Page from './page';
 import { CommonStyles, ComponentStyles, StyleConfig } from '../styles';
 import Home from './home';
+import Message from './message';
+import UC from './uc';
 const backgroundImageSource = getImageSource(1);
 const TAB_HOMEPAGE = '首页';
 const TAB_MESSAGE = '消息';
@@ -33,12 +34,10 @@ class Index extends Component {
     constructor (props) {
         super(props);
         this.state = {
-            //flag: postCategory.home,
             selectedTab: TAB_HOMEPAGE,
             tabBarShow: true
         };
         this._renderTabItem = this._renderTabItem.bind(this);
-        //this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     }
 
     componentWillUnmount() {
@@ -63,10 +62,10 @@ class Index extends Component {
                 renderView = <Home router={this.props.router}/>;
                 break;
             case TAB_MESSAGE:
-                renderView = <Home router={this.props.router}/>;
+                renderView = <Message router={this.props.router}/>;
                 break;
             case TAB_UC:
-                renderView = <Home router={this.props.router}/>;
+                renderView = <UC router={this.props.router}/>;
                 break;
             default:
                 break;
