@@ -12,7 +12,7 @@ import PostRow from './postRow';
 import Spinner from '../spinner';
 import EndTag from '../endtag';
 import ViewPage from '../view';
-
+import Toast from 'react-native-root-toast';
 class PostList extends Component {
 	
 	constructor(props) {
@@ -23,6 +23,7 @@ class PostList extends Component {
 		};
 
 		//this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
+		Toast.show('....................')
 	}
 	
 	componentWillReceiveProps(nextProps) {

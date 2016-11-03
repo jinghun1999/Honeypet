@@ -11,18 +11,16 @@ import {
     TouchableOpacity
     } from 'react-native';
 
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
 import TimerMixin from 'react-timer-mixin';
 import * as Animatable from 'react-native-animatable';
-import * as ConfigAction from '../actions/config';
-import * as UserAction from '../actions/user';
+//import * as ConfigAction from '../actions/config';
+//import * as UserAction from '../actions/user';
 import Config, { storageKey } from '../config';
 import { getImageSource } from '../common';
 import Logo from '../components/logo';
-import ViewPage from '../components/view';
+import ViewPage from './view';
 import { CommonStyles, ComponentStyles, StyleConfig } from '../styles';
-
+import Toast from 'react-native-root-toast';
 const backgroundImageSource = getImageSource(8);
 const hintText = "提示：进一步使用，需要先授权登录。使用您的手机号码一键获得验证码，使用验证码直接登陆本软件。";
 const declareText = "声明：本软件需要在联网环境中使用，可能会消耗您的移动数据，我们不会以任何形式使用和传播您的账户信息，请放心使用。";
@@ -42,18 +40,19 @@ class StartupPage extends Component {
     }
 
     checkUserToken() {
-        this.props.configAction.getConfig({
+        storage.load({
             key: storageKey.USER_TOKEN,
-            resolved: (data)=> {
-                if (data && data.access_token && data.username && data.password) {
-                    this.refreshUserToken(data);
-                } else {
-                    this.onCheckUserTokenRejected();
-                }
-            },
-            rejected: (data)=> {
+            autoSync: true,
+            syncInBackground: false
+        }).then(ret=> {
+            if (ret && ret.SafetyCode && ret.Expiration) {
+                this.refreshUserToken(ret);
+                //this.handleLoginResolved(data);
+            } else {
                 this.onCheckUserTokenRejected();
             }
+        }).catch(err=> {
+            this.onCheckUserTokenRejected();
         });
     }
 
@@ -105,9 +104,9 @@ class StartupPage extends Component {
         this.setState({
             modalVisiable: false
         });
-
+        const {navigator} = this.props;
         this.timer = TimerMixin.setTimeout(() => {
-            this.props.router.replace(ViewPage.login());
+            navigator.replace(ViewPage.login());
         }, 500);
     }
 
@@ -250,11 +249,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default connect((state, props) => ({
-    config: state.config
-}), dispatch => ({
-    configAction: bindActionCreators(ConfigAction, dispatch),
-    userAction: bindActionCreators(UserAction, dispatch)
-}), null, {
-    withRef: true
-})(StartupPage);
+export default StartupPage;

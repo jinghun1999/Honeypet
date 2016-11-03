@@ -18,9 +18,14 @@ import drawerItems from '../config/drawer';
 import { getImageSource, logoImage } from '../common';
 import ViewPage from './view';
 import { CommonStyles, ComponentStyles, StyleConfig } from '../styles';
-
+import PostList from './listview/postList';
 const backgroundImageSource = getImageSource(1);
-
+const TAB_HOMEPAGE = '首页';
+const TAB_KNOWLEDGE = '知识库';
+const TAB_BBS = '医师社区';
+const TAB_APP = '应用服务';
+const TAB_UC = '我的';
+import TabNavigator from 'react-native-tab-navigator';
 class DrawerPanel extends Component {
 
 	constructor (props) {
@@ -244,13 +249,49 @@ class DrawerPanel extends Component {
 		}
 	}
 
-	render() {
+	_renderTabItem(ico, tag, childView) {
 		return (
-			<View style={ [styles.container] }>
-				{ this.renderHeader() }
-				{ this.renderContent() }
+			<TabNavigator.Item
+				selected={this.state.selectedTab === tag}
+				renderIcon={() => <View style={styles.tabIcon}><Icon name={ico} size={32} color={'#b2b2b2'}/></View>}
+				title={tag}
+				renderSelectedIcon={() => <View style={styles.tabIcon}><Icon name={ico} size={32} color={'#63B8FF'}/></View>}
+				onPress={() => this.setState({ selectedTab: tag })}>
+				{childView}
+			</TabNavigator.Item>
+		);
+	}
+	_createChildView(tag) {
+		let renderView;
+		switch (tag) {
+			case TAB_HOMEPAGE:
+				renderView = <PostList navigator={this._navigator}/>;
+				break;
+			case TAB_BBS:
+				renderView = <PostList navigator={this._navigator}/>;
+				break;
+			case TAB_UC:
+				renderView = <PostList navigator={this._navigator}/>;
+				break;
+			default:
+				break;
+		}
+		return (<View style={styles.container}>{renderView}</View>)
+	}
+	render() {
+		let { tabBarShow } = this.props;
+		return (
+
+			<View style={{flex: 1}}>
+				<TabNavigator hidesTabTouch={true}
+							  sceneStyle={{paddingBottom: 0}}
+							  tabBarStyle={tabBarShow ? styles.tabNav : styles.tabNavHide}>
+					{this._renderTabItem('ios-home', TAB_HOMEPAGE, this._createChildView(TAB_HOMEPAGE))}
+					{this._renderTabItem('ios-chatbubbles', TAB_BBS, this._createChildView(TAB_BBS))}
+					{this._renderTabItem('ios-person', TAB_UC, this._createChildView(TAB_UC))}
+				</TabNavigator>
 			</View>
-		)
+		);
 	}
 }
 

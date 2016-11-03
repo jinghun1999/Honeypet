@@ -12,20 +12,18 @@ import {
     TouchableOpacity
     } from 'react-native';
 import _ from 'lodash';
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
 import Toast from 'react-native-root-toast';
 import TimerMixin from 'react-timer-mixin';
-import * as ConfigAction from '../actions/config';
-import * as UserAction from '../actions/user';
+//import * as ConfigAction from '../actions/config';
+//import * as UserAction from '../actions/user';
 import { getImageSource, openLink } from '../common';
 import Logo from '../components/logo';
-import ViewPage from '../components/view';
+import ViewPage from './view';
 import Spinner from '../components/spinner';
-import { JSEncrypt } from '../common/jsencrypt';
+//import { JSEncrypt } from '../common/jsencrypt';
 import Config, { authData, storageKey } from '../config';
 import { StyleConfig, ComponentStyles, CommonStyles } from '../styles';
-
+import NetUtil from '../util/NetUtil';
 const navTitle = "登录";
 const backgroundImageSource = getImageSource(8);
 
@@ -77,18 +75,19 @@ class LoginPage extends Component {
 
     handleLogin() {
         const loginData = this.loginValidator();
+        const _this = this;
         if (loginData) {
             this.setState({pending: true});
-            this.props.userAction.login({
-                username: loginData.username,
-                password: loginData.password,
-                resolved: (data)=> {
-                    data.username = loginData.username;
-                    data.password = loginData.password;
-                    this.handleLoginResolved(data);
-                },
-                rejected: (data)=> {
-                    this.handleLoginRejected(data);
+            NetUtil.login(loginData.username, loginData.password, function(ok, msg){
+                if(ok){
+                    const {navigator} = _this.props;
+                    if (navigator) {
+                        _this.timer = TimerMixin.setTimeout(() => {
+                            navigator.replace(ViewPage.index());
+                        }, 2000);
+                    }
+                }else{
+                    Toast.show(msg);
                 }
             });
         }
@@ -121,7 +120,7 @@ class LoginPage extends Component {
         }
         this.props.configAction.updateConfig({
             key: storageKey.USER_TOKEN,
-            value: data.Message.SafetyCode
+            value: data.Message
         });
         Toast.show("恭喜您，登录成功");
         this.timer = TimerMixin.setTimeout(() => {
@@ -274,9 +273,4 @@ export const styles = StyleSheet.create({
     }
 });
 
-export default connect((state, props) => ({}), dispatch => ({
-    userAction: bindActionCreators(UserAction, dispatch),
-    configAction: bindActionCreators(ConfigAction, dispatch)
-}), null, {
-    withRef: true
-})(LoginPage);
+export default LoginPage;
