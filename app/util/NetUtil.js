@@ -125,10 +125,7 @@ class NetUtil extends React.Component {
                 /*保存登陆信息*/
                 storage.save({
                     key: storageKey.USER_TOKEN,
-                    rawData: {
-                        identity: phone,
-                        password: pwd,
-                    },
+                    rawData: lg.Message,
                 });
                 /*保存用户信息*/
                 storage.save({
