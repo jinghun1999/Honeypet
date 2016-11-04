@@ -21,13 +21,17 @@ import { getImageSource, logoImage } from '../common';
 import ViewPage from './view';
 import Page from './page';
 import { CommonStyles, ComponentStyles, StyleConfig } from '../styles';
+
+import SendRequest from './sendrequest';
 import Home from './home';
 import Message from './message';
 import UC from './uc';
+
 const backgroundImageSource = getImageSource(1);
+const TAB_REQUEST  = '求助';
 const TAB_HOMEPAGE = '首页';
-const TAB_MESSAGE = '消息';
-const TAB_UC = '我的';
+const TAB_MESSAGE  = '消息';
+const TAB_UC       = '我的';
 import TabNavigator from 'react-native-tab-navigator';
 class Index extends Component {
 
@@ -67,6 +71,11 @@ class Index extends Component {
             case TAB_UC:
                 renderView = <UC router={this.props.router}/>;
                 break;
+            case TAB_REQUEST:
+
+                renderView = <SendRequest router={this.props.router} />;
+
+                break;
             default:
                 break;
         }
@@ -79,6 +88,7 @@ class Index extends Component {
                 <TabNavigator hidesTabTouch={true} sceneStyle={{paddingBottom: 0}}
                               tabBarStyle={tabBarShow ? styles.tabNav : styles.tabNavHide}>
                     {this._renderTabItem('ios-home', TAB_HOMEPAGE, this._createChildView(TAB_HOMEPAGE))}
+                    {this._renderTabItem('ios-paper-plane', TAB_REQUEST, this._createChildView(TAB_REQUEST))}
                     {this._renderTabItem('ios-chatbubbles', TAB_MESSAGE, this._createChildView(TAB_MESSAGE))}
                     {this._renderTabItem('ios-person', TAB_UC, this._createChildView(TAB_UC))}
                 </TabNavigator>
