@@ -110,6 +110,6 @@ const styles = StyleSheet.create({
         paddingVertical:5,
         justifyContent:'center',
         alignItems:'center'
-    },
+    }
 });
 export default HomePage;
