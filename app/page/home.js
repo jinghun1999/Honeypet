@@ -75,19 +75,7 @@ class HomePage extends Component {
     render() {
         return (
             <View style={styles.container}>
-                <MapView
-                    trafficEnabled={this.state.trafficEnabled}
-                    baiduHeatMapEnabled={this.state.baiduHeatMapEnabled}
-                    zoom={this.state.zoom}
-                    mapType={this.state.mapType}
-                    center={this.state.center}
-                    marker={this.state.marker}
-                    markers={this.state.markers}
-                    style={styles.map}
-                    onMapClick={(e) => {
-          }}
-                    >
-                </MapView>
+
 
                 <View style={styles.row}>
                     <Buttton label="Normal" onPress={() => {
