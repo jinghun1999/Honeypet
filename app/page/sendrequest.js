@@ -32,18 +32,14 @@ class SendRequest extends Component {
             </View>
         );
     }
-    renderModal()
-    {
-        return
-        (
+    renderModal(){
+        return(
             <View>
             </View>
         );
     }
-    renderModalBackdrop()
-    {
-        return
-        (
+    renderModalBackdrop(){
+        return(
             <View>
             </View>
         );
