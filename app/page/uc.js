@@ -23,7 +23,7 @@ class UC extends Component {
     render() {
         return (
             <View>
-                <Text>Message</Text>
+                <Text>my</Text>
             </View>
         );
     }
