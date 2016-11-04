@@ -7,6 +7,7 @@ import {
     View,
     RefreshControl,
     Image,
+    StyleSheet,
     Text
 } from 'react-native';
 import { StyleConfig, ComponentStyles, CommonStyles } from '../styles';
@@ -23,11 +24,11 @@ class SendRequest extends Component {
     componentDidMount()
     {
     }
-    renderContent()
-    {
-        return
-        (
-            <View>
+
+    renderContent(){
+        return (
+            <View style="{[CommonStyles.m_a_4]}">
+
             </View>
         );
     }
@@ -36,7 +37,7 @@ class SendRequest extends Component {
         return
         (
             <View>
-            </View>>
+            </View>
         );
     }
     renderModalBackdrop()
@@ -59,7 +60,7 @@ class SendRequest extends Component {
     }
     render() {
         return (
-            <View style={[ComponentStyles.container, CommonStyles.flexItemsCenter, CommonStyles.flexItemsMiddle, styles.container]}>
+            <View style={[ComponentStyles.container]}>
                 { this.renderHeader()  }
                 { this.renderContent() }
                 { this.renderModal()   }
