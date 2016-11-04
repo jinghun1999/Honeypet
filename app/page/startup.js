@@ -68,13 +68,10 @@ class StartupPage extends Component {
     }
 
     handleLoginResolved(data) {
-        const { configAction, router } = this.props;
-        configAction.updateConfig({
-            key: storageKey.USER_TOKEN,
-            value: data,
-        }).then(()=> {
-            router.replace(ViewPage.home());
-        });
+        const { navigator } = this.props;
+        if(navigator) {
+            navigator.replace(ViewPage.index());
+        }
     }
 
     showLoginModal() {
