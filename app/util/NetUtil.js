@@ -119,6 +119,13 @@ class NetUtil extends React.Component {
         }
     }
 
+    static request(data,callback) {
+        let header = {};//NetUtil.headerClientAuth();
+
+
+
+        NetUtil.postJson(CONSTAPI.REQUEST,data,header,callback);
+    }
     static login(phone, pwd, callback) {
         NetUtil.get(CONSTAPI.LOGIN + "?m=" + phone + "&r=" + pwd, false, function (lg) {
             if (lg.Sign && lg.Message) {

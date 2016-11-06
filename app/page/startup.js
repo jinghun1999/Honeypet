@@ -41,7 +41,6 @@ class StartupPage extends Component {
     }
 
     componentDidMount() {
-
     }
 
     checkUserToken() {
