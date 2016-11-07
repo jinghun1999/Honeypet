@@ -75,27 +75,27 @@ class UserRender extends Component {
 	}
 
 	renderParallaxForeground(){
-		const { user } = this.props;
+		//const { user } = this.props;
 		return (
 			<View style = { [ CommonStyles.flexColumn, CommonStyles.flexItemsMiddle, CommonStyles.flexItemsCenter, styles.foreground ] }> 
 				<Image 
 					style={ [ ComponentStyles.avatar, CommonStyles.m_y_2 ] } 
-		            source={{ uri: user.Avatar }}/>
+		            source={{ uri: 'http://www.easyicon.net/api/resizeApi.php?id=1201413&size=96' }}/>
 				<Text style={[CommonStyles.text_white, CommonStyles.font_lg, CommonStyles.m_b_1 ]}>
-					{ user.DisplayName }
+					张三
 				</Text>
             </View> 
 		)
 	}
 
 	renderParallaxStickyHeader(){
-		const { user } = this.props;
+		//const { user } = this.props;
 		return (
 			<Navbar 
 				backgroundImage = { this.state.cover }
 				leftIconOnPress = {()=>this.props.router.pop()}
-				leftIconName = { {uri:user.Avatar} } 
-				title = { user.DisplayName }/>
+				leftIconName = { {uri:'http://www.easyicon.net/api/resizeApi.php?id=1201413&size=96'} }
+				title = { '张三' }/>
 		);
 	}
 

@@ -63,17 +63,17 @@ class Index extends Component {
         let renderView;
         switch (tag) {
             case TAB_HOMEPAGE:
-                renderView = <Home router={this.props.router}/>;
+                renderView = <Home navigator={this.props.navigator}/>;
                 break;
             case TAB_MESSAGE:
-                renderView = <Message router={this.props.router}/>;
+                renderView = <Message navigator={this.props.navigator}/>;
                 break;
             case TAB_UC:
-                renderView = <UC router={this.props.router}/>;
+                renderView = <UC navigator={this.props.navigator}/>;
                 break;
             case TAB_REQUEST:
 
-                renderView = <SendRequest user="1234567890" router={this.props.router} />;
+                renderView = <SendRequest user="1234567890" navigator={this.props.navigator} />;
 
                 break;
             default:

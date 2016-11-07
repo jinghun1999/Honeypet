@@ -91,7 +91,7 @@ class HomePage extends Component {
     }
 
     _onRowPress(data) {
-        const {navigator}=this.props;
+        const { navigator } = this.props;
         if (navigator) {
             navigator.push(ViewPage.hospital());
         }
@@ -132,7 +132,8 @@ class HomePage extends Component {
 
     _renderRow(rowData, sectionID, rowID) {
         return (
-            <TouchableHighlight underlayColor={'#EBEBEB'} style={styles.row} onPress={this._onRowPress.bind(rowData, this)}>
+            <TouchableHighlight underlayColor={'#EBEBEB'} style={styles.row}
+                                onPress={this._onRowPress.bind(this)}>
                 <View style={{flexDirection:'row', flex:1,}}>
                     <Image source={{uri:rowData.HeadPic}}
                            style={{width:80, height:60, marginRight:5,}}/>
