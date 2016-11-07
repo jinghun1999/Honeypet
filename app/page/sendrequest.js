@@ -24,11 +24,19 @@ class SendRequest extends Component {
     constructor (props) {
         super(props);
         this.state = {
-            petname:'狗狗',
-            master:'',
+            petname:'',
+            master:this.props.user,
             content:'',
             loading:false
         };
+
+
+        NetUtil.getUserInfo(u => {
+
+            Alert.alert(u.userid);
+
+            this.state.setState({mobile:u.userid});
+        });
     }
 
     componentDidMount()
@@ -102,33 +110,24 @@ class SendRequest extends Component {
         }
 
 
+        Alert.alert(this.state.mobile);
 
-        NetUtil.getAuth((ret)=>{
+        let data = {
+            'Mobile':this.props.user,
+            'RealName':this.state.master,
+            'PetType':this.state.petname,
+            'City':'上海',
+            'Postion':'漕河泾',
+            'Lat':'1.0',
+            'Lng':'2.0',
+            'Describe':this.state.content
+        };
+        NetUtil.request( data , (ok,msg)=>{
+            if(ok){
 
-            Alert.alert(ret.USERTOKEN);
-
-            let data = {
-                'Mobile':'1234567890',
-                'RealName':this.state.master,
-                'PetType':this.state.petname,
-                'City':'上海',
-                'Postion':'漕河泾',
-                'Lat':'1.0',
-                'Lng':'2.0',
-                'Describe':this.state.content
-            };
-
-            NetUtil.request( data , (ok,msg)=>{
-                if(ok){
-
-                }
-                Alert.alert(msg);
-            } );
-
-
-        });
-
-
+            }
+            Alert.alert(data.Mobile);
+        } );
     };
 
     Validator()
