@@ -15,6 +15,7 @@ import AMapLocation from 'react-native-amap-location';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Toast from 'react-native-root-toast';
 import NetUtil from '../util/NetUtil';
+import Hospital from './hospital';
 import Spinner from '../components/spinner';
 import { StyleConfig, ComponentStyles, CommonStyles } from '../styles';
 class HomePage extends Component {
@@ -88,7 +89,15 @@ class HomePage extends Component {
             needDetail: true,
         });
     }
-    _renderHead(){
+
+    _onRowPress(data) {
+        const {navigator}=this.props;
+        if (navigator) {
+            navigator.push(ViewPage.hospital());
+        }
+    }
+
+    _renderHead() {
         return (
             <View>
                 <View style={{height: 180}}>
@@ -115,7 +124,7 @@ class HomePage extends Component {
                 </TouchableHighlight>
                 <View style={styles.nearHosHead}>
                     <Text style={{flex:1}}>附近医院</Text>
-                    {/*<Icon name={'ios-arrow-forward-outline'} size={14} color={'#ccc'}/>*/}
+                    {/*<Icon name={'ios-arrow-forward-outline'} size={14} color={'#EDEDED'}/>*/}
                 </View>
             </View>
         );
@@ -123,21 +132,24 @@ class HomePage extends Component {
 
     _renderRow(rowData, sectionID, rowID) {
         return (
-            <View style={styles.row}>
-                <Image source={{uri:'http://img.boqiicdn.com/Data/Vet/B/En/1404/14/img45771397466894.jpg'}}
-                    style={{width:80, height:60, marginRight:5,}}/>
-                <View style={{flex:1,}}>
-                    <View style={{flexDirection:'row'}}>
-                        <Text style={{fontSize:16, flex:1,}}>{rowData.HospitalName}</Text>
-                        <Text style={{textAlign:'center', backgroundColor:'#FF8247',color:'#fff',width:50}}>{rowData.Distance} km</Text>
-                    </View>
+            <TouchableHighlight underlayColor={'#EBEBEB'} style={styles.row} onPress={this._onRowPress.bind(rowData, this)}>
+                <View style={{flexDirection:'row', flex:1,}}>
+                    <Image source={{uri:rowData.HeadPic}}
+                           style={{width:80, height:60, marginRight:5,}}/>
+                    <View style={{flex:1,}}>
+                        <View style={{flexDirection:'row'}}>
+                            <Text style={{fontSize:16, flex:1,}}>{rowData.HospitalName}</Text>
+                            <Text style={styles.distanceText}>{rowData.Distance} km</Text>
+                        </View>
 
-                    <Text><Icon name={'ios-call'} size={14} color={'#999'}/> {rowData.Tel}</Text>
-                    <Text><Icon name={'ios-pin'} size={14} color={'#999'}/> {rowData.Address}</Text>
+                        <Text><Icon name={'ios-call'} size={14} color={'#999'}/> {rowData.Tel}</Text>
+                        <Text><Icon name={'ios-pin'} size={14} color={'#999'}/> {rowData.Address}</Text>
+                    </View>
                 </View>
-            </View>
+            </TouchableHighlight>
         )
     }
+
     renderLoading() {
         if (this.state.loaded !== true) {
             return (
@@ -145,14 +157,15 @@ class HomePage extends Component {
             )
         }
     }
+
     render() {
         return (
             <View style={styles.container}>
-                <ListView style={{backgroundColor:'#e7e7e7'}}
+                <ListView style={{backgroundColor:'#F5F5F5'}}
                           enableEmptySections={true}
                           dataSource={this.state.ds.cloneWithRows(this.state.hosList)}
                           renderHeader={this._renderHead.bind(this)}
-                          renderRow={this._renderRow}
+                          renderRow={this._renderRow.bind(this)}
                           renderFooter={()=>{return <View style={{height:50,}}></View>}}
                     />
                 { this.renderLoading() }
@@ -170,11 +183,11 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         borderTopWidth: 1,
-        borderTopColor: '#ccc',
+        borderTopColor: '#EDEDED',
         borderBottomWidth: 1,
-        borderBottomColor: '#ccc',
+        borderBottomColor: '#EDEDED',
         height: 40,
-        backgroundColor:'#fff',
+        backgroundColor: '#fff',
     },
     positionText: {
         paddingLeft: 5,
@@ -196,21 +209,27 @@ const styles = StyleSheet.create({
         paddingVertical: 5,
         paddingHorizontal: 5,
         borderTopWidth: 1,
-        borderTopColor: '#ccc',
+        borderTopColor: '#EDEDED',
         borderBottomWidth: 1,
-        borderBottomColor: '#ccc',
-        backgroundColor:'#fff',
+        borderBottomColor: '#EDEDED',
+        backgroundColor: '#fff',
     },
     row: {
-        flexDirection:'row',
-        flex:1,
-        padding:10,
-        backgroundColor:'#fff',
+        flexDirection: 'row',
+        flex: 1,
+        padding: 10,
+        backgroundColor: '#fff',
         marginTop: 5,
         borderTopWidth: 1,
-        borderTopColor: '#ccc',
+        borderTopColor: '#EDEDED',
         borderBottomWidth: 1,
-        borderBottomColor: '#ccc',
-    }
+        borderBottomColor: '#EDEDED',
+    },
+    distanceText: {
+        textAlign: 'center',
+        backgroundColor: '#FF8247',
+        color: '#fff',
+        width: 50
+    },
 });
 export default HomePage;

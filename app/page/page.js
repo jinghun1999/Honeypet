@@ -8,3 +8,4 @@ export { default as Login} from './login';
 export { default as Startup} from './startup';
 export { default as Message} from './message';
 export { default as UC} from './uc';
+export { default as Hospital} from './hospital';
