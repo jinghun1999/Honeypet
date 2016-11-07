@@ -73,7 +73,7 @@ class Index extends Component {
                 break;
             case TAB_REQUEST:
 
-                renderView = <SendRequest router={this.props.router} />;
+                renderView = <SendRequest user="1234567890" router={this.props.router} />;
 
                 break;
             default:

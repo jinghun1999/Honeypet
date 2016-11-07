@@ -98,6 +98,24 @@ class NetUtil extends React.Component {
             }
         });
     }
+    static getUserInfo(success, error) {
+        storage.load({
+            key: "USER",
+            autoSync: false,
+            syncInBackground: false
+        }).then(user => {
+            success(user);
+        }).catch(err => {
+            switch (err.name) {
+                case 'NotFoundError':
+                    error('not found user');
+                    break;
+                case 'ExpiredError':
+                    error('user login expired');
+                    break;
+            }
+        });
+    }
 
     static url_healthmonitnorm(checkItemCode) {
         const time = Util.getTime();
@@ -109,6 +127,7 @@ class NetUtil extends React.Component {
         return 'Mobile ' + Util.base64Encode(mobile + ':' + hospitalcode + ":" + token);
     }
 
+    /*
     static headerClientAuth(user, hos) {
         let hoscode = '*';
         if (hos && hos.hospital) {
@@ -117,15 +136,21 @@ class NetUtil extends React.Component {
         return {
             'Authorization': 'Mobile ' + Util.base64Encode(user.Mobile + ':' + hoscode + ":" + user.Token.token)
         }
+    }*/
+
+    static headerClientAuth(user,hos) {
+        return {
+            'Authorization': 'Basic ' + Util.base64Encode(user.UserID + ';' + user.use.CreatedOn + ';' + user.use.SafetyCode)
+        };
     }
 
     static request(data,callback) {
-        let header = {};//NetUtil.headerClientAuth();
-
-
-
-        NetUtil.postJson(CONSTAPI.REQUEST,data,header,callback);
+        NetUtil.getUserInfo((ret)=>{
+            let header = NetUtil.headerClientAuth(ret);
+            NetUtil.postJson(CONSTAPI.REQUEST,data,header,callback);
+        });
     }
+
     static login(phone, pwd, callback) {
         NetUtil.get(CONSTAPI.LOGIN + "?m=" + phone + "&r=" + pwd, false, function (lg) {
             if (lg.Sign && lg.Message) {
@@ -138,11 +163,12 @@ class NetUtil extends React.Component {
                 storage.save({
                     key: 'USER',
                     rawData: {
-                        user: lg.Message,
+                        userid:phone,
+                        user: lg.Message
                     },
                     expires: 1000 * 7200,
                 });
-                callback(true)
+                callback(true);
             } else {
                 callback(false, lg.Exception)
             }
