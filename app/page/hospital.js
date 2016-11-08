@@ -12,7 +12,8 @@ import {
     ListView,
     Image,
     } from 'react-native';
-import HomeHead from '../components/header/home';
+//import HomeHead from '../components/header/home';
+import Head from '../components/head';
 import Toast from 'react-native-root-toast';
 class Hospital extends Component {
 
@@ -24,25 +25,23 @@ class Hospital extends Component {
     }
 
     componentDidMount() {
-        Toast.show(JSON.stringify(this.state.info))
-    }
 
-    onMenuPress(){
-        let _this = this;
-        const { navigator } = _this.props;
-        if (navigator) {
+    }
+    onBack(){
+        let {navigator} = this.props;
+        if(navigator){
             navigator.pop();
         }
     }
     render() {
         return (
             <View style={styles.container}>
-                <View>
-                    <HomeHead onMenuPress={this.onMenuPress.bind(this)}/>
+                <Head title={'医院详情'} canBack={true} onLeftButtonPress={this.onBack.bind(this)}/>
+                <View style={{height:200,}}>
+                    <Image source={{uri:this.state.info.HeadPic}} resizeMode={'stretch'} style={{flex:1,}} />
                 </View>
-                <View style={{flex:1,}}>
-                    <Image source={{uri:this.state.info.HeadPic}}/>
-                    <Text>{this.state.info.HospitalName}</Text>
+                <View style={{flex:1, padding:10,}}>
+                    <Text style={{fontSize:18, borderLeftWidth:5, borderLeftColor:'#EE4000', paddingLeft:5,}}>{this.state.info.HospitalName}</Text>
                 </View>
             </View>
         );

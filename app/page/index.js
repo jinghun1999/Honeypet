@@ -28,36 +28,38 @@ import Message from './message';
 import UC from './uc';
 import NetUtil from '../util/NetUtil';
 const backgroundImageSource = getImageSource(1);
-const TAB_REQUEST  = '求助';
+const TAB_REQUEST = '求助';
 const TAB_HOMEPAGE = '首页';
-const TAB_MESSAGE  = '消息';
-const TAB_UC       = '我的';
+const TAB_MESSAGE = '消息';
+const TAB_UC = '我的';
 import TabNavigator from 'react-native-tab-navigator';
-let CurrentUse='2222';
+let CurrentUse = '2222';
 
 class Index extends Component {
-    constructor (props) {
+    constructor(props) {
         super(props);
         this.state = {
             selectedTab: TAB_HOMEPAGE,
-            CurrentUse:'6666',
+            CurrentUse: '',
             tabBarShow: true
         };
         this._renderTabItem = this._renderTabItem.bind(this);
-        NetUtil.getUserInfo(u=>{
-            this.setState({ CurrentUse:u.userid });
+        NetUtil.getAuth(u=> {
+            this.setState({CurrentUse: u.Phone});
         });
     }
-    componentDidMount(){
+
+    componentDidMount() {
         // 添加返回键监听
         BackAndroidTool.addBackAndroidListener(this.props.navigator);
     }
 
-    componentWillUnmount(){
+    componentWillUnmount() {
         // 移除返回键监听
         BackAndroidTool.removeBackAndroidListener();
         this.timer && TimerMixin.clearTimeout(this.timer);
     }
+
     _renderTabItem(ico, tag, childView) {
         return (
             <TabNavigator.Item
@@ -70,6 +72,7 @@ class Index extends Component {
             </TabNavigator.Item>
         );
     }
+
     _createChildView(tag) {
         let renderView;
         switch (tag) {
@@ -83,13 +86,14 @@ class Index extends Component {
                 renderView = <UC navigator={this.props.navigator}/>;
                 break;
             case TAB_REQUEST:
-                renderView = <SendRequest user={this.state.CurrentUse} navigator={this.props.navigator} />;
+                renderView = <SendRequest user={this.state.CurrentUse} navigator={this.props.navigator}/>;
                 break;
             default:
                 break;
         }
         return (<View style={styles.container}>{renderView}</View>)
     }
+
     render() {
         let { tabBarShow } = this.props;
         return (

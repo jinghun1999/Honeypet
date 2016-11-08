@@ -98,28 +98,7 @@ class NetUtil extends React.Component {
                     error('user login expired');
                     break;
                 default :
-                    error('请重新登陆应用');
-                    break;
-            }
-        });
-    }
-    static getUserInfo(success, error) {
-        storage.load({
-            key: "USER",
-            autoSync:true,
-            syncInBackground: false
-        }).then(user => {
-            success(user);
-        }).catch(err => {
-            switch (err.name) {
-                case 'NotFoundError':
-                    error('not found user');
-                    break;
-                case 'ExpiredError':
-                    error('user login expired');
-                    break;
-                default:
-                    error('请重启应用');
+                    error('not login');
                     break;
             }
         });
