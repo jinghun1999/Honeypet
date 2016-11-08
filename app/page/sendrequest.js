@@ -18,6 +18,7 @@ import { StyleConfig, ComponentStyles, CommonStyles } from '../styles';
 import Logo from '../components/logo';
 import { getImageSource, openLink } from '../common';
 import NetUtil from '../util/NetUtil';
+import Spinner from '../components/spinner';
 const backgroundImageSource = getImageSource(8);
 
 class SendRequest extends Component {
@@ -27,22 +28,62 @@ class SendRequest extends Component {
             petname:'',
             master:this.props.user,
             content:'',
-            loading:false
+            loading:false,
+            Receive:false
         };
-
-
-        NetUtil.getUserInfo(u => {
-
-            Alert.alert(u.userid);
-
-            this.state.setState({mobile:u.userid});
-        });
     }
 
     componentDidMount()
     {
     }
 
+    renderReadOnlyMaster() {
+        return (
+            <View style={ [ComponentStyles.input_control,{marginLeft:50,marginRight:50,marginTop:10} ] }>
+                <View style={{flex:1,}}>
+                    <Text
+                        keyboardType={'ascii-capable'}
+                        placeholderTextColor={ StyleConfig.color_gray }>
+                        {this.state.master}
+                    </Text>
+                </View>
+            </View>
+        );
+    }
+    renderReadOnlyPetName() {
+        return (
+            <View style={ [ComponentStyles.input_control,{marginLeft:50,marginRight:50,marginTop:10} ] }>
+                <View style={{flex:1,}}>
+                    <Text
+                        keyboardType={'ascii-capable'}
+                        placeholderTextColor={ StyleConfig.color_gray }>
+                        {this.state.petname}
+                    </Text>
+                </View>
+            </View>
+        );
+    }
+    renderReadOnlyPetDescribe() {
+        return (
+            <View style={ [ComponentStyles.input_control,{marginLeft:50,marginRight:50,marginTop:10,height:100} ] }>
+                <Text
+                    keyboardType={'ascii-capable'}
+                    placeholderTextColor={ StyleConfig.color_gray }>
+                    {this.state.content}
+                </Text>
+            </View>
+        );
+    }
+    renderReceiveLoading() {
+
+        Alert.alert("2");
+
+            return (
+                <Spinner label="正在等待医院反馈，请稍等..." style={ ComponentStyles.pending_container }>
+
+                </Spinner>
+            )
+    }
     renderMaster() {
         return (
             <View style={ [ComponentStyles.input_control,{marginLeft:50,marginRight:50,marginTop:10} ] }>
@@ -110,8 +151,6 @@ class SendRequest extends Component {
         }
 
 
-        Alert.alert(this.state.mobile);
-
         let data = {
             'Mobile':this.props.user,
             'RealName':this.state.master,
@@ -122,12 +161,16 @@ class SendRequest extends Component {
             'Lng':'2.0',
             'Describe':this.state.content
         };
+
+        this.setState({ loading:true });
         NetUtil.request( data , (ok,msg)=>{
             if(ok){
-
+                this.setState({ loading:false,Receive:true });
             }
-            Alert.alert(data.Mobile);
-        } );
+            else{
+                this.setState({ loading:false,Receive:false });
+            }
+        });
     };
 
     Validator()
@@ -165,20 +208,27 @@ class SendRequest extends Component {
                         marginRight:5}}
                     onPress={()=>this.handleSend()}>
                 <Text style={[ComponentStyles.btn_text]}>
-                    发送1
+                    发送
                 </Text>
             </TouchableOpacity>
         );
     }
 
-    renderContent(){
-        return (
-            <View style="{[CommonStyles.m_a_4],}">
-                { this.renderMaster()  }
-                { this.renderPetName() }
-                { this.renderPetDescribe() }
-            </View>
-        );
+    renderContent() {
+            if( this.state.Receive ){
+                return (<View style="{[CommonStyles.m_a_4],}">
+                    { this.renderReadOnlyMaster() }
+                    { this.renderReadOnlyPetName() }
+                    { this.renderReadOnlyPetDescribe() }
+                </View>);
+            }
+            else{
+                return (<View style="{[CommonStyles.m_a_4],}">
+                    { this.renderMaster()  }
+                    { this.renderPetName() }
+                    { this.renderPetDescribe() }
+                </View>);
+            }
     }
     renderModal() {
         return(
@@ -197,12 +247,23 @@ class SendRequest extends Component {
             </View>
         );
     }
+    renderLoading() {
+        if (this.state.loading === true) {
+            return (
+                <Spinner style={ ComponentStyles.pending_container }/>
+            )
+        }
+        if( this.state.Receive == true ) {
+            return this.renderReceiveLoading();
+        }
+    }
     render() {
         return (
             <View style={[ComponentStyles.container,{backgroundColor:'red'}]}>
                 { this.renderHeader()  }
                 { this.renderContent() }
                 { this.renderModal()   }
+                { this.renderLoading() }
             </View>
         );
     }

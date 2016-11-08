@@ -4,6 +4,7 @@
 import React, { Component } from 'react';
 import {
     View,
+    Text,
     ActivityIndicator
     } from 'react-native';
 
@@ -22,6 +23,7 @@ class Spinner extends Component {
                     size = { 'large' }
                     color={ StyleConfig.color_primary }
                     {...this.props} />
+                <Text>{this.props.label}</Text>
             </View>
         )
     }

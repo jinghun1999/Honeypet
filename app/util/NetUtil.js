@@ -2,6 +2,11 @@
 import React, {
     Component,
     } from 'react';
+
+import {
+    Alert
+} from 'react-native';
+
 import Util from './Util';
 import Global from './Global';
 import Config, { storageKey } from '../config';
@@ -101,7 +106,7 @@ class NetUtil extends React.Component {
     static getUserInfo(success, error) {
         storage.load({
             key: "USER",
-            autoSync: false,
+            autoSync:true,
             syncInBackground: false
         }).then(user => {
             success(user);
@@ -112,6 +117,9 @@ class NetUtil extends React.Component {
                     break;
                 case 'ExpiredError':
                     error('user login expired');
+                    break;
+                default:
+                    error('请重启应用');
                     break;
             }
         });
@@ -140,14 +148,19 @@ class NetUtil extends React.Component {
 
     static headerClientAuth(user,hos) {
         return {
-            'Authorization': 'Basic ' + Util.base64Encode(user.UserID + ';' + user.use.CreatedOn + ';' + user.use.SafetyCode)
+            'Authorization': 'Basic ' + Util.base64Encode(user.userid + ';' + user.user.CreatedOn + ';' + user.user.SafetyCode)
         };
     }
 
     static request(data,callback) {
+
         NetUtil.getUserInfo((ret)=>{
+
             let header = NetUtil.headerClientAuth(ret);
+
             NetUtil.postJson(CONSTAPI.REQUEST,data,header,callback);
+        },(_mess)=>{
+            Alert.alert(_mess);
         });
     }
 

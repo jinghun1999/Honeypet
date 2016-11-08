@@ -1,7 +1,7 @@
 'use strict';
 
 import React, {Component} from 'react';
-var base64 = require('../common/base64');
+import {Base64} from '../common/base64';
 class Util extends React.Component {
     static md5(data) {
         var md5 = require('md5');
@@ -53,7 +53,7 @@ class Util extends React.Component {
     }
 
     static base64Encode(str) {
-        return base64.encode(str);
+        return Base64.encode(str);
     }
 
     static GetDateStr(adddays) {
