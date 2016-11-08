@@ -101,7 +101,7 @@ class HomeRender extends Component {
 		return (
 			<Navbar 
 				backgroundImage = { backgroundImageSource }
-				leftIconName = "ios-menu"
+				leftIconName = "ios-arrow-back"
 				leftIconOnPress={ ()=>this.props.onMenuPress() }
 				title={ Config.appInfo.name }
 				rightIconName = "ios-search-outline"

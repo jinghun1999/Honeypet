@@ -42,11 +42,14 @@ export default ViewPage = {
             id: 'main',
         }
     },
-    hospital:()=>{
+    hospital:(data)=>{
         return {
             component: Page.Hospital,
             name: 'hospital',
             id: 'page',
+            params: {
+                hospital: data,
+            }
         }
     }
 }

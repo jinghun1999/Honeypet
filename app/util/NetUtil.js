@@ -154,18 +154,9 @@ class NetUtil extends React.Component {
     static login(phone, pwd, callback) {
         NetUtil.get(CONSTAPI.LOGIN + "?m=" + phone + "&r=" + pwd, false, function (lg) {
             if (lg.Sign && lg.Message) {
-                /*保存登陆信息*/
                 storage.save({
                     key: storageKey.USER_TOKEN,
                     rawData: lg.Message,
-                });
-                /*保存用户信息*/
-                storage.save({
-                    key: 'USER',
-                    rawData: {
-                        userid:phone,
-                        user: lg.Message
-                    },
                     expires: 1000 * 7200,
                 });
                 callback(true);
