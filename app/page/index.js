@@ -21,7 +21,7 @@ import { getImageSource, logoImage } from '../common';
 import ViewPage from './view';
 import Page from './page';
 import { CommonStyles, ComponentStyles, StyleConfig } from '../styles';
-
+import BackAndroidTool from '../util/BackAndroidTool';
 import SendRequest from './sendrequest';
 import Home from './home';
 import Message from './message';
@@ -43,8 +43,14 @@ class Index extends Component {
         };
         this._renderTabItem = this._renderTabItem.bind(this);
     }
+    componentDidMount(){
+        // 添加返回键监听
+        BackAndroidTool.addBackAndroidListener(this.props.navigator);
+    }
 
-    componentWillUnmount() {
+    componentWillUnmount(){
+        // 移除返回键监听
+        BackAndroidTool.removeBackAndroidListener();
         this.timer && TimerMixin.clearTimeout(this.timer);
     }
     _renderTabItem(ico, tag, childView) {
