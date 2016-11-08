@@ -21,7 +21,7 @@ import { getImageSource, logoImage } from '../common';
 import ViewPage from './view';
 import Page from './page';
 import { CommonStyles, ComponentStyles, StyleConfig } from '../styles';
-
+import BackAndroidTool from '../util/BackAndroidTool';
 import SendRequest from './sendrequest';
 import Home from './home';
 import Message from './message';
@@ -48,7 +48,14 @@ class Index extends Component {
             this.setState({ CurrentUse:u.userid });
         });
     }
-    componentWillUnmount() {
+    componentDidMount(){
+        // 添加返回键监听
+        BackAndroidTool.addBackAndroidListener(this.props.navigator);
+    }
+
+    componentWillUnmount(){
+        // 移除返回键监听
+        BackAndroidTool.removeBackAndroidListener();
         this.timer && TimerMixin.clearTimeout(this.timer);
     }
     _renderTabItem(ico, tag, childView) {
@@ -67,16 +74,16 @@ class Index extends Component {
         let renderView;
         switch (tag) {
             case TAB_HOMEPAGE:
-                renderView = <Home router={this.props.router}/>;
+                renderView = <Home navigator={this.props.navigator}/>;
                 break;
             case TAB_MESSAGE:
-                renderView = <Message router={this.props.router}/>;
+                renderView = <Message navigator={this.props.navigator}/>;
                 break;
             case TAB_UC:
-                renderView = <UC router={this.props.router}/>;
+                renderView = <UC navigator={this.props.navigator}/>;
                 break;
             case TAB_REQUEST:
-                renderView = <SendRequest user={this.state.CurrentUse} router={this.props.router} />;
+                renderView = <SendRequest user={this.state.CurrentUse} navigator={this.props.navigator} />;
                 break;
             default:
                 break;

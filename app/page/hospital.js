@@ -37,8 +37,10 @@ class Hospital extends Component {
     render() {
         return (
             <View style={styles.container}>
-                <HomeHead onMenuPress={this.onMenuPress.bind(this)}/>
                 <View>
+                    <HomeHead onMenuPress={this.onMenuPress.bind(this)}/>
+                </View>
+                <View style={{flex:1,}}>
                     <Image source={{uri:this.state.info.HeadPic}}/>
                     <Text>{this.state.info.HospitalName}</Text>
                 </View>
