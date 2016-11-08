@@ -26,24 +26,28 @@ import SendRequest from './sendrequest';
 import Home from './home';
 import Message from './message';
 import UC from './uc';
-
+import NetUtil from '../util/NetUtil';
 const backgroundImageSource = getImageSource(1);
 const TAB_REQUEST  = '求助';
 const TAB_HOMEPAGE = '首页';
 const TAB_MESSAGE  = '消息';
 const TAB_UC       = '我的';
 import TabNavigator from 'react-native-tab-navigator';
-class Index extends Component {
+let CurrentUse='2222';
 
+class Index extends Component {
     constructor (props) {
         super(props);
         this.state = {
             selectedTab: TAB_HOMEPAGE,
+            CurrentUse:'6666',
             tabBarShow: true
         };
         this._renderTabItem = this._renderTabItem.bind(this);
+        NetUtil.getUserInfo(u=>{
+            this.setState({ CurrentUse:u.userid });
+        });
     }
-
     componentWillUnmount() {
         this.timer && TimerMixin.clearTimeout(this.timer);
     }
@@ -72,9 +76,7 @@ class Index extends Component {
                 renderView = <UC router={this.props.router}/>;
                 break;
             case TAB_REQUEST:
-
-                renderView = <SendRequest user="1234567890" router={this.props.router} />;
-
+                renderView = <SendRequest user={this.state.CurrentUse} router={this.props.router} />;
                 break;
             default:
                 break;
