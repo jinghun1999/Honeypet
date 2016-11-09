@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 
 import _ from 'lodash';
-//import PureRenderMixin from '../common/pureRender';
+//import PureRenderMixin from '../../common/pureRender';
 import ParallaxScrollView from 'react-native-parallax-scroll-view';
 import { getImageSource } from '../../common';
 import Navbar from '../navbar';

@@ -33,8 +33,9 @@ class LoginPage extends Component {
         super(props);
         this.state = {
             username: '12345678900',
-            password: '123',
-            loading: false
+            password: '123456',
+            loading: false,
+            canLogin: false,
         };
     }
 
@@ -78,15 +79,15 @@ class LoginPage extends Component {
         const _this = this;
         if (loginData) {
             this.setState({loading: true});
-            NetUtil.login(loginData.username, loginData.password, function(ok, msg){
-                if(ok){
+            NetUtil.login(loginData.username, loginData.password, function (ok, msg) {
+                if (ok) {
                     const {navigator} = _this.props;
                     if (navigator) {
                         _this.timer = TimerMixin.setTimeout(() => {
                             navigator.replace(ViewPage.index());
                         }, 2000);
                     }
-                }else{
+                } else {
                     Toast.show(msg);
                 }
             });
@@ -98,7 +99,7 @@ class LoginPage extends Component {
         if (username === null || username.length !== 11) {
             Toast.show("请输入正确的手机号");
             return false;
-        }else{
+        } else {
             this.setState({loading: true});
             this.props.userAction.getVerifycode({
                 username: username,
@@ -114,7 +115,7 @@ class LoginPage extends Component {
     }
 
     handleLoginResolved(data) {
-        if(!data.Sign){
+        if (!data.Sign) {
             Toast.show("登录失败，手机号或验证码错误");
             return;
         }
@@ -205,7 +206,12 @@ class LoginPage extends Component {
                         placeholder={'请输入验证码'}
                         placeholderTextColor={ StyleConfig.color_gray }
                         underlineColorAndroid={ 'transparent' }
-                        onChangeText={(val)=>this.setState({password: val})}
+                        onChangeText={(val)=>{
+                            this.setState({password: val});
+                            if(val.length===6){
+                                this.setState({canLogin: true});
+                            }
+                        }}
                         value={ this.state.password }/>
                 </View>
                 <TouchableOpacity
@@ -224,7 +230,8 @@ class LoginPage extends Component {
         return (
             <TouchableOpacity
                 activeOpacity={ StyleConfig.touchable_press_opacity }
-                style={ [ComponentStyles.btn, ComponentStyles.btn_primary, styles.btn_login] }
+                disabled={!this.state.canLogin}
+                style={ [ComponentStyles.btn, {flex:1,}, this.state.canLogin?ComponentStyles.btn_primary:ComponentStyles.btn_dark] }
                 onPress={()=>this.handleLogin()}>
                 <Text style={ ComponentStyles.btn_text }>
                     登录
