@@ -1,7 +1,7 @@
 'use strict';
 import React, { Component, } from 'react';
 
-let API_HOST = 'http://test.tuoruimed.com/honeypet/api/';
+let API_HOST = 'http://test.tuoruimed.com:802/api/';
 var GLOBAL = {
     API_HOST:API_HOST,
     LOGIN: API_HOST + '/token',

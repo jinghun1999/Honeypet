@@ -19,7 +19,12 @@ import Logo from '../components/logo';
 import { getImageSource, openLink } from '../common';
 import NetUtil from '../util/NetUtil';
 import Spinner from '../components/spinner';
+import Toast from 'react-native-root-toast';
 const backgroundImageSource = getImageSource(8);
+
+import Signalr from 'react-native-signalr';
+
+
 
 class SendRequest extends Component {
     constructor (props) {
@@ -35,6 +40,28 @@ class SendRequest extends Component {
 
     componentDidMount()
     {
+        var connection = Signalr.hubConnection('http://test.tuoruimed.com:802');
+        var proxy = connection.createHubProxy('MessageHub');
+        proxy.on('AddMessage', (message) => {
+            Alert.alert("接收到一条新信息",message);
+        });
+
+
+        connection.start().done(() => {
+            Alert.alert('Now connected, connection ID=' + connection.id);
+
+            //proxy.invoke('SendAll', '上海','大上海');
+        }).fail((error) => {
+            Toast.show('Failed：' + error);
+        });
+
+        connection.connectionSlow(function () {
+            Toast.show('We are currently experiencing difficulties with the connection.')
+        });
+
+        connection.error(function (error) {
+            Toast.show('SignalR error: ' + error)
+        });
     }
 
     renderReadOnlyMaster() {
@@ -76,7 +103,6 @@ class SendRequest extends Component {
     }
     renderReceiveLoading() {
 
-        Alert.alert("2");
 
             return (
                 <Spinner label="正在等待医院反馈，请稍等..." style={ ComponentStyles.pending_container }>
@@ -149,8 +175,6 @@ class SendRequest extends Component {
         if( !re ) {
             return;
         }
-
-
         let data = {
             'Mobile':this.props.user,
             'RealName':this.state.master,
@@ -165,6 +189,17 @@ class SendRequest extends Component {
         this.setState({ loading:true });
         NetUtil.request( data , (ok,msg)=>{
             if(ok){
+
+                if(msg.Sign)
+                {
+                    Alert.alert("提示","sucess");
+                }
+                else
+                {
+                    Alert.alert("提示",msg.Exception);
+                }
+
+
                 this.setState({ loading:false,Receive:true });
             }
             else{
