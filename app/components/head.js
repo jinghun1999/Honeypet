@@ -12,7 +12,7 @@ import{
     TouchableHighlight,
     TouchableOpacity,
     } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import Icon from 'react-native-vector-icons/Ionicons';
 class Head extends Component {
     constructor(props) {
         super(props);
@@ -32,7 +32,7 @@ class Head extends Component {
             return (
                 <View style={styles.container}>
                     <TouchableHighlight underlayColor='#52b0ff' style={styles.backBtn} onPress={this.props.onLeftButtonPress}>
-                        <Icon name={'angle-left'} size={40} color={'white'}/>
+                        <Icon name={'ios-arrow-round-back'} size={40} color={'white'}/>
                     </TouchableHighlight>
 
                     <View style={styles.titleBox}>
@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
         alignItems: 'stretch',
         height: 50,
         alignSelf: 'stretch',
-        backgroundColor: '#63B8FF',
+        backgroundColor: '#9B30FF',
         justifyContent: 'center',
         paddingRight: 10,
     },

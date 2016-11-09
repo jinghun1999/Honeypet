@@ -15,15 +15,24 @@ import ViewPage from './view';
 import Config, { storageKey } from '../config';
 import UserHead from '../components/header/user';
 import NButton from '../components/NButton';
+import NetUtil from '../util/NetUtil';
+import Toast from 'react-native-root-toast';
 class UC extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {};
+        this.state = {
+            user:{}
+        };
     }
 
     componentDidMount() {
-
+        let _this = this;
+        NetUtil.getAuth((ret)=>{
+            _this.setState({user: ret});
+        },()=>{
+            Toast.show('获取用户信息失败');
+        });
     }
     logout(){
         let _this = this;
@@ -44,11 +53,17 @@ class UC extends Component {
             ]
         )
     }
+    renderChildren(){
+        return (
+            <NButton onPress={this.logout.bind(this)} backgroundColor={'#FF6666'} text="注 销"/>
+        );
+    }
     render() {
         return (
             <View style={styles.container}>
-                <UserHead />
-                <NButton onPress={this.logout.bind(this)} backgroundColor={'#FF6666'} text="注 销"/>
+                <UserHead user={this.state.user}>
+                    {this.renderChildren()}
+                </UserHead>
             </View>
         );
     }

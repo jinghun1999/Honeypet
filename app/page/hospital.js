@@ -14,6 +14,7 @@ import {
     } from 'react-native';
 //import HomeHead from '../components/header/home';
 import Head from '../components/head';
+import Icon from 'react-native-vector-icons/Ionicons';
 import Toast from 'react-native-root-toast';
 class Hospital extends Component {
 
@@ -40,8 +41,17 @@ class Hospital extends Component {
                 <View style={{height:200,}}>
                     <Image source={{uri:this.state.info.HeadPic}} resizeMode={'stretch'} style={{flex:1,}} />
                 </View>
-                <View style={{flex:1, padding:10,}}>
-                    <Text style={{fontSize:18, borderLeftWidth:5, borderLeftColor:'#EE4000', paddingLeft:5,}}>{this.state.info.HospitalName}</Text>
+                <View style={{padding:10, backgroundColor:'#fff'}}>
+                    <Text style={{fontSize:18, borderLeftWidth:5, borderLeftColor:'#FA8072', paddingLeft:5,}}>{this.state.info.HospitalName}</Text>
+                </View>
+                <View style={{padding:10, marginVertical:10, backgroundColor:'#fff'}}>
+                    <Text>{this.state.info.Description}</Text>
+                </View>
+                <View style={{padding:10, backgroundColor:'#fff', borderBottomWidth:1, borderBottomColor:'#EDEDED'}}>
+                    <Text><Icon name={'ios-call'} size={18} color={'#FA8072'}/> {this.state.info.Tel}</Text>
+                </View>
+                <View style={{padding:10, backgroundColor:'#fff', borderBottomWidth:1, borderBottomColor:'#EDEDED'}}>
+                    <Text><Icon name={'ios-pin'} size={18} color={'#FA8072'}/> {this.state.info.Address}</Text>
                 </View>
             </View>
         );
@@ -50,6 +60,7 @@ class Hospital extends Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        backgroundColor:'#F5F5F5'
     },
 
 });
