@@ -11,7 +11,8 @@ import {
     TextInput,
     StyleSheet,
     ScrollView,
-    TouchableOpacity
+    TouchableOpacity,
+    InteractionManager
     } from 'react-native';
 import _ from 'lodash';
 import ViewPage from './view';
