@@ -49,7 +49,7 @@ export const StyleConfig = {
     htmlRender_spaceHeight: 15,
 
     header_height: 200,
-    navbar_height: 70,
+    navbar_height: 50,
     bottomBar_height: 46,
     icon_size: 22,
     avatarSize_lg: 60,

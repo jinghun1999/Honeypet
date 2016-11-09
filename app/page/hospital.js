@@ -16,6 +16,7 @@ import {
 import Head from '../components/head';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Toast from 'react-native-root-toast';
+import Navbar from '../components/navbar';
 class Hospital extends Component {
 
     constructor(props) {
@@ -37,7 +38,7 @@ class Hospital extends Component {
     render() {
         return (
             <View style={styles.container}>
-                <Head title={'医院详情'} canBack={true} onLeftButtonPress={this.onBack.bind(this)}/>
+                <Navbar title={'医院详情'} leftIconOnPress={this.onBack.bind(this)}/>
                 <View style={{height:200,}}>
                     <Image source={{uri:this.state.info.HeadPic}} resizeMode={'stretch'} style={{flex:1,}} />
                 </View>
