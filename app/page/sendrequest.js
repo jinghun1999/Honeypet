@@ -21,10 +21,23 @@ import NetUtil from '../util/NetUtil';
 import Spinner from '../components/spinner';
 import Toast from 'react-native-root-toast';
 const backgroundImageSource = getImageSource(8);
-
 import Signalr from 'react-native-signalr';
 
-
+/*
+* 场景汇总：
+* 1、初始化：
+*    SendRequesting:false,SucessRequest:"",WaitResponding:false,SucessRespond:""
+* 2、请求运行中：
+*    SendRequesting:true,SucessRequest:"",WaitResponding:false,SucessRespond:""
+* 3、请求成功，等待回应
+*    SendRequesting:false,SucessRequest:"true",WaitResponding:true,SucessRespond:""
+* 4、成功接收到回应
+*    SendRequesting:false,SucessRequest:"true",WaitResponding:false,SucessRespond:"true"
+* 5、接收回应失败
+*    SendRequesting:false,SucessRequest:"true",WaitResponding:false,SucessRespond:"false"
+* 6、发送请求失败
+*    SendRequesting:false,SucessRequest:"false",WaitResponding:false,SucessRespond:""
+* */
 
 class SendRequest extends Component {
     constructor (props) {
@@ -33,34 +46,39 @@ class SendRequest extends Component {
             petname:'',
             master:this.props.user,
             content:'',
-            loading:false,
-            Receive:false
+
+            SendRequesting:false,
+            SucessRequest:'',
+            WaitResponding:false,
+            SucessRespond:''
         };
     }
-
     componentDidMount()
     {
-        var connection = Signalr.hubConnection('http://test.tuoruimed.com:802');
+
+    }
+
+    startMonitor(requestId,sucessCallBack,failedCallBack){
+        let connection = Signalr.hubConnection('http://test.tuoruimed.com:802');
         var proxy = connection.createHubProxy('MessageHub');
         proxy.on('AddMessage', (message) => {
-            Alert.alert("接收到一条新信息",message);
+            //收到消息
         });
 
-
         connection.start().done(() => {
-            Alert.alert('Now connected, connection ID=' + connection.id);
-
-            //proxy.invoke('SendAll', '上海','大上海');
+            //链接成功
+            sucessCallBack();
         }).fail((error) => {
-            Toast.show('Failed：' + error);
+            //接收消息失败
+            failedCallBack();
         });
 
         connection.connectionSlow(function () {
-            Toast.show('We are currently experiencing difficulties with the connection.')
+            //链接速度较慢
         });
 
         connection.error(function (error) {
-            Toast.show('SignalR error: ' + error)
+            //出错
         });
     }
 
@@ -100,15 +118,6 @@ class SendRequest extends Component {
                 </Text>
             </View>
         );
-    }
-    renderReceiveLoading() {
-
-
-            return (
-                <Spinner label="正在等待医院反馈，请稍等..." style={ ComponentStyles.pending_container }>
-
-                </Spinner>
-            )
     }
     renderMaster() {
         return (
@@ -170,6 +179,47 @@ class SendRequest extends Component {
             </View>
         );
     }
+    setcene(value){
+        if( value == 1 ){
+            this.setState({SendRequesting:false,SucessRequest:"",WaitResponding:false,SucessRespond:""});
+        }
+        if( value == 2 ){
+            this.setState({SendRequesting:true,SucessRequest:"",WaitResponding:false,SucessRespond:""});
+        }
+        if( value == 3 ){
+            this.setState({SendRequesting:false,SucessRequest:"true",WaitResponding:true,SucessRespond:""});
+        }
+        if( value == 4 ){
+            this.setState({SendRequesting:false,SucessRequest:"true",WaitResponding:false,SucessRespond:"true"});
+        }
+        if( value == 5 ){
+            this.setState({SendRequesting:false,SucessRequest:"true",WaitResponding:false,SucessRespond:"false"});
+        }
+        if( value == 6 ){
+            this.setState({SendRequesting:false,SucessRequest:"false",WaitResponding:false,SucessRespond:""});
+        }
+        Alert.alert('错误的场景参数：' + value.toString());
+    }
+    getcene(){
+        if( this.state.SendRequesting == false && this.state.SucessRequest=='' && this.state.WaitResponding == false && this.state.SucessRespond=='' ){
+            return 1;
+        }if( this.state.SendRequesting == true && this.state.SucessRequest=='' && this.state.WaitResponding == false && this.state.SucessRespond==''){
+            return 2;
+        }if( this.state.SendRequesting == false && this.state.SucessRequest=='true' && this.state.WaitResponding == true && this.state.SucessRespond==''){
+            return 3;
+        }
+        if( this.state.SendRequesting == false && this.state.SucessRequest=='true' && this.state.WaitResponding==false && this.state.SucessRespond=='true'){
+            return 4;
+        }
+        if( this.state.SendRequesting == false && this.state.SucessRequest=='true' && this.state.WaitResponding==false && this.state.SucessRespond=='false'){
+            return 5;
+        }
+        if( this.state.SendRequesting == false && this.state.SucessRequest=='false' && this.state.WaitResponding==false && this.state.SucessRespond==''){
+            return 6;
+        }
+        alert("发现错误的场景参数");
+    }
+
     handleSend(){
         let re = this.Validator();
         if( !re ) {
@@ -186,30 +236,31 @@ class SendRequest extends Component {
             'Describe':this.state.content
         };
 
-        this.setState({ loading:true });
+        //设置场景2
+        this.setcene(2);
+        let _this = this;
         NetUtil.request( data , (ok,msg)=>{
             if(ok){
-
-                if(msg.Sign)
-                {
+                if(msg.Sign){
                     Alert.alert("提示","sucess");
+                    _this.startMonitor(data.Message,()=>{
+                        this.setcene(3);
+                    },()=>{
+                        this.setcene(6);//报错
+                    });
                 }
-                else
-                {
+                else{
                     Alert.alert("提示",msg.Exception);
+                    this.setcene(6);//报错
                 }
-
-
-                this.setState({ loading:false,Receive:true });
             }
             else{
-                this.setState({ loading:false,Receive:false });
+                this.setcene(6);//报错
             }
         });
     };
 
-    Validator()
-    {
+    Validator(){
         let message;
         if( !_.trim(this.state.petname) )
         {
@@ -248,30 +299,6 @@ class SendRequest extends Component {
             </TouchableOpacity>
         );
     }
-
-    renderContent() {
-            if( this.state.Receive ){
-                return (<View style="{[CommonStyles.m_a_4],}">
-                    { this.renderReadOnlyMaster() }
-                    { this.renderReadOnlyPetName() }
-                    { this.renderReadOnlyPetDescribe() }
-                </View>);
-            }
-            else{
-                return (<View style="{[CommonStyles.m_a_4],}">
-                    { this.renderMaster()  }
-                    { this.renderPetName() }
-                    { this.renderPetDescribe() }
-                </View>);
-            }
-    }
-    renderModal() {
-        return(
-            <View style={{height:200,margin:0}}>
-                {this.renderCommitAction()}
-            </View>
-        );
-    }
     renderHeader() {
         return (
             <View style={[CommonStyles.m_b_4]}>
@@ -282,22 +309,67 @@ class SendRequest extends Component {
             </View>
         );
     }
-    renderLoading() {
-        if (this.state.loading === true) {
+    renderLoading(label) {
             return (
-                <Spinner style={ ComponentStyles.pending_container }/>
+                <Spinner label={label} style={ ComponentStyles.pending_container }/>
             )
+    }
+
+    renderContent() {
+        let value = getcene();
+        if( value == 1 ){
+            //场景1：初始化
+            return (<View style="{[CommonStyles.m_a_4],}">
+                { this.renderMaster()  }
+                { this.renderPetName() }
+                { this.renderPetDescribe() }
+                { this.renderCommitAction() }
+            </View>);
+        }if( value == 2 ){
+            //场景2：请求运行中
+            return (<View style="{[CommonStyles.m_a_4],}">
+                { this.renderReadOnlyMaster()  }
+                { this.renderReadOnlyPetName() }
+                { this.renderReadOnlyPetDescribe() }
+                { this.renderLoading('正在发送您的请求...') }
+            </View>);
+        }if( value == 3 ){
+            //场景3：请求成功，等待回应
+            return (<View style="{[CommonStyles.m_a_4],}">
+                { this.renderReadOnlyMaster()  }
+                { this.renderReadOnlyPetName() }
+                { this.renderReadOnlyPetDescribe() }
+                { this.renderLoading('请稍等，正在等待医院回应...') }
+            </View>);
+        }if( value == 4 ){
+            //场景4：成功接收到回应
+            return (<View style="{[CommonStyles.m_a_4],}">
+                { this.renderReadOnlyMaster()  }
+                { this.renderReadOnlyPetName() }
+                { this.renderReadOnlyPetDescribe() }
+            </View>);
+        }if( value == 5 ){
+            //场景5：接收回应失败
+            return (<View style="{[CommonStyles.m_a_4],}">
+                { this.renderReadOnlyMaster()  }
+                { this.renderReadOnlyPetName() }
+                { this.renderReadOnlyPetDescribe() }
+            </View>);
+        }if( value == 6 ){
+            //场景6：发送请求失败
+            return (<View style="{[CommonStyles.m_a_4],}">
+                { this.renderReadOnlyMaster()  }
+                { this.renderReadOnlyPetName() }
+                { this.renderReadOnlyPetDescribe() }
+            </View>);
         }
-        if( this.state.Receive == true ) {
-            return this.renderReceiveLoading();
-        }
+        return (<View />);
     }
     render() {
         return (
-            <View style={[ComponentStyles.container,{backgroundColor:'red'}]}>
+            <View style={[ComponentStyles.container]}>
                 { this.renderHeader()  }
                 { this.renderContent() }
-                { this.renderModal()   }
                 { this.renderLoading() }
             </View>
         );
