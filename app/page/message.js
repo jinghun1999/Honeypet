@@ -30,7 +30,6 @@ const navTitle = "呼叫医生";
 const backgroundImageSource = getImageSource(15);
 const category = postCategory.question;
 
-const questionAddEnabled = false;
 class Message extends Component {
 
     constructor(props) {
@@ -92,9 +91,6 @@ class Message extends Component {
     }
 
     onQuestionSendPress(){
-        if(questionAddEnabled === false){
-            return;
-        }
         const questionData = this.questionValidator();
         if(questionData){
             this.setState({ pending: true });
@@ -129,30 +125,6 @@ class Message extends Component {
         )
     }
 
-    renderPetName(){
-        return (
-            <View>
-                <View style={[ CommonStyles.flexRow, CommonStyles.flexItemsMiddle, CommonStyles.flexItemsBetween, CommonStyles.p_a_3, ComponentStyles.panel_bg ]}>
-                    <Text style={[CommonStyles.text_danger, CommonStyles.font_xs]}>
-                        爱宠名字
-                    </Text>
-                </View>
-                <View  style={[ CommonStyles.p_a_3 ]}>
-                    <TextInput
-                        ref="txtTitle"
-                        maxLength = { 80 }
-                        multiline = { false }
-                        style={ [ComponentStyles.input] }
-                        placeholder={'请输入您的爱宠名字...'}
-                        placeholderTextColor={ StyleConfig.color_dark }
-                        underlineColorAndroid = { 'transparent' }
-                        onChangeText = {(val)=>this.setState({petName: val})}
-                        value={ this.state.petName } />
-                </View>
-            </View>
-        )
-    }
-
     renderQuestionFlags(){
         return (
             <View>
@@ -164,7 +136,8 @@ class Message extends Component {
                 <View style={[ CommonStyles.p_a_3 ]}>
                     <TextInput
                         ref="txtFlags"
-                        maxLength = { 5 }
+                        onFocus={() => {this.refs.txtFlags.focus()}}
+                        maxLength = { 11 }
                         multiline = { false }
                         keyboardType='numeric'
                         style={ [ComponentStyles.input] }
@@ -173,6 +146,31 @@ class Message extends Component {
                         underlineColorAndroid = { 'transparent' }
                         onChangeText = {(val)=>this.setState({questionFlags: val})}
                         value={ this.state.questionFlags } />
+                </View>
+            </View>
+        )
+    }
+
+    renderPetName(){
+        return (
+            <View>
+                <View style={[ CommonStyles.flexRow, CommonStyles.flexItemsMiddle, CommonStyles.flexItemsBetween, CommonStyles.p_a_3, ComponentStyles.panel_bg ]}>
+                    <Text style={[CommonStyles.text_danger, CommonStyles.font_xs]}>
+                        爱宠名字
+                    </Text>
+                </View>
+                <View  style={[ CommonStyles.p_a_3 ]}>
+                    <TextInput
+                        ref="txtTitle"
+                        onFocus={() => {this.refs.txtTitle.focus()}}
+                        maxLength = { 80 }
+                        multiline = { false }
+                        style={ [ComponentStyles.input] }
+                        placeholder={'请输入您的爱宠名字...'}
+                        placeholderTextColor={ StyleConfig.color_dark }
+                        underlineColorAndroid = { 'transparent' }
+                        onChangeText = {(val)=>this.setState({petName: val})}
+                        value={ this.state.petName } />
                 </View>
             </View>
         )
@@ -189,6 +187,7 @@ class Message extends Component {
                 <View style={[ CommonStyles.p_a_3 ]}>
                     <TextInput
                         ref="txtContent"
+                        onFocus={() => {this.refs.txtContent.focus()}}
                         maxLength = { 1000 }
                         multiline = { true }
                         style={ [ComponentStyles.textarea, styles.text_content] }
@@ -252,8 +251,8 @@ class Message extends Component {
                 keyboardDismissMode= { 'interactive'}
                 showsVerticalScrollIndicator  = { false }
                 keyboardShouldPersistTaps  = { true }>
-                { this.renderPetName()}
                 { this.renderQuestionFlags()}
+                { this.renderPetName()}
                 { this.renderQuestionContent() }
                 { this.renderQuestionOp() }
             </ScrollView>
