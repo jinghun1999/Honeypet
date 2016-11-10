@@ -50,8 +50,8 @@ class Message extends Component {
         InteractionManager.runAfterInteractions(() => {
             NetUtil.getAuth((ret)=>{
                 _this.setState({user: ret});
-            },(ret)={
-
+            },(ret)=>{
+                Toast.show(ret);
             });
         });
     }
@@ -142,7 +142,6 @@ class Message extends Component {
                         ref="txtTitle"
                         maxLength = { 80 }
                         multiline = { false }
-                        editable = { questionAddEnabled }
                         style={ [ComponentStyles.input] }
                         placeholder={'请输入您的爱宠名字...'}
                         placeholderTextColor={ StyleConfig.color_dark }
@@ -168,7 +167,6 @@ class Message extends Component {
                         maxLength = { 5 }
                         multiline = { false }
                         keyboardType='numeric'
-                        editable = { questionAddEnabled }
                         style={ [ComponentStyles.input] }
                         placeholder={'请输入手机号码'}
                         placeholderTextColor={ StyleConfig.color_gray }
@@ -193,7 +191,6 @@ class Message extends Component {
                         ref="txtContent"
                         maxLength = { 1000 }
                         multiline = { true }
-                        editable = { questionAddEnabled }
                         style={ [ComponentStyles.textarea, styles.text_content] }
                         placeholder={'请输入求助详情...'}
                         placeholderTextColor={ StyleConfig.color_gray }
