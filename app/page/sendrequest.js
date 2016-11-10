@@ -37,6 +37,8 @@ import Signalr from 'react-native-signalr';
 *    SendRequesting:false,SucessRequest:"true",WaitResponding:false,SucessRespond:"false"
 * 6、发送请求失败
 *    SendRequesting:false,SucessRequest:"false",WaitResponding:false,SucessRespond:""
+* 7、无人接单
+*    SendRequesting:false,SucessRequest:"true",WaitResponding:false,SucessRespond:""
 * */
 
 class SendRequest extends Component {
@@ -46,40 +48,48 @@ class SendRequest extends Component {
             petname:'',
             master:this.props.user,
             content:'',
-
             SendRequesting:false,
             SucessRequest:'',
             WaitResponding:false,
             SucessRespond:''
         };
+        this.startMonitor = this.startMonitor.bind(this);
     }
     componentDidMount()
     {
 
     }
 
-    startMonitor(requestId,sucessCallBack,failedCallBack){
+    startMonitor(requestId,connCallBack, receiveCallBack, timeoutCallBack,failedCallBack){
         let connection = Signalr.hubConnection('http://test.tuoruimed.com:802');
         var proxy = connection.createHubProxy('MessageHub');
         proxy.on('AddMessage', (message) => {
             //收到消息
+            receiveCallBack(message);
         });
-
         connection.start().done(() => {
             //链接成功
-            sucessCallBack();
+            let connid = connection.id;
+            proxy.invoke("MasterConnect",requestId,connid);
+            connCallBack();
         }).fail((error) => {
             //接收消息失败
             failedCallBack();
         });
-
         connection.connectionSlow(function () {
             //链接速度较慢
         });
-
         connection.error(function (error) {
             //出错
         });
+        setTimeout(()=>{
+
+            Alert.alert("断开连接");
+
+            //关闭连接
+            proxy.invoke("MasterDisconnected");
+            timeoutCallBack();
+        },1000 * 10);
     }
 
     renderReadOnlyMaster() {
@@ -198,7 +208,9 @@ class SendRequest extends Component {
         if( value == 6 ){
             this.setState({SendRequesting:false,SucessRequest:"false",WaitResponding:false,SucessRespond:""});
         }
-        Alert.alert('错误的场景参数：' + value.toString());
+        if( value == 7 ){
+            this.setState({SendRequesting:false,SucessRequest:"true",WaitResponding:false,SucessRespond:""});
+        }
     }
     getcene(){
         if( this.state.SendRequesting == false && this.state.SucessRequest=='' && this.state.WaitResponding == false && this.state.SucessRespond=='' ){
@@ -217,15 +229,20 @@ class SendRequest extends Component {
         if( this.state.SendRequesting == false && this.state.SucessRequest=='false' && this.state.WaitResponding==false && this.state.SucessRespond==''){
             return 6;
         }
+        if( this.state.SendRequesting==false && this.state.SucessRequest=="true" && this.state.WaitResponding==false && this.state.SucessRespond=="" ){
+            return 7;
+        }
         alert("发现错误的场景参数");
+        return -1;
     }
-
     handleSend(){
         let re = this.Validator();
         if( !re ) {
             return;
         }
         let data = {
+            'ID':'00000000-0000-0000-0000-000000000000',
+            'ClientID':'00000000-0000-0000-0000-000000000000',
             'Mobile':this.props.user,
             'RealName':this.state.master,
             'PetType':this.state.petname,
@@ -235,26 +252,33 @@ class SendRequest extends Component {
             'Lng':'2.0',
             'Describe':this.state.content
         };
-
         //设置场景2
         this.setcene(2);
         let _this = this;
         NetUtil.request( data , (ok,msg)=>{
             if(ok){
                 if(msg.Sign){
-                    Alert.alert("提示","sucess");
-                    _this.startMonitor(data.Message,()=>{
+                    _this.startMonitor(msg.Message,()=>{
+                        //链接成功CallBack
                         this.setcene(3);
+                    },(mess)=>{
+                        //接收到消息CallBack
+                        this.setcene(4);
                     },()=>{
+                        //断开连接CallBack
+                        if( this.getcene() == 3 ){
+                            this.setcene(7);//无人结单
+                        }
+                    },()=>{
+                        //链接出错CallBack
                         this.setcene(6);//报错
                     });
-                }
-                else{
-                    Alert.alert("提示",msg.Exception);
+                }else{
+                    //发送请求出错
                     this.setcene(6);//报错
                 }
-            }
-            else{
+            }else{
+                //发送请求出错
                 this.setcene(6);//报错
             }
         });
@@ -316,7 +340,8 @@ class SendRequest extends Component {
     }
 
     renderContent() {
-        let value = getcene();
+        let value = this.getcene();
+
         if( value == 1 ){
             //场景1：初始化
             return (<View style="{[CommonStyles.m_a_4],}">
@@ -362,6 +387,14 @@ class SendRequest extends Component {
                 { this.renderReadOnlyPetName() }
                 { this.renderReadOnlyPetDescribe() }
             </View>);
+        }if( value == 7 ){
+            //场景6：无人接单
+            return (<View style="{[CommonStyles.m_a_4],}">
+                { this.renderMaster()  }
+                { this.renderPetName() }
+                { this.renderPetDescribe() }
+                { this.renderCommitAction() }
+            </View>);
         }
         return (<View />);
     }
@@ -370,7 +403,6 @@ class SendRequest extends Component {
             <View style={[ComponentStyles.container]}>
                 { this.renderHeader()  }
                 { this.renderContent() }
-                { this.renderLoading() }
             </View>
         );
     }
