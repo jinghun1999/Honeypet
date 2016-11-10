@@ -35,6 +35,7 @@ class LoginPage extends Component {
             username: '12345678900',
             password: '123456',
             loading: false,
+            canSend: false,
             canLogin: false,
         };
     }
@@ -95,21 +96,20 @@ class LoginPage extends Component {
     }
 
     handleSend() {
-        let username = this.state.username;
+        let _this = this;
+        let username = _this.state.username;
         if (username === null || username.length !== 11) {
             Toast.show("请输入正确的手机号");
             return false;
         } else {
-            this.setState({loading: true});
-            this.props.userAction.getVerifycode({
-                username: username,
-                resolved: (data)=> {
-                    data.username = username;
-                    this.handleLoginResolved(data);
-                },
-                rejected: (data)=> {
-                    this.handleLoginRejected(data);
+            _this.setState({loading: true});
+            NetUtil.getVerifycode(username, (ret)=>{
+                if(ret.Sign){
+                    Toast.show('验证码已发送至您的手机，请注意查收');
+                }else{
+                    Toast.show(ret.Message);
                 }
+                _this.setState({loading: false});
             });
         }
     }
@@ -119,13 +119,9 @@ class LoginPage extends Component {
             Toast.show("登录失败，手机号或验证码错误");
             return;
         }
-        this.props.configAction.updateConfig({
-            key: storageKey.USER_TOKEN,
-            value: data.Message
-        });
         Toast.show("恭喜您，登录成功");
         this.timer = TimerMixin.setTimeout(() => {
-            this.props.router.replace(ViewPage.home());
+            this.props.navigator.replace(ViewPage.home());
         }, 2000);
     }
 
@@ -186,7 +182,12 @@ class LoginPage extends Component {
                         placeholder={'请输入手机号码'}
                         placeholderTextColor={ StyleConfig.color_gray }
                         underlineColorAndroid={ 'transparent' }
-                        onChangeText={(val)=>this.setState({username: val})}
+                        onChangeText={(val)=>{
+                            this.setState({username: val});
+                            if(val.length===11){
+                                this.setState({canSend: true});
+                            }
+                        }}
                         value={ this.state.username }/>
                 </View>
             </View>
@@ -216,9 +217,10 @@ class LoginPage extends Component {
                 </View>
                 <TouchableOpacity
                     activeOpacity={ StyleConfig.touchable_press_opacity }
-                    style={{justifyContent:'center', paddingLeft:5, alignItems:'center', borderLeftWidth:.5,borderLeftColor:'#EEE9E9', marginRight:5,}}
+                    style={styles.sendBtn}
+                    disabled={!this.state.canSend}
                     onPress={()=>this.handleSend()}>
-                    <Text>
+                    <Text style={!this.state.canSend?{color:'#ccc'}:{}}>
                         发送验证码
                     </Text>
                 </TouchableOpacity>
@@ -277,7 +279,15 @@ export const styles = StyleSheet.create({
     footer_copyright: {
         flex: 1,
         justifyContent: 'flex-end'
-    }
+    },
+    sendBtn: {
+        justifyContent: 'center',
+        paddingLeft: 5,
+        alignItems: 'center',
+        borderLeftWidth: .5,
+        borderLeftColor: '#EEE9E9',
+        marginRight: 5,
+    },
 });
 
 export default LoginPage;
