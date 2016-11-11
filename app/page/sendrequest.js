@@ -83,9 +83,7 @@ class SendRequest extends Component {
             //出错
         });
         setTimeout(()=>{
-
             Alert.alert("断开连接");
-
             //关闭连接
             proxy.invoke("MasterDisconnected");
             timeoutCallBack();
@@ -95,26 +93,22 @@ class SendRequest extends Component {
     renderReadOnlyMaster() {
         return (
             <View style={ [ComponentStyles.input_control,{marginLeft:50,marginRight:50,marginTop:10} ] }>
-                <View style={{flex:1,}}>
                     <Text
                         keyboardType={'ascii-capable'}
                         placeholderTextColor={ StyleConfig.color_gray }>
                         {this.state.master}
                     </Text>
-                </View>
             </View>
         );
     }
     renderReadOnlyPetName() {
         return (
             <View style={ [ComponentStyles.input_control,{marginLeft:50,marginRight:50,marginTop:10} ] }>
-                <View style={{flex:1,}}>
                     <Text
                         keyboardType={'ascii-capable'}
                         placeholderTextColor={ StyleConfig.color_gray }>
                         {this.state.petname}
                     </Text>
-                </View>
             </View>
         );
     }
@@ -132,7 +126,6 @@ class SendRequest extends Component {
     renderMaster() {
         return (
             <View style={ [ComponentStyles.input_control,{marginLeft:50,marginRight:50,marginTop:10} ] }>
-                <View style={{flex:1,}}>
                     <TextInput
                         ref="txtMaster"
                         maxLength={ 60 }
@@ -145,15 +138,12 @@ class SendRequest extends Component {
                         onChangeText={(val)=>this.setState({master: val})}
                         value={this.state.master}
                     />
-                </View>
             </View>
         );
     }
-
     renderPetName() {
         return (
             <View style={ [ComponentStyles.input_control,{marginLeft:50,marginRight:50,marginTop:10} ] }>
-                <View style={{flex:1,}}>
                     <TextInput
                         ref="txtPetName"
                         maxLength={ 60 }
@@ -166,7 +156,6 @@ class SendRequest extends Component {
                         onChangeText={(val)=>this.setState({petname: val})}
                         value={this.state.petname}
                     />
-                </View>
             </View>
         );
     }
@@ -316,6 +305,7 @@ class SendRequest extends Component {
                         borderLeftWidth:.5,
                         borderLeftColor:'#EEE9E9',
                         marginRight:5}}
+                    activeOpacity="1.0"
                     onPress={()=>this.handleSend()}>
                 <Text style={[ComponentStyles.btn_text]}>
                     发送
