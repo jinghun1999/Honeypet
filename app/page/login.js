@@ -32,8 +32,8 @@ class LoginPage extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            username: '12345678900',
-            password: '123456',
+            username: '',
+            password: '',
             loading: false,
             canSend: false,
             canLogin: false,
@@ -103,11 +103,15 @@ class LoginPage extends Component {
             return false;
         } else {
             _this.setState({loading: true});
-            NetUtil.getVerifycode(username, (ret)=>{
-                if(ret.Sign){
+            NetUtil.getVerifycode(username, (ok, ret)=> {
+                if (ok) {
                     Toast.show('验证码已发送至您的手机，请注意查收');
-                }else{
-                    Toast.show(ret.Message);
+                    _this.setState({
+                        password: ret.VerifyCode.toString(),
+                        canLogin: true,
+                    });
+                } else {
+                    Toast.show(ret);
                 }
                 _this.setState({loading: false});
             });
@@ -169,7 +173,7 @@ class LoginPage extends Component {
         return (
             <View style={ [ComponentStyles.input_control ,{flexDirection:'row', borderBottomWidth:0}] }>
                 <View
-                    style={{width:40,justifyContent:'center', alignItems:'center', borderRightWidth:.5,borderRightColor:'#EEE9E9', marginRight:5,}}>
+                    style={styles.phone86}>
                     <Text>+86</Text>
                 </View>
                 <View style={{flex:1,}}>
@@ -279,6 +283,14 @@ export const styles = StyleSheet.create({
     footer_copyright: {
         flex: 1,
         justifyContent: 'flex-end'
+    },
+    phone86: {
+        width: 40,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRightWidth: .5,
+        borderRightColor: '#EEE9E9',
+        marginRight: 5,
     },
     sendBtn: {
         justifyContent: 'center',

@@ -145,6 +145,22 @@ class NetUtil extends React.Component {
             }
         });
     }
+    static getVerifycode(phone, callback) {
+        //let ret = {Sign: true, VerifyCode: '123456'};
+        NetUtil.get(CONSTAPI.LOGIN + "?m=" + phone, false, function (lg) {
+            if (lg.Sign && lg.Message) {
+                storage.save({
+                    key: storageKey.USER_VERIFYCODE,
+                    rawData: lg.Message,
+                    expires: 1000 * 9,
+                });
+                callback(true, lg.Message);
+            } else {
+                callback(false, lg.Exception)
+            }
+        });
+        //callback(ret);
+    }
 }
 
 module.exports = NetUtil;
