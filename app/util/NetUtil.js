@@ -114,7 +114,7 @@ class NetUtil extends React.Component {
     }
 
     static headerClientAuth(user) {
-        let authorization = 'Basic ' + Util.base64Encode(user.userid + ';' + user.CreatedOn + ';' + user.SafetyCode);
+        let authorization = 'Basic ' + Util.base64Encode(user.userid + ';' + user.AccessTokenExpiredAt + ';' + user.AccessToken);
         return {
             "Authorization":authorization
         };

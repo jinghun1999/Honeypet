@@ -116,7 +116,7 @@ class HomePage extends Component {
                 <TouchableHighlight
                     underlayColor={'#6495ED'}
                     style={styles.callStyle}
-                    onPress={()=>{}}>
+                    onPress={()=>{this.props.navigator.push(ViewPage.message())}}>
                     <View style={{flex:1, flexDirection:'row', alignItems:'center'}}>
                         <Icon name={'ios-call'} size={32} color={'#fff'}/>
                         <Text style={{color:'#fff', fontSize:18, marginLeft:10,}}>免费呼叫宠物医生</Text>

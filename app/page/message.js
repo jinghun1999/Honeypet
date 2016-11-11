@@ -121,7 +121,7 @@ class Message extends Component {
 
     renderNavbar(){
         return (
-            <Navbar title={navTitle} leftIconName={false} leftIconOnPress={()=>{}}/>
+            <Navbar title={navTitle} leftIconOnPress={()=>this.props.navigator.pop()}/>
         )
     }
 

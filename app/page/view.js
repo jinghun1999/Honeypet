@@ -32,7 +32,7 @@ export default ViewPage = {
         return {
             component: Page.Message,
             name: 'message',
-            id: 'main',
+            id: 'page',
         }
     },
     uc: ()=>{
