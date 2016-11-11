@@ -5,7 +5,7 @@ import React, {
 
 import {
     Alert
-    } from 'react-native';
+} from 'react-native';
 
 import Util from './Util';
 import Global from './Global';
@@ -40,14 +40,13 @@ class NetUtil extends React.Component {
                 try {
                     result = JSON.parse(responseText);
                 } catch (e) {
-                    result = {Sign: false, Message: '【解析远程数据失败】' + responseText};
+                    result = {Sign: false, Exception: '【解析远程数据失败】' + responseText};
                 }
                 callback(result);
             }).catch(error => {
-                alert(error);
+                callback({Sign: false, Exception: '访问数据出错：' + error});
             }).done();
     }
-
     //get请求
     static get(url, header, callback) {
         if (!header) {
@@ -74,7 +73,7 @@ class NetUtil extends React.Component {
                 try {
                     result = JSON.parse(responseText);
                 } catch (e) {
-                    result = {Sign: false, Message: '【解析远程数据失败】' + responseText};
+                    result = {Sign: false, Exception: '【解析远程数据失败】' + responseText};
                 }
                 callback(result);
             }).catch(error => {
@@ -114,29 +113,21 @@ class NetUtil extends React.Component {
         return 'Mobile ' + Util.base64Encode(mobile + ':' + hospitalcode + ":" + token);
     }
 
-    /*
-     static headerClientAuth(user, hos) {
-     let hoscode = '*';
-     if (hos && hos.hospital) {
-     hoscode = hos.hospital.Registration
-     }
-     return {
-     'Authorization': 'Mobile ' + Util.base64Encode(user.Mobile + ':' + hoscode + ":" + user.Token.token)
-     }
-     }*/
-
-    static headerClientAuth(user, hos) {
+    static headerClientAuth(user) {
+        let authorization = 'Basic ' + Util.base64Encode(user.userid + ';' + user.CreatedOn + ';' + user.SafetyCode);
         return {
-            'Authorization': 'Basic ' + Util.base64Encode(user.userid + ';' + user.user.CreatedOn + ';' + user.user.SafetyCode)
+            "Authorization":authorization
         };
     }
 
-    static request(data, callback) {
-        NetUtil.getAuth((ret)=> {
+    static request(data,callback) {
+        NetUtil.getAuth((ret)=>{
             let header = NetUtil.headerClientAuth(ret);
-            NetUtil.postJson(CONSTAPI.REQUEST, data, header, callback);
-        }, (_mess)=> {
-            Alert.alert(_mess);
+            NetUtil.postJson(CONSTAPI.REQUEST,data,header,(result)=>{
+                    callback(result.Sign,result);
+            });
+        },(_mess)=>{
+            callback(false,_mess);
         });
     }
 
@@ -153,11 +144,6 @@ class NetUtil extends React.Component {
                 callback(false, lg.Exception)
             }
         });
-    }
-
-    static getVerifycode(phone, callback) {
-        let ret = {Sign: true, VerifyCode: '123456'};
-        callback(ret);
     }
 }
 
