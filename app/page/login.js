@@ -107,7 +107,7 @@ class LoginPage extends Component {
                 if (ok) {
                     Toast.show('验证码已发送至您的手机，请注意查收');
                     _this.setState({
-                        password: ret.VerifyCode.toString(),
+                        password: ret.verifycode.toString(),
                         canLogin: true,
                     });
                 } else {

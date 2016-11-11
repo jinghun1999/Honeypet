@@ -40,11 +40,11 @@ class NetUtil extends React.Component {
                 try {
                     result = JSON.parse(responseText);
                 } catch (e) {
-                    result = {Sign: false, Exception: '【解析远程数据失败】' + responseText};
+                    result = {result: false, error: '【解析远程数据失败】' + responseText};
                 }
                 callback(result);
             }).catch(error => {
-                callback({Sign: false, Exception: '访问数据出错：' + error});
+                callback({result: false, error: '访问数据出错：' + error});
             }).done();
     }
     //get请求
@@ -73,7 +73,7 @@ class NetUtil extends React.Component {
                 try {
                     result = JSON.parse(responseText);
                 } catch (e) {
-                    result = {Sign: false, Exception: '【解析远程数据失败】' + responseText};
+                    result = {result: false, error: '【解析远程数据失败】' + responseText};
                 }
                 callback(result);
             }).catch(error => {
@@ -123,40 +123,40 @@ class NetUtil extends React.Component {
     static request(data,callback) {
         NetUtil.getAuth((ret)=>{
             let header = NetUtil.headerClientAuth(ret);
-            NetUtil.postJson(CONSTAPI.REQUEST,data,header,(result)=>{
-                    callback(result.Sign,result);
+            NetUtil.postJson(CONSTAPI.REQUEST, data, header, (result)=>{
+                    callback(result.result, result);
             });
         },(_mess)=>{
-            callback(false,_mess);
+            callback(false, _mess);
         });
     }
 
     static login(phone, pwd, callback) {
         NetUtil.get(CONSTAPI.LOGIN + "?m=" + phone + "&r=" + pwd, false, function (lg) {
-            if (lg.Sign && lg.Message) {
+            if (lg.result && lg.data) {
                 storage.save({
                     key: storageKey.USER_TOKEN,
-                    rawData: lg.Message,
+                    rawData: lg.data,
                     expires: 1000 * 7200,
                 });
                 callback(true);
             } else {
-                callback(false, lg.Exception)
+                callback(false, lg.error)
             }
         });
     }
     static getVerifycode(phone, callback) {
         //let ret = {Sign: true, VerifyCode: '123456'};
         NetUtil.get(CONSTAPI.LOGIN + "?m=" + phone, false, function (lg) {
-            if (lg.Sign && lg.Message) {
+            if (lg.result && lg.data) {
                 storage.save({
                     key: storageKey.USER_VERIFYCODE,
-                    rawData: lg.Message,
+                    rawData: lg.data,
                     expires: 1000 * 9,
                 });
-                callback(true, lg.Message);
+                callback(true, lg.data);
             } else {
-                callback(false, lg.Exception)
+                callback(false, lg.error)
             }
         });
         //callback(ret);
