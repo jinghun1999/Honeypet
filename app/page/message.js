@@ -209,7 +209,7 @@ class Message extends Component {
                        source={ {uri: 'http://www.easyicon.net/api/resizeApi.php?id=1201413&size=96' } }>
                 </Image>
                 <Text style={ [ CommonStyles.text_gray, CommonStyles.font_xs ] }>
-                    {this.state.user.Phone}
+                    {this.state.user.realname}
                 </Text>
             </View>
         )

@@ -91,13 +91,13 @@ class NetUtil extends React.Component {
         }).catch(err => {
             switch (err.name) {
                 case 'NotFoundError':
-                    error('not found user');
+                    error('本App需要登录后才能使用');
                     break;
                 case 'ExpiredError':
-                    error('user login expired');
+                    error('登录已过期');
                     break;
                 default :
-                    error('not login');
+                    error('请先登录');
                     break;
             }
         });
