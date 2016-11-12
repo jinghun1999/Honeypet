@@ -64,9 +64,9 @@ class HomePage extends Component {
                 pageIndex: pageIndex,
                 pageSize: 35
             }, null, function (data) {
-                if (data && data.Sign && data.Message) {
+                if (data && data.result && data.data) {
                     _this.setState({
-                        hosList: data.Message,
+                        hosList: data.data,
                         loaded: true,
                     })
                 } else {

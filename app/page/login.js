@@ -102,12 +102,20 @@ class LoginPage extends Component {
             Toast.show("请输入正确的手机号");
             return false;
         } else {
+            var reg = /^0?1[3|4|5|7|8][0-9]\d{8}$/;
+            if (reg.test(username)) {
+                Toast.show("请输入正确的手机号");
+                return false;
+            }else{
+                Toast.show("请输入正确的手机号");
+                return false;
+            };
             _this.setState({loading: true});
             NetUtil.getVerifycode(username, (ok, ret)=> {
                 if (ok) {
                     Toast.show('验证码已发送至您的手机，请注意查收');
                     _this.setState({
-                        password: ret.VerifyCode.toString(),
+                        password: ret.verifycode.toString(),
                         canLogin: true,
                     });
                 } else {
