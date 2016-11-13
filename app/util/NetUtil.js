@@ -121,6 +121,7 @@ class NetUtil extends React.Component {
     }
 
     static request(data,callback) {
+
         NetUtil.getAuth((ret)=>{
             let header = NetUtil.headerClientAuth(ret);
             NetUtil.postJson(CONSTAPI.REQUEST, data, header, (result)=>{

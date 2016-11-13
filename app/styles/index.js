@@ -394,6 +394,10 @@ export const ComponentStyles = StyleSheet.create({
         backgroundColor: 'transparent',
     },
 
+    model_width:{
+        width: width - 60,
+    },
+
     modal_header:{
         backgroundColor: 'transparent'
     },
