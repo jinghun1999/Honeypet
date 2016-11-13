@@ -85,13 +85,14 @@ class LoginPage extends Component {
                     const {navigator} = _this.props;
                     if (navigator) {
                         _this.timer = TimerMixin.setTimeout(() => {
+                            _this.setState({loading: false});
                             navigator.replace(ViewPage.index());
-                        }, 2000);
+                        }, 500);
                     }
                 } else {
+                    _this.setState({loading: false});
                     Toast.show(msg);
                 }
-                _this.setState({loading: false});
             });
         }
     }

@@ -28,11 +28,14 @@ export default ViewPage = {
             name: 'login'
         }
     },
-    message: ()=>{
+    message: (data)=>{
         return {
             component: Page.Message,
             name: 'message',
             id: 'page',
+            params: {
+                location: data,
+            }
         }
     },
     uc: ()=>{
