@@ -243,13 +243,11 @@ class Message extends Component {
                         }
                     },()=>{
                         //链接出错CallBack
-                        Alert.alert("2");
                         Toast.show("链接服务器出错...");
                         this.setcene(6);//报错
                     });
                 }else{
                     //发送请求出错
-                    Alert.alert("1");
                     Toast.show("链接服务器出错...");
                     this.setcene(6);//报错
                 }
