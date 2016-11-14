@@ -57,13 +57,16 @@ class HomePage extends Component {
 
     componentDidMount() {
         const _this = this;
+
         this.listener = AMapLocation.addEventListener((data) => {
+            Toast.show(JSON.stringify(data))
             if (data.address != '') {
                 _this.setState({
                     location: data,
                     position: data.address,
                 });
             } else {
+
                 _this.setState({
                     location: {},
                     position: '定位失败，请点击重新定位',
@@ -129,7 +132,7 @@ class HomePage extends Component {
                         source={{uri: 'http://img.zcool.cn/community/019a9e554b3fbd000001bf72ac0029.jpg'}}
                         />
                 </View>
-                <TouchableHighlight underlayColor={'#F7F7F7'} onPress={this.onLocation.bind(this)}>
+                <TouchableHighlight underlayColor={'#F7F7F7'} onPress={()=>{}}>
                     <View style={styles.location}>
                         <Icon name={'ios-pin'} size={22} color={'#FA8072'}/>
                         <Text style={styles.positionText}>{this.state.position}</Text>
