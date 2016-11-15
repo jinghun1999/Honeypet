@@ -18,7 +18,7 @@ import NButton from '../components/NButton';
 import NetUtil from '../util/NetUtil';
 import Toast from 'react-native-root-toast';
 import Icon from 'react-native-vector-icons/FontAwesome'
-class UC extends Component {
+class P extends Component {
 
     constructor(props) {
         super(props);
@@ -71,7 +71,7 @@ class UC extends Component {
                     <Icon name="phone-square" size={26} color="#CD661D" />
                     <Text style={styles.rowText}>我的呼叫历史</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={[styles.row,styles.bottom,{marginTop:10,}]} onPress={()=>{ this.props.navigator.push(ViewPage.setting())}}>
+                <TouchableOpacity style={[styles.row,styles.bottom,{marginTop:10,}]} onPress={()=>{}}>
                     <Icon name="cog" size={26} color="#CDCD00" />
                     <Text style={styles.rowText}>设置</Text>
                 </TouchableOpacity>
@@ -110,4 +110,4 @@ const styles = StyleSheet.create({
     },
     bottom:{borderBottomWidth:StyleSheet.hairlineWidth, borderBottomColor:'#ccc',}
 });
-export default UC;
+export default P;

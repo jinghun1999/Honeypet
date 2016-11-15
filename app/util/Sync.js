@@ -1,29 +1,27 @@
 /**
- * Created by User on 2016-09-22.
+ * Created by User on 2016-10-22.
  */
 'use strict';
+import Config, { storageKey, loginExpiredIn } from '../config';
 var Sync = {
-    USER(params) {
+    USERTOKEN(params) {
         let {id, resolve, reject } = params;
-        storage.load({key: 'LoginData'}).then(l=> {
-            let url = CONSTAPI.Auth + '/ad?identity=' + l.identity + '&password=' + l.password + '&verCode=&type=m';
-            //let url = CONSTAPI.Auth + '/ad?identity=18307722503&password=abc123&type=m';
+        storage.load({key: storageKey.LOGIN_INFO}).then(li=> {
+            let url = CONSTAPI.LOGIN + "?m=" + li.phone + "&r=" + li.password;
             fetch(url)
                 .then((response) => response.text())
                 .then((responseText) => {
                     let r = {};
                     try {
                         r = JSON.parse(responseText);
-                        if (r.Sign && r.Message) {
-                            let _expires = 1000 * (r.Message.Token.expires_in - 16200);
+                        if (r.result && r.data) {
+                            let _expires = 1000 * loginExpiredIn;
                             storage.save({
-                                key: 'USER',
-                                rawData: {
-                                    user: r.Message,
-                                },
+                                key: storageKey.USER_TOKEN,
+                                rawData: r.data,
                                 expires: _expires,
                             });
-                            resolve && resolve({user: r.Message});
+                            resolve && resolve({user: r.data});
                             //alert('自动登陆成功，' + _expires + 'ms后过期')
                         } else {
                             //alert('自动登陆失败！')

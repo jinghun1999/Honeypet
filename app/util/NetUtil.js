@@ -9,7 +9,7 @@ import {
 
 import Util from './Util';
 import Global from './Global';
-import Config, { storageKey } from '../config';
+import Config, { storageKey, loginExpiredIn } from '../config';
 import Toast from 'react-native-root-toast';
 class NetUtil extends React.Component {
 
@@ -133,12 +133,19 @@ class NetUtil extends React.Component {
     }
 
     static login(phone, pwd, callback) {
-        NetUtil.get(CONSTAPI.LOGIN + "?m=" + phone + "&r=" + pwd, false, function (lg) {
+        NetUtil.get(CONSTAPI.LOGIN + "?m=" + phone + "&r=" + pwd, false, (lg)=> {
             if (lg.result && lg.data) {
                 storage.save({
                     key: storageKey.USER_TOKEN,
                     rawData: lg.data,
-                    expires: 1000 * 7200,
+                    expires: 1000 * loginExpiredIn,
+                });
+                storage.save({
+                    key: storageKey.LOGIN_INFO,
+                    rawData: {
+                        phone: phone,
+                        password: pwd,
+                    },
                 });
                 callback(true);
             } else {
@@ -147,7 +154,6 @@ class NetUtil extends React.Component {
         });
     }
     static getVerifycode(phone, callback) {
-        //let ret = {Sign: true, VerifyCode: '123456'};
         NetUtil.get(CONSTAPI.LOGIN + "?m=" + phone, false, function (lg) {
             if (lg.result && lg.data) {
                 storage.save({
@@ -160,7 +166,6 @@ class NetUtil extends React.Component {
                 callback(false, lg.error)
             }
         });
-        //callback(ret);
     }
 }
 

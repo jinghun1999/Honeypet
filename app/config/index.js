@@ -39,9 +39,10 @@ export const authData = {
 };
 
 export const pageSize = 10;
-
+export const loginExpiredIn = 10;//秒
 export const storageKey = {
     OFFLINE_POSTS: "OFFLINEPOSTS",
     USER_TOKEN: "USERTOKEN",
-    USER_VERIFYCODE: 'USERVERIFYCODE'
+    USER_VERIFYCODE: 'USERVERIFYCODE',
+    LOGIN_INFO: 'LOGININFO'
 };

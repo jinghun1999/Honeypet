@@ -54,5 +54,15 @@ export default ViewPage = {
                 hospital: data,
             }
         }
+    },
+    setting:(data)=>{
+        return {
+            component: Page.Setting,
+            name: 'setting',
+            id: 'page',
+            params: {
+
+            }
+        }
     }
 }

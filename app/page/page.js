@@ -9,3 +9,4 @@ export { default as Startup} from './startup';
 export { default as Message} from './message';
 export { default as UC} from './uc';
 export { default as Hospital} from './hospital';
+export { default as Setting} from './setting';
