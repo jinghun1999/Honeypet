@@ -8,6 +8,7 @@ import {
     StyleSheet,
     ListView,
     Image,
+    Modal,
     } from 'react-native';
 //import PureRenderMixin from 'react-addons-pure-render-mixin';
 import ViewPage from './view';
@@ -18,6 +19,9 @@ import NetUtil from '../util/NetUtil';
 import Hospital from './hospital';
 import Spinner from '../components/spinner';
 import { StyleConfig, ComponentStyles, CommonStyles } from '../styles';
+import { getImageSource } from '../common';
+const backgroundImageSource = getImageSource(8);
+
 class HomePage extends Component {
 
     constructor(props) {
@@ -46,11 +50,11 @@ class HomePage extends Component {
                 speed: 0,
                 street: "嘉松北路",
                 streetNum: "6128号"
-            }
-            ,
+            },
             position: '点击重新获取您的位置',
             dataString: null,
             loaded: false,
+            modalVisiable: false,
         };
         //this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     }
@@ -142,7 +146,8 @@ class HomePage extends Component {
                     underlayColor={'#6495ED'}
                     style={styles.callStyle}
                     onPress={()=>{
-                        this.props.navigator.push(ViewPage.message(this.state.location))}
+                        this.setState({modalVisiable: true});
+                        }
                     }>
                     <View style={{flex:1, flexDirection:'row', alignItems:'center'}}>
                         <Icon name={'ios-call'} size={32} color={'#fff'}/>
@@ -186,6 +191,48 @@ class HomePage extends Component {
         }
     }
 
+    renderModal() {
+        return (
+            <Modal
+                animationType={ 'slide' }
+                transparent={ true }
+                onRequestClose={()=> null }
+                visible={ this.state.modalVisiable }>
+                <View style={ ComponentStyles.modal_container  }>
+                    <View style={ ComponentStyles.modal_body }>
+                        <Text style={[ CommonStyles.text_center, CommonStyles.m_b_1, CommonStyles.font_lg, CommonStyles.text_dark ]}>
+                            您确定要免费呼叫嘛？
+                        </Text>
+                        <Text style={[ CommonStyles.m_b_3, CommonStyles.font_md, CommonStyles.text_dark ]}>
+                            本功能为免费呼叫，待医生抢单成功后，您可以与医生沟通预约爱宠就诊。
+                        </Text>
+                    </View>
+                    <View style={ [ComponentStyles.modal_footer,{flexDirection:'row', }] }>
+                        <TouchableHighlight
+                            activeOpacity={ StyleConfig.touchable_press_opacity }
+                            style={ [ ComponentStyles.btn, ComponentStyles.btn_danger,{flex:1, marginRight:10} ] }
+                            onPress={()=>{this.setState({modalVisiable: false,})} }>
+                            <Text style={ ComponentStyles.btn_text }>
+                                取消
+                            </Text>
+                        </TouchableHighlight>
+                        <TouchableHighlight
+                            activeOpacity={ StyleConfig.touchable_press_opacity }
+                            style={ [ ComponentStyles.btn, ComponentStyles.btn_primary,{flex:1, marginLeft:10} ] }
+                            onPress={()=>{
+                                this.setState({modalVisiable: false,});
+                                this.props.navigator.push(ViewPage.message(this.state.location));
+                            } }>
+                            <Text style={ ComponentStyles.btn_text }>
+                                呼叫
+                            </Text>
+                        </TouchableHighlight>
+                    </View>
+                </View>
+            </Modal>
+        )
+    }
+
     render() {
         return (
             <View style={styles.container}>
@@ -197,6 +244,7 @@ class HomePage extends Component {
                           renderFooter={()=>{return <View style={{height:50,}}></View>}}
                     />
                 { this.renderLoading() }
+                { this.renderModal() }
             </View>
         );
     }
