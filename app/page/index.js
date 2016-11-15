@@ -32,20 +32,19 @@ const TAB_HOMEPAGE = '首页';
 const TAB_MESSAGE = '消息';
 const TAB_UC = '我的';
 import TabNavigator from 'react-native-tab-navigator';
-let CurrentUser = '2222';
 
 class Index extends Component {
     constructor(props) {
         super(props);
         this.state = {
             selectedTab: TAB_HOMEPAGE,
-            CurrentUser: '',
+            user_mobile: '',
             tabBarShow: true
         };
         this._renderTabItem = this._renderTabItem.bind(this);
-        NetUtil.getAuth(u=> {
-            this.setState({CurrentUser: u.Phone});
-        });
+        /*NetUtil.getAuth(u=> {
+            this.setState({user_mobile: u.phone});
+        });*/
     }
 
     componentDidMount() {
