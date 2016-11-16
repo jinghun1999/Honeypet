@@ -189,6 +189,7 @@ class LoginPage extends Component {
                         maxLength={ 11 }
                         keyboardType={'numeric'}
                         blurOnSubmit={true}
+                        autoFocus={true}
                         style={ [ComponentStyles.input ] }
                         placeholder={'请输入手机号码'}
                         placeholderTextColor={ StyleConfig.color_gray }

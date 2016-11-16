@@ -7,13 +7,13 @@ import {
     View,
     RefreshControl,
     Text,
-    TouchableHighlight,
+    TouchableOpacity,
     StyleSheet,
     ListView,
     Image,
     } from 'react-native';
 import Head from '../components/head';
-import Icon from 'react-native-vector-icons/Ionicons';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import Toast from 'react-native-root-toast';
 import Navbar from '../components/navbar';
 class Setting extends Component {
@@ -37,22 +37,29 @@ class Setting extends Component {
     render() {
         return (
             <View style={styles.container}>
-                <Navbar title={'医院详情'} leftIconOnPress={this.onBack.bind(this)}/>
-                <View style={{height:200,}}>
-                    <Image source={{uri:this.state.info.HeadPic}} resizeMode={'stretch'} style={{flex:1,}} />
+                <Navbar title={'设置'} leftIconOnPress={this.onBack.bind(this)}/>
+                <View style={{height:130, marginBottom:30, justifyContent:'center', alignItems:'center'}}>
+                    <Image source={require('../img/logo.png')} style={{height:100}} resizeMode='contain'/>
+                    <Text>
+                        当前版本：V1.0.1
+                    </Text>
                 </View>
-                <View style={{padding:10, backgroundColor:'#fff'}}>
-                    <Text style={{fontSize:18, borderLeftWidth:5, borderLeftColor:'#FA8072', paddingLeft:5,}}>{this.state.info.HospitalName}</Text>
-                </View>
-                <View style={{padding:10, marginVertical:10, backgroundColor:'#fff'}}>
-                    <Text>{this.state.info.Description}</Text>
-                </View>
-                <View style={{padding:10, backgroundColor:'#fff', borderBottomWidth:1, borderBottomColor:'#EDEDED'}}>
-                    <Text><Icon name={'ios-call'} size={18} color={'#FA8072'}/> {this.state.info.Tel}</Text>
-                </View>
-                <View style={{padding:10, backgroundColor:'#fff', borderBottomWidth:1, borderBottomColor:'#EDEDED'}}>
-                    <Text><Icon name={'ios-pin'} size={18} color={'#FA8072'}/> {this.state.info.Address}</Text>
-                </View>
+                <TouchableOpacity style={styles.row} onPress={()=>{}}>
+                    <Text style={styles.rowText}>AAAAAAAAA</Text>
+                    <Icon name="angle-right" size={16} color="#ccc" />
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.row} onPress={()=>{}}>
+                    <Text style={styles.rowText}>AAAAAAAAA</Text>
+                    <Icon name="angle-right" size={16} color="#ccc" />
+                </TouchableOpacity>
+                <TouchableOpacity style={[styles.row, styles.bottom]} onPress={()=>{}}>
+                    <Text style={styles.rowText}>AAAAAAAAA</Text>
+                    <Icon name="angle-right" size={16} color="#ccc" />
+                </TouchableOpacity>
+                <TouchableOpacity style={[styles.row,styles.bottom,{marginTop:10,}]} onPress={()=>{}}>
+                    <Text style={styles.rowText}>关于</Text>
+                    <Icon name="angle-right" size={16} color="#ccc" />
+                </TouchableOpacity>
             </View>
         );
     }
@@ -62,6 +69,18 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor:'#F5F5F5'
     },
-
+    row: {
+        flexDirection:'row',
+        backgroundColor: '#fff',
+        padding:12,
+        borderTopWidth:StyleSheet.hairlineWidth,
+        borderTopColor:'#ccc',
+        alignItems:'center'
+    },
+    rowText:{
+        flex:1,
+        fontSize:16,
+        color:'#000',
+    },
 });
 export default Setting;
