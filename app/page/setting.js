@@ -38,25 +38,25 @@ class Setting extends Component {
         return (
             <View style={styles.container}>
                 <Navbar title={'设置'} leftIconOnPress={this.onBack.bind(this)}/>
-                <View style={{height:130, marginBottom:30, justifyContent:'center', alignItems:'center'}}>
+                <View style={{height:150, justifyContent:'center', alignItems:'center'}}>
                     <Image source={require('../img/logo.png')} style={{height:100}} resizeMode='contain'/>
                     <Text>
                         当前版本：V1.0.1
                     </Text>
                 </View>
                 <TouchableOpacity style={styles.row} onPress={()=>{}}>
-                    <Text style={styles.rowText}>AAAAAAAAA</Text>
+                    <Text style={styles.rowText}>版本更新</Text>
                     <Icon name="angle-right" size={16} color="#ccc" />
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.row} onPress={()=>{}}>
-                    <Text style={styles.rowText}>AAAAAAAAA</Text>
+                    <Text style={styles.rowText}>协议</Text>
                     <Icon name="angle-right" size={16} color="#ccc" />
                 </TouchableOpacity>
-                <TouchableOpacity style={[styles.row, styles.bottom]} onPress={()=>{}}>
-                    <Text style={styles.rowText}>AAAAAAAAA</Text>
+                <TouchableOpacity style={styles.row} onPress={()=>{this.props.navigator.push(ViewPage.feedback())}}>
+                    <Text style={styles.rowText}>意见反馈</Text>
                     <Icon name="angle-right" size={16} color="#ccc" />
                 </TouchableOpacity>
-                <TouchableOpacity style={[styles.row,styles.bottom,{marginTop:10,}]} onPress={()=>{}}>
+                <TouchableOpacity style={[styles.row,styles.bottom]} onPress={()=>{this.props.navigator.push(ViewPage.setting_detail({title:'关于'}))}}>
                     <Text style={styles.rowText}>关于</Text>
                     <Icon name="angle-right" size={16} color="#ccc" />
                 </TouchableOpacity>

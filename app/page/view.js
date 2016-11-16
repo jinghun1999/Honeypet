@@ -45,7 +45,7 @@ export default ViewPage = {
             id: 'main',
         }
     },
-    hospital:(data)=>{
+    hospital: (data)=>{
         return {
             component: Page.Hospital,
             name: 'hospital',
@@ -55,7 +55,7 @@ export default ViewPage = {
             }
         }
     },
-    setting:(data)=>{
+    setting: (data)=>{
         return {
             component: Page.Setting,
             name: 'setting',
@@ -64,5 +64,22 @@ export default ViewPage = {
 
             }
         }
-    }
+    },
+    setting_detail: (data)=>{
+        return {
+            component: Page.SettingDetail,
+            name: 'setting_detail',
+            id: 'page',
+            params: {
+                title: data.title
+            }
+        }
+    },
+    feedback: ()=>{
+        return {
+            component: Page.Feedback,
+            name: 'feedback',
+            id: 'page'
+        }
+    },
 }
