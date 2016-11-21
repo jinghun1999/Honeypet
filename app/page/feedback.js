@@ -12,13 +12,13 @@ import{
     } from 'react-native';
 import Navbar from '../components/navbar';
 import Spinner from '../components/spinner';
-import ScrollableTabView, {DefaultTabBar, } from 'react-native-scrollable-tab-view';
+import ScrollableTabView, {ScrollableTabBar, DefaultTabBar, } from 'react-native-scrollable-tab-view';
 class Feedback extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             url: '',
-            loaded: false,
+            loaded: true,
         };
     }
 
@@ -54,17 +54,16 @@ class Feedback extends React.Component {
         else {
             webBody = (
                 <ScrollableTabView
-                    style={{marginTop: 20, }}
+                    style={{ }}
                     renderTabBar={() => <DefaultTabBar />}
                     >
-                    <Text tabLabel='Tab #1'>My</Text>
-                    <Text tabLabel='Tab #2'>favorite</Text>
-                    <Text tabLabel='Tab #3'>project</Text>
+                    <Text tabLabel='我的意见'>My</Text>
+                    <Text tabLabel='常见问题'>favorite</Text>
                 </ScrollableTabView>);
         }
         return (
             <View style={{flex:1,}}>
-                <Navbar title={this.props.title} leftIconOnPress={this.onBack.bind(this)}/>
+                <Navbar title='意见反馈' leftIconOnPress={this.onBack.bind(this)}/>
                 {webBody}
             </View>
         )

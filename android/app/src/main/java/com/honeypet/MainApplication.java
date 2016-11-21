@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.facebook.react.ReactApplication;
 import com.react.rnspinkit.RNSpinkitPackage;
+import com.beefe.picker.PickerViewPackage;
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
@@ -29,6 +30,7 @@ public class MainApplication extends Application implements ReactApplication {
       return Arrays.<ReactPackage>asList(
           new RNSpinkitPackage(),
            new MainReactPackage(),
+           new PickerViewPackage(),
            new VectorIconsPackage(),
            new AMapLocationReactPackage(),
            new RCTCommonToolsPackage()

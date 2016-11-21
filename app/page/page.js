@@ -10,5 +10,6 @@ export { default as Message} from './message';
 export { default as UC} from './uc';
 export { default as Hospital} from './hospital';
 export { default as Setting} from './setting';
+export { default as UserInfo} from './userinfo';
 export { default as SettingDetail} from './settingdetail';
 export { default as Feedback} from './feedback';

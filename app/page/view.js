@@ -45,6 +45,13 @@ export default ViewPage = {
             id: 'main',
         }
     },
+    userinfo:()=>{
+      return {
+          component: Page.UserInfo,
+          name: 'userinfo',
+          id: 'page',
+      }
+    },
     hospital: (data)=>{
         return {
             component: Page.Hospital,

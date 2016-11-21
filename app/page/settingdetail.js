@@ -34,35 +34,41 @@ class SettingDetail extends React.Component {
             let name = '';
             switch (this.props.title) {
                 case '服务条款':
-                    name = 'Service';
+                    name = 'service';
                     break;
                 case '使用帮助':
-                    name = 'Help';
+                    name = 'help';
                     break;
-                case '关于我们':
-                    name = 'About';
+                case '关于':
+                    name = 'index';
                     break;
                 case '联系我们':
-                    name = 'Contact';
+                    name = 'contact';
+                    break;
+                default:
+                    name = 'error';
                     break;
             }
             this.setState({
-                url: 'http://www.jianshu.com/p/87ccfb795635',
+                url: CONSTAPI.HOST + '/about/' + name,
                 loaded: true,
             });
+
         });
     }
 
     componentWillUnmount() {
 
     }
-    renderLoading(){
+
+    renderLoading() {
         return (
             <View style={{flex:1, justifyContent:'center'}}>
                 <Spinner/>
             </View>
         )
     }
+
     render() {
         var webBody;
         if (!this.state.loaded) {

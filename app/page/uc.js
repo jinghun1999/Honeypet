@@ -59,17 +59,17 @@ class UC extends Component {
     renderChildren() {
         return (
             <View style={{flex:1, paddingVertical:10, backgroundColor:'#F4F4F4'}}>
-                <TouchableOpacity style={styles.row} onPress={()=>{}}>
+                <TouchableOpacity style={styles.row} onPress={()=>{ this.props.navigator.push(ViewPage.userinfo())}}>
                     <Icon name="user" size={26} color="#68228B" />
                     <Text style={styles.rowText}>个人信息</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.row} onPress={()=>{}}>
-                    <Icon name="rocket" size={26} color="#6495ED" />
-                    <Text style={styles.rowText}>我的预约记录</Text>
-                </TouchableOpacity>
                 <TouchableOpacity style={[styles.row, styles.bottom]} onPress={()=>{}}>
-                    <Icon name="phone-square" size={26} color="#CD661D" />
+                    <Icon name="whatsapp" size={26} color="#CD661D" />
                     <Text style={styles.rowText}>我的呼叫历史</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={[styles.row,styles.bottom]} onPress={()=>{}}>
+                    <Icon name="safari" size={26} color="#6495ED" />
+                    <Text style={styles.rowText}>我的预约记录</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={[styles.row,styles.bottom,{marginTop:10,}]} onPress={()=>{ this.props.navigator.push(ViewPage.setting())}}>
                     <Icon name="cog" size={26} color="#CDCD00" />

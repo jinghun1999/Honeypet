@@ -15,7 +15,7 @@ import {
     } from 'react-native';
 
 import TimerMixin from 'react-timer-mixin';
-import Icon from 'react-native-vector-icons/Ionicons';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import Config, { postCategory } from '../config';
 import { getImageSource, logoImage } from '../common';
 import ViewPage from './view';
@@ -29,7 +29,7 @@ import UC from './uc';
 import NetUtil from '../util/NetUtil';
 const backgroundImageSource = getImageSource(1);
 const TAB_HOMEPAGE = '首页';
-const TAB_MESSAGE = '消息';
+const TAB_MESSAGE = '附近医院';
 const TAB_UC = '我的';
 import TabNavigator from 'react-native-tab-navigator';
 
@@ -62,9 +62,9 @@ class Index extends Component {
         return (
             <TabNavigator.Item
                 selected={this.state.selectedTab === tag}
-                renderIcon={() => <View style={styles.tabIcon}><Icon name={ico} size={32} color={'#b2b2b2'}/></View>}
+                renderIcon={() => <View style={styles.tabIcon}><Icon name={ico} size={26} color={'#b2b2b2'}/></View>}
                 title={tag}
-                renderSelectedIcon={() => <View style={styles.tabIcon}><Icon name={ico} size={32} color={'#63B8FF'}/></View>}
+                renderSelectedIcon={() => <View style={styles.tabIcon}><Icon name={ico} size={26} color={'#63B8FF'}/></View>}
                 onPress={() => this.setState({ selectedTab: tag })}>
                 {childView}
             </TabNavigator.Item>
@@ -96,10 +96,10 @@ class Index extends Component {
             <View style={{flex: 1}}>
                 <TabNavigator hidesTabTouch={true} sceneStyle={{paddingBottom: 0}}
                               tabBarStyle={tabBarShow ? styles.tabNav : styles.tabNavHide}>
-                    {this._renderTabItem('ios-home', TAB_HOMEPAGE, this._createChildView(TAB_HOMEPAGE))}
+                    {this._renderTabItem('home', TAB_HOMEPAGE, this._createChildView(TAB_HOMEPAGE))}
 
-                    {this._renderTabItem('ios-chatbubbles', TAB_MESSAGE, this._createChildView(TAB_MESSAGE))}
-                    {this._renderTabItem('ios-person', TAB_UC, this._createChildView(TAB_UC))}
+                    {this._renderTabItem('h-square', TAB_MESSAGE, this._createChildView(TAB_MESSAGE))}
+                    {this._renderTabItem('user', TAB_UC, this._createChildView(TAB_UC))}
                 </TabNavigator>
             </View>
         );
