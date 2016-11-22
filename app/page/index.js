@@ -24,12 +24,12 @@ import { CommonStyles, ComponentStyles, StyleConfig } from '../styles';
 import BackAndroidTool from '../util/BackAndroidTool';
 
 import Home from './home';
-import Message from './message';
+import Hospitals from './hospitals';
 import UC from './uc';
 import NetUtil from '../util/NetUtil';
 const backgroundImageSource = getImageSource(1);
 const TAB_HOMEPAGE = '首页';
-const TAB_MESSAGE = '附近医院';
+const TAB_HOSPITALS = '附近医院';
 const TAB_UC = '我的';
 import TabNavigator from 'react-native-tab-navigator';
 
@@ -77,8 +77,8 @@ class Index extends Component {
             case TAB_HOMEPAGE:
                 renderView = <Home navigator={this.props.navigator}/>;
                 break;
-            case TAB_MESSAGE:
-                renderView = <Message navigator={this.props.navigator}/>;
+            case TAB_HOSPITALS:
+                renderView = <Hospitals navigator={this.props.navigator}/>;
                 break;
             case TAB_UC:
                 renderView = <UC navigator={this.props.navigator}/>;
@@ -97,8 +97,7 @@ class Index extends Component {
                 <TabNavigator hidesTabTouch={true} sceneStyle={{paddingBottom: 0}}
                               tabBarStyle={tabBarShow ? styles.tabNav : styles.tabNavHide}>
                     {this._renderTabItem('home', TAB_HOMEPAGE, this._createChildView(TAB_HOMEPAGE))}
-
-                    {this._renderTabItem('h-square', TAB_MESSAGE, this._createChildView(TAB_MESSAGE))}
+                    {this._renderTabItem('h-square', TAB_HOSPITALS, this._createChildView(TAB_HOSPITALS))}
                     {this._renderTabItem('user', TAB_UC, this._createChildView(TAB_UC))}
                 </TabNavigator>
             </View>

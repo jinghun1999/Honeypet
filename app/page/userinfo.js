@@ -21,6 +21,7 @@ import Navbar from '../components/navbar';
 
 import NetUtil from '../util/NetUtil';
 import Picker from 'react-native-picker';
+import BackAndroidTool from '../util/BackAndroidTool';
 class UserInfo extends Component {
 
     constructor(props) {
@@ -32,6 +33,7 @@ class UserInfo extends Component {
     }
 
     componentDidMount() {
+        BackAndroidTool.customHandleBack(this.props.navigator, ()=>{})
         InteractionManager.runAfterInteractions(() => {
             NetUtil.getAuth((ret)=> {
                 this.setState({
@@ -41,14 +43,10 @@ class UserInfo extends Component {
         });
     }
     chooseSex(){
-        let data = [];
-        for(var i=0;i<100;i++){
-            data.push(i);
-        }
-
+        let data = ['男','女'];
         Picker.init({
             pickerData: data,
-            selectedValue: [59],
+            selectedValue: [''],
             onPickerConfirm: data => {
                 Toast.show(data);
             },
@@ -73,7 +71,7 @@ class UserInfo extends Component {
             <View style={styles.container}>
                 <Navbar title={'设置'} leftIconOnPress={this.onBack.bind(this)}/>
                 <View style={{height:150, justifyContent:'center', alignItems:'center'}}>
-                    <Image source={require('../img/avatar.jpg')} style={{borderRadius:50, height:100}}
+                    <Image source={{uri: this.state.user.userhead}} style={{width:100, height:100, borderRadius:50}}
                            resizeMode='contain'/>
                     <Text>
                         {this.state.user.phone}
@@ -82,6 +80,10 @@ class UserInfo extends Component {
                 <Text>{JSON.stringify(this.state.user)}</Text>
                 <View style={styles.row}>
                     <Text style={styles.rowText}>昵称</Text>
+                    <Text style={styles.rowValue}>{this.state.user.nickname}</Text>
+                </View>
+                <View style={styles.row}>
+                    <Text style={styles.rowText}>姓名</Text>
                     <Text style={styles.rowValue}>{this.state.user.realname}</Text>
                 </View>
                 <View style={styles.row}>
@@ -90,6 +92,7 @@ class UserInfo extends Component {
                 </View>
                 <TouchableOpacity style={styles.row}onPress={this.chooseSex}>
                     <Text style={styles.rowText}>性别</Text>
+                    <Text style={styles.rowValue}>{this.state.user.usersex}</Text>
                 </TouchableOpacity>
 
                 {/*<TouchableOpacity style={styles.row} onPress={()=>{this.props.navigator.push(ViewPage.feedback())}}>
