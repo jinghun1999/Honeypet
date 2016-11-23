@@ -24,7 +24,7 @@ var Sync = {
                             storage.save({
                                 key: storageKey.LOGIN_INFO,
                                 rawData: {
-                                    phone: r.phone,
+                                    phone: r.data.phone,
                                     access_token: r.data.access_token,
                                 },
                             });
