@@ -25,6 +25,7 @@ export const StyleConfig = {
     color_gray: 'rgba(0, 0, 0, 0.6)',
     color_dark: 'rgba(0, 0, 0, 0.7)',
     color_black: 'rgba(0, 0, 0, 0.8)',
+    color_ghostwhite : 'rgba(105,105,105,0.6)',
 
     font_eg: 24,
     font_lg: 20,

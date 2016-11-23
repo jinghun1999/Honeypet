@@ -6,6 +6,7 @@ import React, { Component } from 'react';
 import {
     View,
     Text,
+    ListView,
     Modal,
     Image,
     Alert,
@@ -55,10 +56,10 @@ class Message extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            user:{},/*用户名称*/
             petName:'',/*宠物名称*/
             content:'',/*内容*/
-            questionFlags:'',/*手机号*/
+            questionFlags:this.props.user.phone,/*手机号*/
+            realName:this.props.user.realname,/*真实姓名*/
             petType:'',/*宠物类型*/
             /*订单*/
             Bill:{
@@ -68,7 +69,6 @@ class Message extends Component {
                 ResponseName:'',
                 Phone:''
             },
-
             openmodel:false,
             openShelter:false,
 
@@ -77,9 +77,11 @@ class Message extends Component {
             WaitResponding:false,
             SucessRespond:''
         }
-
         this.sucessExit = this.sucessExit.bind(this);
     }
+
+
+
 
     setcene(value){
         if( value == 1 ){
@@ -205,16 +207,17 @@ class Message extends Component {
         let data = {
             'ID':'00000000-0000-0000-0000-000000000000',
             'ClientID':'00000000-0000-0000-0000-000000000000',
-            'Mobile':this.state.user.phone,
-            'RealName':this.state.user.realname,
+            'Mobile':this.state.questionFlags,
+            'RealName':this.state.realName,
             'PetType':this.state.petType,
-            'City':'上海',
+            'City':this.props.location.province,
             'Postion':this.props.location.address,
-            'Lat':this.props.location.latitude,
-            'Lng':this.props.location.longitude,
-            'Describe':this.state.content
+            'Describe':this.state.content,
+            'Point':{
+                'Y':this.props.location.latitude,
+                'X':this.props.location.longitude
+            }
         };
-
         //设置场景2
         this.setcene(2);
         let _this = this;
@@ -282,10 +285,35 @@ class Message extends Component {
                         keyboardType='numeric'
                         style={ [ComponentStyles.input] }
                         placeholder={'请输入手机号码'}
-                        placeholderTextColor={ StyleConfig.color_gray }
+                        placeholderTextColor={ StyleConfig.color_ghostwhite }
                         underlineColorAndroid = { 'transparent' }
                         onChangeText = {(val)=>this.setState({questionFlags: val})}
                         value={ this.state.questionFlags } />
+                </View>
+            </View>
+        )
+    }
+
+    renderRealName(){
+        return (
+            <View>
+                <View style={[ CommonStyles.flexRow, CommonStyles.flexItemsMiddle, CommonStyles.flexItemsBetween, CommonStyles.p_a_3, ComponentStyles.panel_bg ]}>
+                    <Text style={[CommonStyles.text_danger, CommonStyles.font_xs]}>
+                        您的姓名
+                    </Text>
+                </View>
+                <View style={[ CommonStyles.p_a_3 ]}>
+                    <TextInput
+                        ref="txtRealName"
+                        onFocus={() => {this.refs.txtRealName.focus()}}
+                        maxLength = { 20 }
+                        multiline = { false }
+                        style={ [ComponentStyles.input] }
+                        placeholder={'请输入您的姓名...'}
+                        placeholderTextColor={ StyleConfig.color_ghostwhite }
+                        underlineColorAndroid = { 'transparent' }
+                        onChangeText = {(val)=>this.setState({realName: val})}
+                        value={ this.state.realName } />
                 </View>
             </View>
         )
@@ -307,7 +335,7 @@ class Message extends Component {
                         multiline = { false }
                         style={ [ComponentStyles.input] }
                         placeholder={'请输入您的爱宠名字...'}
-                        placeholderTextColor={ StyleConfig.color_dark }
+                        placeholderTextColor={ StyleConfig.color_ghostwhite }
                         underlineColorAndroid = { 'transparent' }
                         onChangeText = {(val)=>this.setState({petName: val})}
                         value={ this.state.petName } />
@@ -332,7 +360,7 @@ class Message extends Component {
                         multiline = { true }
                         style={ [ComponentStyles.textarea, styles.text_content] }
                         placeholder={'请输入求助详情...'}
-                        placeholderTextColor={ StyleConfig.color_gray }
+                        placeholderTextColor={ StyleConfig.color_ghostwhite }
                         underlineColorAndroid = { 'transparent' }
                         onChangeText = {(val)=>this.setState({content: val})}
                         value={ this.state.content } />
@@ -349,7 +377,7 @@ class Message extends Component {
                        source={ {uri: 'http://www.easyicon.net/api/resizeApi.php?id=1201413&size=96' } }>
                 </Image>
                 <Text style={ [ CommonStyles.text_gray, CommonStyles.font_xs ] }>
-                    {this.state.user.realname}
+                    {this.state.realName}
                 </Text>
             </View>
         )
@@ -392,6 +420,7 @@ class Message extends Component {
                 showsVerticalScrollIndicator  = { false }
                 keyboardShouldPersistTaps  = { true }>
                 { this.renderQuestionFlags()}
+                { this.renderRealName() }
                 { this.renderPetName()}
                 { this.renderQuestionContent() }
                 { this.renderQuestionOp() }
@@ -399,7 +428,6 @@ class Message extends Component {
         )
     }
     sucessExit(){
-        //this.setState( { openmodel:true,openShelter:false } );
         this.props.navigator.pop();
     }
     renderPending(){
@@ -423,7 +451,6 @@ class Message extends Component {
         }
     }
     renderModel() {
-
         if( !this.state.openmodel ){
             return (<View visible="false"></View>);
         }else{
