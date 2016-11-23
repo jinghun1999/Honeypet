@@ -76,11 +76,11 @@ class UserInfo extends Component {
 
     onSave() {
         let _this = this;
-        NetUtil.postJson(CONSTAPI.LOGIN, _this.state.user, null, (data)=> {
+        NetUtil.postJson(CONSTAPI.LOGIN + '/post', _this.state.user, null, (data)=> {
             if (data && data.result) {
                 Toast.show('保存成功');
             } else if (data) {
-                alert(data.error+JSON.stringify(_this.state.user));
+                alert(data.error + JSON.stringify(_this.state.user));
             } else {
                 Toast.show('系统异常，请稍后再试');
             }
