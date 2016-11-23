@@ -87,7 +87,7 @@ class HomePage extends Component {
     fetchData(pageIndex) {
         const _this = this;
         NetUtil.getAuth(function (ret) {
-            NetUtil.postJson(CONSTAPI.API_HOST + '/hospital', {
+            NetUtil.postJson(CONSTAPI.API_HOST + '/hospital/HosList', {
                 pageIndex: pageIndex,
                 pageSize: 35
             }, null, function (data) {

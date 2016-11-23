@@ -7,7 +7,7 @@ var Sync = {
     USERTOKEN(params) {
         let {id, resolve, reject } = params;
         storage.load({key: storageKey.LOGIN_INFO}).then(li=> {
-            let url = CONSTAPI.LOGIN + "?m=" + li.phone + "&r=" + li.password;
+            let url = CONSTAPI.LOGIN + "/GetRefreshToken?m=" + li.phone + "&access_token=" + li.access_token;
             fetch(url)
                 .then((response) => response.text())
                 .then((responseText) => {
@@ -21,10 +21,17 @@ var Sync = {
                                 rawData: r.data,
                                 expires: _expires,
                             });
+                            storage.save({
+                                key: storageKey.LOGIN_INFO,
+                                rawData: {
+                                    phone: r.phone,
+                                    access_token: r.data.access_token,
+                                },
+                            });
                             resolve && resolve({user: r.data});
-                            //alert('自动登陆成功，' + _expires + 'ms后过期')
+                            alert('自动登陆成功，' + _expires + 'ms后过期')
                         } else {
-                            //alert('自动登陆失败！')
+                            alert('自动登陆失败！'+url)
                             reject && reject(new Error('登陆信息已过期，请重新登陆'));
                         }
                     } catch (e) {

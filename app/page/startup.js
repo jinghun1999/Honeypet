@@ -46,13 +46,13 @@ class StartupPage extends Component {
     checkUserToken() {
         const _this = this;
         NetUtil.getAuth((ret)=>{
-            //Toast.show(ret)
             if (ret && ret.access_token && ret.expired_in) {
                 _this.handleLoginResolved(ret);
             } else {
                 _this.onCheckUserTokenRejected('登录已过期');
             }
         }, (msg)=>{
+            Toast.show('error');
             _this.onCheckUserTokenRejected(msg);
         });
     }

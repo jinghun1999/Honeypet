@@ -77,7 +77,8 @@ class NetUtil extends React.Component {
                 }
                 callback(result);
             }).catch(error => {
-                Toast.show(error);
+                //Toast.show(error.message);
+                callback({result: false, error: error.message});
             }).done();
     }
 
@@ -133,7 +134,7 @@ class NetUtil extends React.Component {
     }
 
     static login(phone, pwd, callback) {
-        NetUtil.get(CONSTAPI.LOGIN + "?m=" + phone + "&r=" + pwd, false, (lg)=> {
+        NetUtil.get(CONSTAPI.LOGIN + "/Get?m=" + phone + "&r=" + pwd, false, (lg)=> {
             if (lg.result && lg.data) {
                 storage.save({
                     key: storageKey.USER_TOKEN,
@@ -143,18 +144,18 @@ class NetUtil extends React.Component {
                 storage.save({
                     key: storageKey.LOGIN_INFO,
                     rawData: {
-                        phone: phone,
-                        password: pwd,
+                        phone: lg.data.phone,
+                        access_token: lg.data.access_token,
                     },
                 });
                 callback(true);
             } else {
-                callback(false, lg.error)
+                callback(false, lg.error);
             }
         });
     }
     static getVerifycode(phone, callback) {
-        NetUtil.get(CONSTAPI.LOGIN + "?m=" + phone, false, function (lg) {
+        NetUtil.get(CONSTAPI.LOGIN + "/GetVerifyCode?m=" + phone, false, function (lg) {
             if (lg.result && lg.data) {
                 storage.save({
                     key: storageKey.USER_VERIFYCODE,
