@@ -65,17 +65,13 @@ class Appoint extends Component {
     }
 
     _renderRow(app) {
-        var date = Util.getFormateTime(app.requesttime, 'day');
-        var dateDay = date.substr(date.lastIndexOf('-') + 1);
-        var dateMonth = date.substring(date.indexOf('-') + 1, date.lastIndexOf('-'));
-        var dateYear = date.substring(0, date.indexOf('-'));
         return (
             <TouchableOpacity style={styles.row} onPress={()=>this._onPress(app)}>
                 <View style={styles.calendar}>
                     <Text style={styles.month}>
-                        <Text style={styles.day}>{dateDay} </Text>
-                        {dateMonth}月</Text>
-                    <Text style={styles.year}>{dateYear}年</Text>
+                        <Text style={styles.day}>{Util.GetDatePart(app.requesttime,'day')} </Text>
+                        {Util.GetDatePart(app.requesttime,'month')}月</Text>
+                    <Text style={styles.year}>{Util.GetDatePart(app.requesttime,'year')}年</Text>
                 </View>
                 <View style={{flex:1,justifyContent:'center',margin:5,}}>
                     <View style={{flexDirection:'row'}}>

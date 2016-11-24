@@ -9,6 +9,7 @@ import {
     ListView,
     Image,
     Modal,
+    Dimensions,
     } from 'react-native';
 //import PureRenderMixin from 'react-addons-pure-render-mixin';
 import ViewPage from './view';
@@ -19,6 +20,8 @@ import NetUtil from '../util/NetUtil';
 import Spinner from '../components/spinner';
 import { StyleConfig, ComponentStyles, CommonStyles } from '../styles';
 import { getImageSource } from '../common';
+import ViewPager from 'react-native-viewpager';
+
 const backgroundImageSource = getImageSource(8);
 
 class HomePage extends Component {
@@ -54,6 +57,8 @@ class HomePage extends Component {
             dataString: null,
             loaded: false,
             modalVisiable: false,
+            imageSource: [],
+            dsImage: new ViewPager.DataSource({pageHasChanged: (p1, p2)=>p1 !== p2}),
         };
         //this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     }
@@ -77,6 +82,7 @@ class HomePage extends Component {
         });
         this.onLocation();
         this.fetchData(1);
+        this.loadAD();
     }
 
     componentWillUnmount() {
@@ -124,15 +130,56 @@ class HomePage extends Component {
         }
     }
 
+    loadAD(){
+        const _this = this;
+        NetUtil.get('http://120.24.89.243/trapi/api/AppInfo/GetHomePageImageInfo', null, function (data) {
+            if (data.Status) {
+                if (data.Data.length > 0) {
+                    let imgs = [];
+                    data.Data.forEach(function (obj, index, v) {
+                        imgs.push({uri: obj.AddressUrl});
+                    });
+                    storage.save({
+                        key: 'IndexFocus',
+                        rawData: {
+                            IndexFocus: imgs,
+                        }
+                    });
+                    _this.setState({
+                        imageSource: imgs,
+                    });
+                }
+            } else {
+                Toast.show("获取数据失败：" + data.message);
+            }
+        })
+    }
+
+    _onPush(){
+        const _this =this;
+        const { navigator } = _this.props;
+        if (navigator) {
+            navigator.push(ViewPage.setting());
+        }
+    }
+
+    renderPage(data){
+        return (
+            <TouchableOpacity onPress={this._onPush.bind(this)}>
+                <Image source={{uri: data.uri}} style={styles.page}/>
+            </TouchableOpacity>
+        );
+    }
+
     _renderHead() {
         return (
             <View>
                 <View style={{height: 180}}>
-                    <Image
-                        resizeMode={'stretch'}
-                        style={{flex:1,overflow: 'visible'}}
-                        source={{uri: 'http://img.zcool.cn/community/019a9e554b3fbd000001bf72ac0029.jpg'}}
-                        />
+                    <ViewPager style={{height:150}}
+                               dataSource={this.state.dsImage.cloneWithPages(this.state.imageSource)}
+                               renderPage={this.renderPage.bind(this)}
+                               isLoop={true}
+                               autoPlay={true}/>
                 </View>
                 <TouchableOpacity style={styles.location} underlayColor={'#F7F7F7'} onPress={()=>{}}>
                     <Icon name={'ios-pin'} size={22} color={'#FA8072'}/>
@@ -246,6 +293,11 @@ class HomePage extends Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+    },
+    page: {
+        width: Dimensions.get('window').width,
+        height: 180,
+        resizeMode: 'stretch'
     },
     location: {
         marginTop: 5,
