@@ -86,8 +86,8 @@ class Appoint extends Component {
                         <Text>{app.describe}</Text>
                     </View>
                 </View>
-                {app.state===0?<Text style={styles.state}>已接单</Text>
-                    :<Text style={[styles.state,{color:'#EE4000'}]}>未接单</Text>}
+                {app.state===0?<Text style={styles.stated}>已接单</Text>
+                    :<Text style={[styles.stated,{color:'#EE4000'}]}>未接单</Text>}
                 <Icon style={{marginRight:5,}} name={'angle-right'} size={20} color={'#ccc'}/>
             </TouchableOpacity>
         )
@@ -121,11 +121,18 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor:'#F0F0F0',
     },
+    stated:{
+        position:'absolute',
+        top:5,
+        right:15,
+        color:'#6959CD',
+        fontSize:14,
+    },
     state:{
         marginRight:10,
         textAlign:'center',
         alignSelf:'center',
-        color:'#4F9D9D',
+        color:'#218868',
     },
     row: {
         flex: 1,
