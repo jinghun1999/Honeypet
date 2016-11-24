@@ -262,7 +262,11 @@ class HomePage extends Component {
                             style={ [ ComponentStyles.btn, ComponentStyles.btn_primary,{flex:1, marginLeft:10} ] }
                             onPress={()=>{
                                 this.setState({modalVisiable: false,});
-                                this.props.navigator.push(ViewPage.message(this.state.location));
+                                this.props.navigator.push(ViewPage.message(this.state.location,
+                                    {
+                                        phone:'15882434962',
+                                        realname:'游侠'
+                                    }));
                             } }>
                             <Text style={ ComponentStyles.btn_text }>
                                 呼叫

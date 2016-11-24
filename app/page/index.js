@@ -83,7 +83,6 @@ class Index extends Component {
             case TAB_UC:
                 renderView = <UC navigator={this.props.navigator}/>;
                 break;
-
             default:
                 break;
         }
