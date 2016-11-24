@@ -67,7 +67,7 @@ class UC extends Component {
                     <Icon name="whatsapp" size={26} color="#CD661D" />
                     <Text style={styles.rowText}>我的呼叫历史</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={[styles.row,styles.bottom]} onPress={()=>{}}>
+                <TouchableOpacity style={[styles.row,styles.bottom]} onPress={()=>{this.props.navigator.push(ViewPage.appoint({title:'预约记录'}))}}>
                     <Icon name="safari" size={26} color="#6495ED" />
                     <Text style={styles.rowText}>我的预约记录</Text>
                 </TouchableOpacity>
