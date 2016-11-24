@@ -92,7 +92,7 @@ class HomePage extends Component {
 
     fetchData(pageIndex) {
         const _this = this;
-        NetUtil.getAuth(function (ret) {
+        NetUtil.getAuth(ret=> {
             NetUtil.postJson(CONSTAPI.API_HOST + '/hospital/HosList', {
                 pageIndex: pageIndex,
                 pageSize: 35
@@ -139,18 +139,12 @@ class HomePage extends Component {
                     data.Data.forEach(function (obj, index, v) {
                         imgs.push({uri: obj.AddressUrl});
                     });
-                    storage.save({
-                        key: 'IndexFocus',
-                        rawData: {
-                            IndexFocus: imgs,
-                        }
-                    });
                     _this.setState({
                         imageSource: imgs,
                     });
                 }
             } else {
-                Toast.show("获取数据失败：" + data.message);
+                Toast.show("获取广告失败：" + data.message);
             }
         })
     }
@@ -159,7 +153,7 @@ class HomePage extends Component {
         const _this =this;
         const { navigator } = _this.props;
         if (navigator) {
-            navigator.push(ViewPage.setting());
+            navigator.push(ViewPage.webpage({}));
         }
     }
 

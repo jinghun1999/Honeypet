@@ -72,13 +72,14 @@ export default ViewPage = {
             }
         }
     },
-    setting_detail: (data)=>{
+    webpage: (data)=>{
         return {
-            component: Page.SettingDetail,
+            component: Page.WebPage,
             name: 'setting_detail',
             id: 'page',
             params: {
-                title: data.title
+                title: data.title,
+                url: data.url,
             }
         }
     },
