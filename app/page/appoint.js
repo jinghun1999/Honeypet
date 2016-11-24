@@ -15,6 +15,7 @@ import NetUtil from '../util/NetUtil';
 import Toast from 'react-native-root-toast';
 import Navbar from '../components/navbar';
 import Util from '../util/Util';
+import Icon from 'react-native-vector-icons/FontAwesome';
 class Appoint extends Component {
     constructor(props) {
         super(props);
@@ -61,7 +62,11 @@ class Appoint extends Component {
     }
 
     _onPress(app) {
-        alert(app.entname)
+        const _this =this;
+        const { navigator } = _this.props;
+        if (navigator) {
+            navigator.push(ViewPage.appointdetail({title:'预约详情',appDetail:app}));
+        }
     }
 
     _renderRow(app) {
@@ -75,17 +80,21 @@ class Appoint extends Component {
                 </View>
                 <View style={{flex:1,justifyContent:'center',margin:5,}}>
                     <View style={{flexDirection:'row'}}>
-                        <Text style={{flex:1}}>{app.entname}</Text>
-                        <Text>手机:{app.entphone}</Text>
+                        <Text style={{flex:1,fontSize:16,fontWeight:'bold'}}>{app.entname}</Text>
                     </View>
                     <View style={{marginTop:5,flexDirection:'row'}}>
-                        <Text>描述:{app.describe}</Text>
+                        <Text>{app.describe}</Text>
                     </View>
                 </View>
-                {app.state===0?<Text style={styles.success}>已接单</Text>
-                    :<Text style={styles.fail}>未接单</Text>}
+                {app.state===0?<Text style={styles.state}>已接单</Text>
+                    :<Text style={[styles.state,{color:'#EE4000'}]}>未接单</Text>}
+                <Icon style={{marginRight:5,}} name={'angle-right'} size={20} color={'#ccc'}/>
             </TouchableOpacity>
         )
+    }
+
+    _endReached(){
+        this.fetchData(this.state.page + 1,this.state.phone,  true);
     }
 
     renderChildren() {
@@ -93,6 +102,7 @@ class Appoint extends Component {
             <ListView enableEmptySections={true}
                       dataSource={this.state.ds.cloneWithRows(this.state.dataSource)}
                       renderRow={this._renderRow.bind(this)}
+                      onEndReached={this._endReached.bind(this)}
             />
         )
     }
@@ -111,23 +121,19 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor:'#F0F0F0',
     },
-    success:{
-        marginRight:5,
+    state:{
+        marginRight:10,
         textAlign:'center',
         alignSelf:'center',
         color:'#4F9D9D',
-    },
-    fail:{
-        marginRight:5,
-        textAlign:'center',
-        alignSelf:'center',
-        color:'#EE4000',
     },
     row: {
         flex: 1,
         flexDirection: 'row',
         backgroundColor: 'white',
         margin: 5,
+        justifyContent:'center',
+        alignItems:'center',
     },
     calendar: {
         borderWidth:StyleSheet.hairlineWidth,
