@@ -48,8 +48,8 @@ class Index extends React.Component {
                         }
                     }
                 renderScene={(route, navigator) => {
-                        this._navigator = navigator;
                         let Component = route.component;
+
                         return <Component {...route.params} navigator={navigator} tabBarShow={route.id==='main'} />
                     }
                 }/>
