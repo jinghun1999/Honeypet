@@ -45,7 +45,7 @@ class Setting extends Component {
                     </Text>
                 </View>
 
-                <TouchableOpacity style={styles.row} onPress={()=>{this.props.navigator.push(ViewPage.setting_detail({title:'服务条款'}))}}>
+                <TouchableOpacity style={styles.row} onPress={()=>{this.props.navigator.push(ViewPage.webpage({title:'服务条款', url:CONSTAPI.HOST+'/about/service'}))}}>
                     <Text style={styles.rowText}>协议</Text>
                     <Icon name="angle-right" size={16} color="#ccc" />
                 </TouchableOpacity>
@@ -53,7 +53,7 @@ class Setting extends Component {
                     <Text style={styles.rowText}>意见反馈</Text>
                     <Icon name="angle-right" size={16} color="#ccc" />
                 </TouchableOpacity>*/}
-                <TouchableOpacity style={styles.row} onPress={()=>{this.props.navigator.push(ViewPage.setting_detail({title:'关于'}))}}>
+                <TouchableOpacity style={styles.row} onPress={()=>{this.props.navigator.push(ViewPage.webpage({title:'关于', url:CONSTAPI.HOST+'/about/index'}))}}>
                     <Text style={styles.rowText}>关于</Text>
                     <Icon name="angle-right" size={16} color="#ccc" />
                 </TouchableOpacity>

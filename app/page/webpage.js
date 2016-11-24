@@ -12,7 +12,7 @@ import{
     } from 'react-native';
 import Navbar from '../components/navbar';
 import Spinner from '../components/spinner';
-class SettingDetail extends React.Component {
+class WebPage extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -31,28 +31,6 @@ class SettingDetail extends React.Component {
 
     componentDidMount() {
         InteractionManager.runAfterInteractions(() => {
-            let name = '';
-            switch (this.props.title) {
-                case '服务条款':
-                    name = 'service';
-                    break;
-                case '使用帮助':
-                    name = 'help';
-                    break;
-                case '关于':
-                    name = 'index';
-                    break;
-                case '联系我们':
-                    name = 'contact';
-                    break;
-                default:
-                    name = 'error';
-                    break;
-            }
-            this.setState({
-                url: CONSTAPI.HOST + '/about/' + name,
-                loaded: true,
-            });
 
         });
     }
@@ -70,29 +48,22 @@ class SettingDetail extends React.Component {
     }
 
     render() {
-        var webBody;
-        if (!this.state.loaded) {
-            webBody = this.renderLoading();
-        }
-        else {
-            webBody = (
+
+        return (
+            <View style={{flex:1,}}>
+                <Navbar title={this.props.title} leftIconOnPress={this.onBack.bind(this)}/>
                 <WebView
                     ref="webView"
                     style={{backgroundColor:'#e7e7e7',flex:1,}}
-                    source={{uri: this.state.url}}
+                    source={{uri: this.props.url}}
                     javaScriptEnabled={true}
                     domStorageEnabled={true}
                     startInLoadingState={true}
                     scalesPageToFit={true}
                     renderLoading={this.renderLoading.bind(this)}
-                    />);
-        }
-        return (
-            <View style={{flex:1,}}>
-                <Navbar title={this.props.title} leftIconOnPress={this.onBack.bind(this)}/>
-                {webBody}
+                    />
             </View>
         )
     }
 }
-module.exports = SettingDetail;
+module.exports = WebPage;
