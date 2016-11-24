@@ -8,6 +8,7 @@ import {
     RefreshControl,
     Text,
     TouchableOpacity,
+    TouchableHighlight,
     StyleSheet,
     ListView,
     Image,
@@ -31,12 +32,13 @@ class UserInfo extends Component {
         super(props);
         this.state = {
             user: {},
+            modalVisiable: false,
         };
     }
 
     componentDidMount() {
-        BackAndroidTool.customHandleBack(this.props.navigator, ()=> {
-        })
+        //BackAndroidTool.customHandleBack(this.props.navigator, ()=> {
+        //});
         InteractionManager.runAfterInteractions(() => {
             NetUtil.getAuth((ret)=> {
                 this.setState({
@@ -47,24 +49,7 @@ class UserInfo extends Component {
     }
 
     chooseSex() {
-        let data = ['男', '女'];
-        let _this = this;
-        Picker.init({
-            pickerData: data,
-            selectedValue: [''],
-            onPickerConfirm: s => {
-                let user = _this.state.user;
-                user.usersex = s;
-                _this.setState({user: user});
-            },
-            onPickerCancel: s => {
-                Toast.show(s);
-            },
-            onPickerSelect: s => {
-                //Toast.show('select:' + s);
-            }
-        });
-        Picker.show();
+        this.setState({modalVisiable: !this.state.modalVisiable});
     }
 
     onBack() {
@@ -85,6 +70,16 @@ class UserInfo extends Component {
                 Toast.show('系统异常，请稍后再试');
             }
         });
+    }
+
+    _setModalVisible(s) {
+        let user = this.state.user;
+        user.usersex = s;
+        this.setState({
+            user: user,
+            modalVisiable: false,
+        });
+
     }
 
     render() {
@@ -131,18 +126,50 @@ class UserInfo extends Component {
                         }}
                         />
                 </View>
-                <View style={styles.row}>
+                <View style={[styles.row, styles.paddingV]}>
                     <Text style={styles.rowText}>手机号码</Text>
                     <Text style={styles.rowValue}>{this.state.user.phone}</Text>
                 </View>
-                <TouchableOpacity style={styles.row} onPress={this.chooseSex.bind(this)}>
+                <TouchableOpacity style={[styles.row, styles.paddingV]} onPress={this.chooseSex.bind(this)}>
                     <Text style={styles.rowText}>性别</Text>
                     <Text style={styles.rowValue}>{this.state.user.usersex}</Text>
+                    <Icon name="angle-right" size={16} color="#ccc" style={{marginLeft:10}}/>
                 </TouchableOpacity>
-                <View style={[styles.row,styles.bottom]}>
+                <View style={[styles.row, styles.paddingV, styles.bottom]}>
                     <Text style={styles.rowText}>我的积分</Text>
                     <Text style={styles.rowValue}>{this.state.user.integral}</Text>
                 </View>
+                <Modal
+                    animationType='slide'
+                    transparent={true}
+                    visible={this.state.modalVisiable}
+                    onShow={() => {}}
+                    onRequestClose={() => {}}>
+                    <View style={styles.modalStyle}>
+                        <View style={styles.subView}>
+                            <Text style={styles.titleText}>
+                                设置您的性别
+                            </Text>
+                            <View style={styles.buttonView}>
+                                <TouchableOpacity underlayColor='transparent'
+                                                  style={styles.buttonStyle}
+                                                  onPress={this._setModalVisible.bind(this, '男')}>
+                                    <Text style={styles.buttonText}>
+                                        男
+                                    </Text>
+                                </TouchableOpacity>
+                                <View style={styles.verticalLine}/>
+                                <TouchableOpacity underlayColor='transparent'
+                                                  style={styles.buttonStyle}
+                                                  onPress={this._setModalVisible.bind(this, '女')}>
+                                    <Text style={styles.buttonText}>
+                                        女
+                                    </Text>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    </View>
+                </Modal>
             </View>
         );
     }
@@ -155,10 +182,13 @@ const styles = StyleSheet.create({
     row: {
         flexDirection: 'row',
         backgroundColor: '#fff',
-        padding: 12,
+        paddingHorizontal: 12,
         borderTopWidth: StyleSheet.hairlineWidth,
         borderTopColor: '#ccc',
         alignItems: 'center'
+    },
+    paddingV: {
+        paddingVertical: 15,
     },
     rowText: {
         flex: 1,
@@ -170,10 +200,75 @@ const styles = StyleSheet.create({
         color: '#555',
     },
     input: {
-        flex: 1, height: 30, borderWidth: 0, textAlign: 'right',
+        flex: 1,
+        height: 40,
+        borderWidth: 0,
+        textAlign: 'right',
         paddingRight: 0,
         fontSize: 12,
         color: '#333'
+    },// modal的样式
+    modalStyle: {
+        //backgroundColor:'#ccc',
+        alignItems: 'center',
+        justifyContent: 'center',
+        flex: 1,
+    },
+    // modal上子View的样式
+    subView: {
+        marginLeft: 60,
+        marginRight: 60,
+        backgroundColor: '#F4F4F4',
+        alignSelf: 'stretch',
+        justifyContent: 'center',
+        borderRadius: 3,
+        borderWidth: 0.5,
+        borderColor: '#ccc',
+    },
+    // 标题
+    titleText: {
+        marginTop: 10,
+        marginBottom: 5,
+        fontSize: 16,
+        fontWeight: 'bold',
+        textAlign: 'center',
+    },
+    // 内容
+    contentText: {
+        margin: 8,
+        fontSize: 14,
+        textAlign: 'center',
+    },
+    // 水平的分割线
+    horizontalLine: {
+        marginTop: 5,
+        height: 0.5,
+        backgroundColor: '#ccc',
+    },
+    // 按钮
+    buttonView: {
+        flex: 1,
+        backgroundColor: '#FAFAFA',
+        flexDirection: 'column',
+        //alignItems: 'center',
+
+    },
+    buttonStyle: {
+        flex: 1,
+        height: 44,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    // 竖直的分割线
+    verticalLine: {
+        flex: 1,
+        height: 0.5,
+        backgroundColor: '#ccc',
+    },
+    buttonText: {
+        fontSize: 16,
+        color: '#3393F2',
+        textAlign: 'center',
     },
 });
 module.exports = UserInfo;
