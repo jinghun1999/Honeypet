@@ -89,4 +89,14 @@ export default ViewPage = {
             id: 'page'
         }
     },
+    appoint: (data)=>{
+        return {
+            component: Page.Appoint,
+            name: 'appoint',
+            id:'page',
+            params: {
+                title: data.title
+            }
+        }
+    },
 }

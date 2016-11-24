@@ -64,6 +64,18 @@ class Util extends React.Component {
         var d = dd.getDate();
         return y + "-" + m + "-" + d;
     }
+    static GetDatePart(time,part){
+        var date = Util.getFormateTime(time, 'day');
+        if(part=='day'){
+            return date.substr(date.lastIndexOf('-') + 1);
+        }
+        if(part=='month'){
+            return date.substring(date.indexOf('-') + 1, date.lastIndexOf('-'));
+        }
+        if(part=='year'){
+            return date.substring(0, date.indexOf('-'));
+        }
+    }
 
     static guid() {
         return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
