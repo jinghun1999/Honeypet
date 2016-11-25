@@ -101,4 +101,15 @@ export default ViewPage = {
             }
         }
     },
+    appointdetail: (data)=>{
+        return {
+            component: Page.AppointDetail,
+            name: 'appointdetail',
+            id:'page',
+            params: {
+                title: data.title,
+                appDetail:data.appDetail,
+            }
+        }
+    },
 }
