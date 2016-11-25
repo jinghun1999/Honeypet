@@ -13,5 +13,5 @@ export { default as Setting} from './setting';
 export { default as UserInfo} from './userinfo';
 export { default as WebPage} from './webpage';
 export { default as Feedback} from './feedback';
-export { default as Appoint} from './appoint';
-export { default as AppointDetail} from './appointdetail';
+export { default as Call} from './call';
+export { default as CallDetail} from './calldetail';

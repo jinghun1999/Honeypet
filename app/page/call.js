@@ -7,7 +7,6 @@ import {
     View,
     TouchableOpacity,
     Text,
-    Alert,
     StyleSheet,
     ListView,
 } from 'react-native';
@@ -16,7 +15,7 @@ import Toast from 'react-native-root-toast';
 import Navbar from '../components/navbar';
 import Util from '../util/Util';
 import Icon from 'react-native-vector-icons/FontAwesome';
-class Appoint extends Component {
+class Call extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -65,28 +64,28 @@ class Appoint extends Component {
         const _this =this;
         const { navigator } = _this.props;
         if (navigator) {
-            navigator.push(ViewPage.appointdetail({title:'预约详情',appDetail:app}));
+            navigator.push(ViewPage.calldetail({title:'呼叫详情',callDetail:app}));
         }
     }
 
-    _renderRow(app) {
+    _renderRow(call) {
         return (
-            <TouchableOpacity style={styles.row} onPress={()=>this._onPress(app)}>
+            <TouchableOpacity style={styles.row} onPress={()=>this._onPress(call)}>
                 <View style={styles.calendar}>
                     <Text style={styles.month}>
-                        <Text style={styles.day}>{Util.GetDatePart(app.requesttime,'day')} </Text>
-                        {Util.GetDatePart(app.requesttime,'month')}月</Text>
-                    <Text style={styles.year}>{Util.GetDatePart(app.requesttime,'year')}年</Text>
+                        <Text style={styles.day}>{Util.GetDatePart(call.requesttime,'day')} </Text>
+                        {Util.GetDatePart(call.requesttime,'month')}月</Text>
+                    <Text style={styles.year}>{Util.GetDatePart(call.requesttime,'year')}年</Text>
                 </View>
                 <View style={{flex:1,justifyContent:'center',margin:5,}}>
                     <View style={{flexDirection:'row'}}>
-                        <Text style={{flex:1,fontSize:16,fontWeight:'bold'}}>{app.entname}</Text>
+                        <Text style={{flex:1,fontSize:16,fontWeight:'bold'}}>{call.entname}</Text>
                     </View>
                     <View style={{marginTop:5,flexDirection:'row'}}>
-                        <Text>{app.describe}</Text>
+                        <Text>{call.describe}</Text>
                     </View>
                 </View>
-                {app.state===0?<Text style={styles.stated}>已接单</Text>
+                {call.state===0?<Text style={styles.stated}>已接单</Text>
                     :<Text style={[styles.stated,{color:'#EE4000'}]}>未接单</Text>}
                 <Icon style={{marginRight:5,}} name={'angle-right'} size={20} color={'#ccc'}/>
             </TouchableOpacity>
@@ -166,4 +165,4 @@ const styles = StyleSheet.create({
         margin: 2,
     },
 })
-export default Appoint;
+export default Call;

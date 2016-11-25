@@ -7,17 +7,15 @@ import {
     View,
     TouchableOpacity,
     Text,
-    Alert,
     StyleSheet,
     ListView,
-    Image,
 } from 'react-native';
 import Navbar from '../components/navbar';
-class AppointDetail extends Component {
+class CallDetail extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            appDetail:this.props.appDetail,
+            callDetail:this.props.callDetail,
         }
     }
     componentDidMount() {
@@ -38,36 +36,36 @@ class AppointDetail extends Component {
                 </View>
                 <View style={[styles.row, styles.paddingV]}>
                     <Text style={styles.rowText}>名称:</Text>
-                    <Text style={styles.rowValue}>{this.state.appDetail.entname}</Text>
+                    <Text style={styles.rowValue}>{this.state.callDetail.entname}</Text>
                 </View>
                 <View style={[styles.row, styles.paddingV]}>
                     <Text style={styles.rowText}>手机:</Text>
-                    <Text style={styles.rowValue}>{this.state.appDetail.entphone}</Text>
+                    <Text style={styles.rowValue}>{this.state.callDetail.entphone}</Text>
                 </View>
                 <View style={[styles.row, styles.paddingV]}>
                     <Text style={styles.rowText}>宠物:</Text>
-                    <Text style={styles.rowValue}>{this.state.appDetail.requestpet}</Text>
+                    <Text style={styles.rowValue}>{this.state.callDetail.requestpet}</Text>
                 </View>
                 <View style={[styles.row, styles.paddingV]}>
                     <Text style={styles.rowText}>地址:</Text>
-                    <Text style={styles.rowValue}>{this.state.appDetail.entaddress}</Text>
+                    <Text style={styles.rowValue}>{this.state.callDetail.entaddress}</Text>
                 </View>
                 <View style={[styles.row, styles.paddingV]}>
                     <Text style={styles.rowText}>请求时间:</Text>
-                    <Text style={styles.rowValue}>{this.state.appDetail.requesttime}</Text>
+                    <Text style={styles.rowValue}>{this.state.callDetail.requesttime}</Text>
                 </View>
                 <View style={[styles.row, styles.paddingV]}>
                     <Text style={styles.rowText}>应答时间:</Text>
-                    <Text style={styles.rowValue}>{this.state.appDetail.responsetime}</Text>
+                    <Text style={styles.rowValue}>{this.state.callDetail.responsetime}</Text>
                 </View>
                 <View style={[styles.row, styles.paddingV]}>
                     <Text style={styles.rowText}>接单状态:</Text>
-                    <Text style={styles.rowValue}>{this.state.appDetail.state==0?'已接单':'未接单'}</Text>
+                    <Text style={styles.rowValue}>{this.state.callDetail.state==0?'已接单':'未接单'}</Text>
                 </View>
                 <View style={[styles.row, styles.paddingV]}>
-                    <Text style={styles.rowText}>详细描述:</Text>
+                    <Text style={styles.rowText}>求助详情:</Text>
                     <Text style={styles.rowValue}>
-                        {this.state.appDetail.describe}{'\n'}
+                        {this.state.callDetail.describe}
                     </Text>
                 </View>
             </View>
@@ -122,4 +120,4 @@ const styles = StyleSheet.create({
         color: '#555',
     },
 });
-export default AppointDetail;
+export default CallDetail;

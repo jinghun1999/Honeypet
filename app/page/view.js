@@ -91,24 +91,24 @@ export default ViewPage = {
             id: 'page'
         }
     },
-    appoint: (data)=>{
+    call: (data)=>{
         return {
-            component: Page.Appoint,
-            name: 'appoint',
+            component: Page.Call,
+            name: 'call',
             id:'page',
             params: {
                 title: data.title
             }
         }
     },
-    appointdetail: (data)=>{
+    calldetail: (data)=>{
         return {
-            component: Page.AppointDetail,
-            name: 'appointdetail',
+            component: Page.CallDetail,
+            name: 'calldetail',
             id:'page',
             params: {
                 title: data.title,
-                appDetail:data.appDetail,
+                callDetail:data.callDetail,
             }
         }
     },
