@@ -11,7 +11,7 @@ import {
     Modal,
     Dimensions,
     } from 'react-native';
-//import PureRenderMixin from 'react-addons-pure-render-mixin';
+///import PureRenderMixin from '../common/pureRender';
 import ViewPage from './view';
 import AMapLocation from 'react-native-amap-location';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -21,11 +21,15 @@ import Spinner from '../components/spinner';
 import { StyleConfig, ComponentStyles, CommonStyles } from '../styles';
 import { getImageSource } from '../common';
 import ViewPager from 'react-native-viewpager';
-
+/*
+var TimeAgo = require('react-native-timeago');
+var moment = require('moment');
+require('moment/locale/zh-cn');
+moment.locale('zh-cn');
 const backgroundImageSource = getImageSource(8);
-
+<TimeAgo time={'2016-11-11 12:12:22'} />
+*/
 class HomePage extends Component {
-
     constructor(props) {
         super(props);
         this.state = {
@@ -93,6 +97,7 @@ class HomePage extends Component {
     fetchData(pageIndex) {
         const _this = this;
         NetUtil.getAuth(ret=> {
+            _this.setState({user: ret});
             NetUtil.postJson(CONSTAPI.API_HOST + '/hospital/HosList', {
                 pageIndex: pageIndex,
                 pageSize: 35
@@ -130,37 +135,33 @@ class HomePage extends Component {
         }
     }
 
-    loadAD(){
+    loadAD() {
         const _this = this;
-        NetUtil.get('http://120.24.89.243/trapi/api/AppInfo/GetHomePageImageInfo', null, function (data) {
-            if (data.Status) {
-                if (data.Data.length > 0) {
-                    let imgs = [];
-                    data.Data.forEach(function (obj, index, v) {
-                        imgs.push({uri: obj.AddressUrl});
-                    });
+        NetUtil.get(CONSTAPI.API_HOST + '/service/getfocusads', null, function (data) {
+            if (data.result) {
+                if (data.data.length > 0) {
                     _this.setState({
-                        imageSource: imgs,
+                        imageSource: data.data,
                     });
                 }
             } else {
-                Toast.show("获取广告失败：" + data.message);
+                Toast.show("获取广告失败：" + data.error);
             }
-        })
+        });
     }
 
-    _onPush(){
-        const _this =this;
+    _onPush(obj) {
+        const _this = this;
         const { navigator } = _this.props;
         if (navigator) {
-            navigator.push(ViewPage.webpage({}));
+            navigator.push(ViewPage.webpage({title: obj.title, url: obj.link}));
         }
     }
 
-    renderPage(data){
+    renderPage(data) {
         return (
-            <TouchableOpacity onPress={this._onPush.bind(this)}>
-                <Image source={{uri: data.uri}} style={styles.page}/>
+            <TouchableOpacity onPress={this._onPush.bind(this, data)}>
+                <Image source={{uri: data.imgurl}} style={styles.page}/>
             </TouchableOpacity>
         );
     }
@@ -256,7 +257,7 @@ class HomePage extends Component {
                             style={ [ ComponentStyles.btn, ComponentStyles.btn_primary,{flex:1, marginLeft:10} ] }
                             onPress={()=>{
                                 this.setState({modalVisiable: false,});
-                                this.props.navigator.push(ViewPage.message(this.state.location));
+                                this.props.navigator.push(ViewPage.message({location:this.state.location, user:this.state.user}));
                             } }>
                             <Text style={ ComponentStyles.btn_text }>
                                 呼叫

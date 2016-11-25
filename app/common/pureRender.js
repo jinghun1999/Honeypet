@@ -3,14 +3,12 @@
  */
 'use strict';
 
-var React = require('react');
-
+import React from 'react';
 if (React) {
     module.exports = React.addons.PureRenderMixin;
 }
 else {
     var g;
-
     if (typeof window != 'undefined') {
         g = window;
     } else if (typeof global != 'undefined') {
@@ -18,7 +16,6 @@ else {
     } else {
         g = this;
     }
-
     if (g.React) {
         module.exports = React.addons.PureRenderMixin;
     }
