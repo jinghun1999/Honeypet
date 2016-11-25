@@ -98,10 +98,7 @@ class HomePage extends Component {
         const _this = this;
         NetUtil.getAuth(ret=> {
             _this.setState({user: ret});
-            NetUtil.postJson(CONSTAPI.API_HOST + '/hospital/HosList', {
-                pageIndex: pageIndex,
-                pageSize: 35
-            }, null, function (data) {
+            NetUtil.get(CONSTAPI.API_HOST + '/hospital/gethospitals?pageindex=1', null, function (data) {
                 if (data && data.result && data.data) {
                     _this.setState({
                         hosList: data.data,
@@ -203,16 +200,16 @@ class HomePage extends Component {
             <TouchableOpacity underlayColor={'#EBEBEB'} style={styles.row}
                               onPress={this._onRowPress.bind(this, rowData)}>
 
-                <Image source={{uri:rowData.HeadPic}}
+                <Image source={{uri:rowData.headpic}}
                        style={{width:80, height:60, marginRight:5,}}/>
                 <View style={{flex:1,}}>
                     <View style={{flexDirection:'row'}}>
-                        <Text style={{fontSize:16, flex:1,}}>{rowData.HospitalName}</Text>
-                        <Text style={styles.distanceText}>{rowData.Distance} km</Text>
+                        <Text style={{fontSize:16, flex:1,}}>{rowData.entname}</Text>
+                        <Text style={styles.distanceText}>{rowData.distance} km</Text>
                     </View>
 
-                    <Text><Icon name={'ios-call'} size={14} color={'#999'}/> {rowData.Tel}</Text>
-                    <Text><Icon name={'ios-pin'} size={14} color={'#999'}/> {rowData.Address}</Text>
+                    <Text><Icon name={'ios-call'} size={14} color={'#999'}/> {rowData.tel}</Text>
+                    <Text><Icon name={'ios-pin'} size={14} color={'#999'}/> {rowData.address}</Text>
                 </View>
             </TouchableOpacity>
         )
