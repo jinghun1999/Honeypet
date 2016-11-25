@@ -98,7 +98,7 @@ class HomePage extends Component {
         const _this = this;
         NetUtil.getAuth(ret=> {
             _this.setState({user: ret});
-            NetUtil.get(CONSTAPI.API_HOST + '/hospital/gethospitals?pageindex=1', null, function (data) {
+            NetUtil.get(CONSTAPI.API_HOST + '/hospital/gethospitals?pageindex='+pageIndex, null, function (data) {
                 if (data && data.result && data.data) {
                     _this.setState({
                         hosList: data.data,

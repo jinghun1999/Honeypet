@@ -112,4 +112,15 @@ export default ViewPage = {
             }
         }
     },
+    doctor: (data)=>{
+        return {
+            component: Page.Doctor,
+            name: 'doctor',
+            id:'page',
+            params: {
+                title: data.title,
+                doctor:data.docData,
+            }
+        }
+    },
 }

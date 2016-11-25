@@ -15,3 +15,4 @@ export { default as WebPage} from './webpage';
 export { default as Feedback} from './feedback';
 export { default as Call} from './call';
 export { default as CallDetail} from './calldetail';
+export { default as Doctor} from './doctor';

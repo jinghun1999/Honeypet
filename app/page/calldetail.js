@@ -9,8 +9,10 @@ import {
     Text,
     StyleSheet,
     ListView,
+    Dimensions,
 } from 'react-native';
 import Navbar from '../components/navbar';
+const width=Dimensions.get('window').width;
 class CallDetail extends Component {
     constructor(props) {
         super(props);
@@ -64,7 +66,7 @@ class CallDetail extends Component {
                 </View>
                 <View style={[styles.row, styles.paddingV]}>
                     <Text style={styles.rowText}>求助详情:</Text>
-                    <Text style={styles.rowValue}>
+                    <Text style={[styles.rowValue,{width:width-100,textAlign:'right'}]}>
                         {this.state.callDetail.describe}
                     </Text>
                 </View>

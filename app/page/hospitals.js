@@ -9,7 +9,8 @@ import {
     ListView,
     Image,
     Modal,
-    } from 'react-native';
+    Dimensions,
+} from 'react-native';
 //import PureRenderMixin from 'react-addons-pure-render-mixin';
 import ViewPage from './view';
 import AMapLocation from 'react-native-amap-location';
@@ -17,8 +18,10 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import Toast from 'react-native-root-toast';
 import NetUtil from '../util/NetUtil';
 import Spinner from '../components/spinner';
+import Navbar from '../components/navbar';
 import { StyleConfig, ComponentStyles, CommonStyles } from '../styles';
 import { getImageSource } from '../common';
+const { height, width } = Dimensions.get('window');
 const backgroundImageSource = getImageSource(8);
 
 class HomePage extends Component {
@@ -54,6 +57,7 @@ class HomePage extends Component {
             dataString: null,
             loaded: false,
             modalVisiable: false,
+            pageIndex:1,
         };
         //this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     }
@@ -76,7 +80,7 @@ class HomePage extends Component {
             }
         });
         this.onLocation();
-        this.fetchData(1);
+        this.fetchData(this.state.pageIndex);
     }
 
     componentWillUnmount() {
@@ -86,14 +90,18 @@ class HomePage extends Component {
 
     fetchData(pageIndex) {
         const _this = this;
-        NetUtil.getAuth(function (ret) {
-            NetUtil.postJson(CONSTAPI.API_HOST + '/hospital/HosList', {
-                pageIndex: pageIndex,
-                pageSize: 35
-            }, null, function (data) {
+        NetUtil.getAuth(ret=> {
+            _this.setState({user: ret});
+            NetUtil.get(CONSTAPI.API_HOST + '/hospital/gethospitals?pageindex='+pageIndex, null, function (data) {
                 if (data && data.result && data.data) {
+                    var dataSource = data.data;
+                    if(pageIndex!==1){
+                        data.data.forEach((d)=>{
+                            dataSource.push(d)
+                        })
+                    }
                     _this.setState({
-                        hosList: data.data,
+                        hosList: dataSource,
                         loaded: true,
                     });
                 } else {
@@ -126,10 +134,14 @@ class HomePage extends Component {
 
     _renderHead() {
         return (
-            <View style={styles.nearHosHead}>
-                <Text style={{flex:1}}>附近医院</Text>
+            <View style={styles.head}>
+                <Text style={styles.headText}>附近医院</Text>
             </View>
         );
+    }
+
+    _endReached(){
+        this.fetchData(this.state.pageIndex+1);
     }
 
     _renderRow(rowData, sectionID, rowID) {
@@ -137,16 +149,16 @@ class HomePage extends Component {
             <TouchableOpacity underlayColor={'#EBEBEB'} style={styles.row}
                               onPress={this._onRowPress.bind(this, rowData)}>
 
-                <Image source={{uri:rowData.HeadPic}}
+                <Image source={{uri:rowData.headpic}}
                        style={{width:80, height:60, marginRight:5,}}/>
                 <View style={{flex:1,}}>
                     <View style={{flexDirection:'row'}}>
-                        <Text style={{fontSize:16, flex:1,}}>{rowData.HospitalName}</Text>
-                        <Text style={styles.distanceText}>{rowData.Distance} km</Text>
+                        <Text style={{fontSize:16, flex:1,}}>{rowData.entname}</Text>
+                        <Text style={styles.distanceText}>{rowData.distance} km</Text>
                     </View>
 
-                    <Text><Icon name={'ios-call'} size={14} color={'#999'}/> {rowData.Tel}</Text>
-                    <Text><Icon name={'ios-pin'} size={14} color={'#999'}/> {rowData.Address}</Text>
+                    <Text><Icon name={'ios-call'} size={14} color={'#999'}/> {rowData.tel}</Text>
+                    <Text><Icon name={'ios-pin'} size={14} color={'#999'}/> {rowData.address}</Text>
                 </View>
             </TouchableOpacity>
         )
@@ -169,8 +181,9 @@ class HomePage extends Component {
                           dataSource={this.state.ds.cloneWithRows(this.state.hosList)}
                           renderHeader={this._renderHead.bind(this)}
                           renderRow={this._renderRow.bind(this)}
+                          onEndReached={this._endReached.bind(this)}
                           renderFooter={()=>{return <View style={{height:50,}}></View>}}
-                    />
+                />
                 { this.renderLoading() }
             </View>
         );
@@ -233,6 +246,17 @@ const styles = StyleSheet.create({
         backgroundColor: '#FF8247',
         color: '#fff',
         width: 50
+    },
+    head:{
+        height:50,
+        width:width,
+        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+        justifyContent:'center',
+        paddingLeft:10,
+    },
+    headText:{
+        color:'rgba(255, 255, 255, 1)',
+        fontSize:18,
     },
 });
 export default HomePage;

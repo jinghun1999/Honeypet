@@ -7,53 +7,126 @@ import {
     View,
     RefreshControl,
     Text,
-    TouchableHighlight,
+    TouchableOpacity,
     StyleSheet,
     ListView,
     Image,
-    } from 'react-native';
+} from 'react-native';
 //import HomeHead from '../components/header/home';
 import Head from '../components/head';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Toast from 'react-native-root-toast';
 import Navbar from '../components/navbar';
+import Spinner from '../components/spinner';
+import NetUtil from '../util/NetUtil';
+import Icons from 'react-native-vector-icons/FontAwesome';
+import { StyleConfig, ComponentStyles, CommonStyles } from '../styles';
 class Hospital extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
             info: this.props.hospital,
+            entid: this.props.hospital.id,
+            loaded: false,
+            ds: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2}),
+            dataSource: [],
         };
     }
 
     componentDidMount() {
-
+        this.fethData();
     }
-    onBack(){
+
+    fethData() {
+        //http://test.tuoruimed.com:802/api/hospital/getdoctors?entid=b8901dabf6ce7d31fd7b835824c99723
+        let _this = this;
+        NetUtil.get(CONSTAPI.API_HOST + 'hospital/getdoctors?entid=' + _this.state.entid, null, function (data) {
+            if (data.result) {
+                let dataSource = data.data;
+                _this.setState({
+                    dataSource: dataSource,
+                    loaded: true,
+                })
+            } else {
+                Toast.show('数据获取失败');
+                _this.setState({loaded: true,})
+            }
+        });
+    }
+
+    onBack() {
         let {navigator} = this.props;
-        if(navigator){
+        if (navigator) {
             navigator.pop();
         }
     }
+
+    _onPress(row) {
+        const _this =this;
+        const { navigator } = _this.props;
+        if (navigator) {
+            navigator.push(ViewPage.doctor({title:'医生详情',docData:row}));
+        }
+    }
+
+    _renderRow(row) {
+        return (
+            <TouchableOpacity style={styles.row} onPress={()=>this._onPress(row)}>
+                <View style={{flexDirection:'column',marginLeft:15,alignSelf:'center',}}>
+                    <Image source={{uri:row.head}}
+                           style={{height:50,width:50,borderRadius:30,borderColor:'#ccc',borderWidth:1,}}/>
+                    <Text style={{textAlign:'center',fontSize:14,}}>{row.name}</Text>
+                </View>
+                <View style={{flex:1,flexDirection:'column',}}>
+                    <View style={{flexDirection:'row',margin:10,padding:5,borderBottomColor:'#ccc',borderBottomWidth:1,}}>
+                        <Icons style={{marginRight:10}} name={'star'} size={20} color={'#87CEFA'}/>
+                        <Text style={{marginRight:30}}>医生</Text>
+                        <Icons style={{marginRight:10}} name={'fire'} size={20} color={'#EE4000'}/>
+                        <Text>{row.hot}</Text>
+                    </View>
+                    <View style={{flexDirection:'row',padding:5,marginLeft:10,}}>
+                        <Icons style={{marginRight:10}} name={'hospital-o'} size={20} color={'#9BCD9B'}/>
+                        <Text style={{marginRight:10,}}>{row.entname}</Text>
+                    </View>
+                </View>
+            </TouchableOpacity>
+        )
+    }
+
+
     render() {
+        var listView = <Spinner style={ ComponentStyles.pending_container }/>;
+        if (this.state.loaded) {
+            listView = <ListView enableEmptySections={true}
+                                 dataSource={this.state.ds.cloneWithRows(this.state.dataSource)}
+                                 renderRow={this._renderRow.bind(this)}
+                                 renderFooter={()=>{return <View style={{height:50,}}></View>}}
+            />
+        }
         return (
             <View style={styles.container}>
                 <Navbar title={'医院详情'} leftIconOnPress={this.onBack.bind(this)}/>
                 <View style={{height:200,}}>
-                    <Image source={{uri:this.state.info.HeadPic}} resizeMode={'stretch'} style={{flex:1,}} />
+                    <Image source={{uri:this.state.info.headpic}} resizeMode={'stretch'} style={{flex:1,}}/>
                 </View>
                 <View style={{padding:10, backgroundColor:'#fff'}}>
-                    <Text style={{fontSize:18, borderLeftWidth:5, borderLeftColor:'#FA8072', paddingLeft:5,}}>{this.state.info.HospitalName}</Text>
+                    <Text
+                        style={{fontSize:18, borderLeftWidth:5, borderLeftColor:'#FA8072', paddingLeft:5,}}>{this.state.info.entname}</Text>
                 </View>
                 <View style={{padding:10, marginVertical:10, backgroundColor:'#fff'}}>
-                    <Text>{this.state.info.Description}</Text>
+                    <Text>{this.state.info.description}</Text>
                 </View>
                 <View style={{padding:10, backgroundColor:'#fff', borderBottomWidth:1, borderBottomColor:'#EDEDED'}}>
-                    <Text><Icon name={'ios-call'} size={18} color={'#FA8072'}/> {this.state.info.Tel}</Text>
+                    <Text><Icon name={'ios-call'} size={18} color={'#FA8072'}/> {this.state.info.tel}</Text>
                 </View>
                 <View style={{padding:10, backgroundColor:'#fff', borderBottomWidth:1, borderBottomColor:'#EDEDED'}}>
-                    <Text><Icon name={'ios-pin'} size={18} color={'#FA8072'}/> {this.state.info.Address}</Text>
+                    <Text><Icon name={'ios-pin'} size={18} color={'#FA8072'}/> {this.state.info.address}</Text>
                 </View>
+                <View style={{height:30,justifyContent:'center',backgroundColor:'#fff',padding:10, marginTop:10,}}>
+                    <Text style={{fontSize:16,borderLeftWidth:5,borderLeftColor:'#FA8072',paddingLeft:5,}}>医生列表</Text>
+                </View>
+                {listView}
             </View>
         );
     }
@@ -61,7 +134,15 @@ class Hospital extends Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor:'#F5F5F5'
+        backgroundColor: '#F5F5F5'
+    },
+    row: {
+        flex: 1,
+        flexDirection: 'row',
+        backgroundColor: '#fff',
+        marginTop: 5,
+        justifyContent: 'flex-start',
+        height: 100,
     },
 
 });
