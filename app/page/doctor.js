@@ -14,7 +14,7 @@ import {
 import NetUtil from '../util/NetUtil';
 import Toast from 'react-native-root-toast';
 import Navbar from '../components/navbar';
-
+const width=Dimensions.get('window').width;
 class Doctor extends Component {
     constructor(props) {
         super(props);
@@ -57,7 +57,7 @@ class Doctor extends Component {
                 </View>
                 <View style={{flexDirection:'row',height:60,backgroundColor:'#fff',marginTop:5}}>
                     <Text style={{fontSize:16,marginLeft:10,}}>从业简介: </Text>
-                    <Text style={{width:Dimensions.get('window').width,}}>{this.state.dataSource.describe}</Text>
+                    <Text style={{width:width-100,}}>{this.state.dataSource.describe}</Text>
                 </View>
             </View>
         )
