@@ -96,7 +96,7 @@ class UserRender extends Component {
                 backgroundImage={ this.state.cover }
                 leftIconOnPress={()=>{}}
                 leftIconName={ {uri:'http://www.easyicon.net/api/resizeApi.php?id=1201413&size=96'} }
-                title={ user.realname }/>
+                title={user.realname != null ? user.realname : user.phone}/>
         );
     }
 

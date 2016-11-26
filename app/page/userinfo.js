@@ -15,6 +15,7 @@ import {
     InteractionManager,
     TextInput,
     Modal,
+    Platform
     } from 'react-native';
 import _ from 'lodash';
 import Head from '../components/head';
@@ -26,7 +27,18 @@ import NetUtil from '../util/NetUtil';
 import Picker from 'react-native-picker';
 import BackAndroidTool from '../util/BackAndroidTool';
 import NButton from '../components/NButton';
-
+//import P from './p';
+import ImagePicker from 'react-native-image-picker';
+var options = {
+    title: 'Select Avatar',
+    customButtons: [
+        {name: 'fb', title: 'Choose Photo from Facebook'},
+    ],
+    storageOptions: {
+        skipBackup: true,
+        path: 'images'
+    }
+};
 class UserInfo extends Component {
     constructor(props) {
         super(props);
@@ -139,6 +151,7 @@ class UserInfo extends Component {
                     <Text style={styles.rowText}>我的积分</Text>
                     <Text style={styles.rowValue}>{this.state.user.integral}</Text>
                 </View>
+
                 <Modal
                     animationType='slide'
                     transparent={true}

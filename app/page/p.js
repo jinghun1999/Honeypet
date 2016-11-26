@@ -2,112 +2,131 @@
  * Created by User on 2016-11-03.
  */
 'use strict';
-import React, { Component } from 'react';
+import React from 'react';
 import {
-    View,
-    RefreshControl,
-    TouchableOpacity,
-    Text,
-    Alert,
+    AppRegistry,
     StyleSheet,
+    Text,
+    View,
+    PixelRatio,
+    TouchableOpacity,
+    Image,
+    Platform
     } from 'react-native';
-import ViewPage from './view';
-import Config, { storageKey } from '../config';
-import UserHead from '../components/header/user';
-import NButton from '../components/NButton';
-import NetUtil from '../util/NetUtil';
-import Toast from 'react-native-root-toast';
-import Icon from 'react-native-vector-icons/FontAwesome'
-class P extends Component {
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            user: {}
+import ImagePicker from 'react-native-image-picker';
+
+export default class P extends React.Component {
+
+    state = {
+        avatarSource: null,
+        videoSource: null
+    };
+
+    selectPhotoTapped() {
+        const options = {
+            title: '上传头像',
+            takePhotoButtonTitle: '拍照',
+            chooseFromLibraryButtonTitle: '从手机浏览',
+            cancelButtonTitle: '取消',
+            quality: 1.0,
+            maxWidth: 500,
+            maxHeight: 500,
+            storageOptions: {
+                skipBackup: true
+            }
         };
-    }
 
-    componentDidMount() {
-        let _this = this;
-        NetUtil.getAuth((ret)=> {
-            _this.setState({user: ret});
-        }, ()=> {
-            Toast.show('获取用户信息失败');
+        ImagePicker.showImagePicker(options, (response) => {
+            console.log('Response = ', response);
+
+            if (response.didCancel) {
+                console.log('User cancelled photo picker');
+            }
+            else if (response.error) {
+                console.log('ImagePicker Error: ', response.error);
+            }
+            else if (response.customButton) {
+                console.log('User tapped custom button: ', response.customButton);
+            }
+            else {
+                var source;
+                // You can display the image using either:
+                //source = {uri: 'data:image/jpeg;base64,' + response.data, isStatic: true};
+                //Or:
+                if (Platform.OS === 'android') {
+                    source = {uri: response.uri, isStatic: true};
+                } else {
+                    source = {uri: response.uri.replace('file://', ''), isStatic: true};
+                }
+
+                this.setState({
+                    avatarSource: source
+                });
+            }
         });
     }
 
-    logout() {
-        let _this = this;
-        Alert.alert(
-            '注销提示',
-            '您确定要注销登陆吗？',
-            [
-                {text: '取消', onPress: () => console.log('Cancel Pressed!')},
-                {
-                    text: '确定', onPress: () => {
-                    storage.remove({key: storageKey.USER_TOKEN});
-                    const { navigator } = _this.props;
-                    if (navigator) {
-                        navigator.replace(ViewPage.startup());
-                    }
-                }
-                },
-            ]
-        )
-    }
-
-    renderChildren() {
-        return (
-            <View style={{flex:1, paddingVertical:10, backgroundColor:'#F4F4F4'}}>
-                <TouchableOpacity style={styles.row} onPress={()=>{}}>
-                    <Icon name="user" size={26} color="#68228B" />
-                    <Text style={styles.rowText}>个人信息</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.row} onPress={()=>{}}>
-                    <Icon name="rocket" size={26} color="#6495ED" />
-                    <Text style={styles.rowText}>我的预约记录</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={[styles.row, styles.bottom]} onPress={()=>{}}>
-                    <Icon name="phone-square" size={26} color="#CD661D" />
-                    <Text style={styles.rowText}>我的呼叫历史</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={[styles.row,styles.bottom,{marginTop:10,}]} onPress={()=>{}}>
-                    <Icon name="cog" size={26} color="#CDCD00" />
-                    <Text style={styles.rowText}>设置</Text>
-                </TouchableOpacity>
-                <NButton onPress={this.logout.bind(this)} backgroundColor={'#FF6666'} text="注 销"/>
-            </View>
-        );
+    ///
+    /*
+     1、首先我们new了一个FormData
+     2、创建一个file对象，uri是什么？如下示例：
+     Android:  file:///storage/emulated/0/Pictures/eb645893-4c00-44a3-a9b4-a2116e955f7c.jpg
+     ios:      /Users/ashleydw/Library/Developer/CoreSimulator/Devices/23EE88D0-6E91-43AD-A3B6-06F87698C5A8/data/Containers/Data/Application/A73E68D3-7424-4301-9934-AD0F8251C1EB/tmp/7803DA8A-0E40-4FCB-A593-884805878172.jpg
+     3、设置header
+        'Content-Type':'multipart/form-data',
+     4、将创建好的FormData赋值给body
+     */
+    uploadImage() {
+        let url = '';
+        let formData = new FormData();
+        let file = {uri: uri, type: 'multipart/form-data', name: 'a.jpg'};
+        formData.append("images", file);
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+            body: formData,
+        }).then((response) => response.text()).then((responseData)=> {
+            console.log('responseData', responseData);
+        }).catch((error)=> {
+            console.error('error', error)
+        });
     }
 
     render() {
         return (
             <View style={styles.container}>
-                <UserHead user={this.state.user}>
-                    {this.renderChildren()}
-                </UserHead>
+                <TouchableOpacity onPress={this.selectPhotoTapped.bind(this)}>
+                    <View style={[styles.avatar, styles.avatarContainer, {marginBottom: 20}]}>
+                        { this.state.avatarSource === null ? <Text>Select a Photo</Text> :
+                            <Image style={styles.avatar} source={this.state.avatarSource}/>
+                        }
+                    </View>
+                </TouchableOpacity>
             </View>
         );
     }
+
 }
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#F5FCFF'
     },
-    row: {
-        backgroundColor: '#fff',
-        padding:12,
-        borderTopWidth:StyleSheet.hairlineWidth,
-        borderTopColor:'#ccc',
-        flexDirection:'row',
-        alignItems:'center'
+    avatarContainer: {
+        borderColor: '#9B9B9B',
+        borderWidth: 1 / PixelRatio.get(),
+        justifyContent: 'center',
+        alignItems: 'center'
     },
-    rowText:{
-        fontSize:16,
-        color:'#000',
-        marginLeft:20,
-    },
-    bottom:{borderBottomWidth:StyleSheet.hairlineWidth, borderBottomColor:'#ccc',}
+    avatar: {
+        borderRadius: 75,
+        width: 150,
+        height: 150
+    }
 });
-export default P;
