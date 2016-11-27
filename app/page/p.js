@@ -78,9 +78,10 @@ export default class P extends React.Component {
      4、将创建好的FormData赋值给body
      */
     uploadImage() {
-        let url = '';
+        let url = CONSTAPI.API_HOST+'/token/imgupload';
+        /*
         let formData = new FormData();
-        let file = {uri: uri, type: 'multipart/form-data', name: 'a.jpg'};
+        let file = {uri: this.state.avatarSource.url, type: 'multipart/form-data', name: 'a.jpg'};
         formData.append("images", file);
         fetch(url, {
             method: 'POST',
@@ -93,6 +94,19 @@ export default class P extends React.Component {
         }).catch((error)=> {
             console.error('error', error)
         });
+        */
+        let formData = new FormData();
+        formData.append('image', {uri: this.state.avatarSource.url, type: 'image/jpg', name: 'image.jpg'});
+        formData.append('description', String('aaaaaaaaaaaaaaaaaa'));
+        let options = {
+            headers:{
+                'Content-Type':'multipart/form-data; boundary=6ff46e0b6b5148d984f148b6542e5a5d'
+            },
+            body: formData,
+        };
+        return fetch(url, options).then((response) => {
+            alert('ok')
+        });
     }
 
     render() {
@@ -104,6 +118,9 @@ export default class P extends React.Component {
                             <Image style={styles.avatar} source={this.state.avatarSource}/>
                         }
                     </View>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={this.uploadImage.bind(this)}>
+                    <Text>上传</Text>
                 </TouchableOpacity>
             </View>
         );

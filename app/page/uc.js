@@ -46,6 +46,7 @@ class UC extends Component {
                 {
                     text: '确定', onPress: () => {
                     storage.remove({key: storageKey.USER_TOKEN});
+                    storage.remove({key: storageKey.LOGIN_INFO});
                     const { navigator } = _this.props;
                     if (navigator) {
                         navigator.replace(ViewPage.startup());

@@ -31,7 +31,7 @@ var Sync = {
                             resolve && resolve({user: r.data});
                             alert('自动登陆成功，' + _expires + 'ms后过期')
                         } else {
-                            alert('自动登陆失败！'+url)
+                            alert('自动登陆失败！'+r.error + url)
                             reject && reject(new Error('登陆信息已过期，请重新登陆'));
                         }
                     } catch (e) {
