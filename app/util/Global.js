@@ -6,7 +6,7 @@ var GLOBAL = {
     HOST: HOST,
     API_HOST:API_HOST,
     LOGIN: API_HOST + '/token',
-    REQUEST : API_HOST + '/Request'
+    REQUEST : API_HOST + '/Request/Post'
 };
 global.CONSTAPI = GLOBAL;
 module.exports = GLOBAL;

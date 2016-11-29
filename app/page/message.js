@@ -213,11 +213,16 @@ class Message extends Component {
             'City':this.props.location.province,
             'Postion':this.props.location.address,
             'Describe':this.state.content,
+            'PetName':this.state.petName,
             'Point':{
                 'Y':this.props.location.latitude,
                 'X':this.props.location.longitude
             }
         };
+
+        data.Postion = '上海九江路26号';
+        data.City = '上海';
+
         //设置场景2
         this.setcene(2);
         let _this = this;
@@ -331,7 +336,7 @@ class Message extends Component {
                     <TextInput
                         ref="txtTitle"
                         onFocus={() => {this.refs.txtTitle.focus()}}
-                        maxLength = { 80 }
+                        maxLength = { 50 }
                         multiline = { false }
                         style={ [ComponentStyles.input] }
                         placeholder={'请输入您的爱宠名字...'}
