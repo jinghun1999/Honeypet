@@ -66,8 +66,7 @@ class Message extends Component {
                 EntName:'',
                 EntAddress:'',
                 EntPhone:'',
-                ResponseName:'',
-                Phone:''
+                ResponseName:''
             },
             openmodel:false,
             openShelter:false,
@@ -220,7 +219,7 @@ class Message extends Component {
             }
         };
 
-        data.Postion = '上海九江路26号';
+        data.Postion = '上海市徐汇区九江路26号黔江大厦29层';
         data.City = '上海';
 
         //设置场景2
@@ -240,8 +239,7 @@ class Message extends Component {
                             EntName:bill.EntName,
                             EntAddress:bill.EntAddress,
                             EntPhone:bill.EntPhone,
-                            ResponseName:bill.ResponseName,
-                            Phone:bill.Phone},openShelter:true});
+                            ResponseName:bill.ResponseName},openShelter:true});
                         this.setcene(4);
                     },()=>{
                         //断开连接CallBack
@@ -486,7 +484,7 @@ class Message extends Component {
                             </Text>
                             <Text
                                 style={[ CommonStyles.text_left, CommonStyles.m_b_1, CommonStyles.font_lg, CommonStyles.text_dark ]}>
-                                电  话：{this.state.Bill.Phone}
+                                电  话：{this.state.Bill.EntPhone}
                             </Text>
                             <Text
                                 style={[ CommonStyles.text_left, CommonStyles.m_b_1, CommonStyles.font_lg, CommonStyles.text_dark ]}>
