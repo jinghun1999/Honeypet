@@ -23,7 +23,6 @@ import NetUtil from '../util/NetUtil';
 import Icons from 'react-native-vector-icons/FontAwesome';
 import { StyleConfig, ComponentStyles, CommonStyles } from '../styles';
 class Hospital extends Component {
-
     constructor(props) {
         super(props);
         this.state = {
@@ -37,11 +36,11 @@ class Hospital extends Component {
 
     componentDidMount() {
         InteractionManager.runAfterInteractions(() => {
-            this.fethData();
+            this._loading();
         });
     }
 
-    fethData() {
+    _loading() {
         //http://test.tuoruimed.com:802/api/hospital/getdoctors?entid=b8901dabf6ce7d31fd7b835824c99723
         let _this = this;
         NetUtil.get(CONSTAPI.API_HOST + 'hospital/getdoctors?entid=' + _this.state.entid, null, function (data) {
@@ -103,9 +102,8 @@ class Hospital extends Component {
             <View style={{height:200,}}>
                 <Image source={{uri:this.state.info.headpic}} resizeMode={'stretch'} style={{flex:1,}}/>
             </View>
-            <View style={{padding:10, backgroundColor:'#fff'}}>
-                <Text
-                    style={{fontSize:18, borderLeftWidth:5, borderLeftColor:'#FA8072', paddingLeft:5,}}>{this.state.info.entname}</Text>
+            <View style={styles.title}>
+                <Text style={{flex:1,fontSize:18}}>{this.state.info.entname}</Text>
             </View>
             <View style={{padding:10, marginVertical:10, backgroundColor:'#fff'}}>
                 <Text>{this.state.info.description}</Text>
@@ -116,10 +114,10 @@ class Hospital extends Component {
             <View style={{padding:10, backgroundColor:'#fff', borderBottomWidth:1, borderBottomColor:'#EDEDED'}}>
                 <Text><Icon name={'ios-pin'} size={18} color={'#FA8072'}/> {this.state.info.address}</Text>
             </View>
-            <View style={{height:30,justifyContent:'center',backgroundColor:'#fff',padding:10, marginTop:10,}}>
-                <Text style={{fontSize:16,borderLeftWidth:5,borderLeftColor:'#FA8072',paddingLeft:5,}}>医生列表</Text>
+            <View style={[styles.title,{marginTop:5}]}>
+                <Text style={{flex:1}}>医生列表</Text>
             </View>
-        </View>);
+        </View>)
     }
 
     render() {
@@ -152,6 +150,15 @@ const styles = StyleSheet.create({
         marginTop: 5,
         justifyContent: 'flex-start',
         height: 100,
+    },
+    title: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingVertical: 5,
+        paddingHorizontal: 5,
+        backgroundColor: '#fff',
+        borderLeftWidth: 5,
+        borderLeftColor: '#FA8072',
     },
 
 });

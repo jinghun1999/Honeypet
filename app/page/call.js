@@ -9,12 +9,14 @@ import {
     Text,
     StyleSheet,
     ListView,
+    Dimensions,
 } from 'react-native';
 import NetUtil from '../util/NetUtil';
 import Toast from 'react-native-root-toast';
 import Navbar from '../components/navbar';
 import Util from '../util/Util';
 import Icon from 'react-native-vector-icons/FontAwesome';
+const width=Dimensions.get('window').width;
 class Call extends Component {
     constructor(props) {
         super(props);
@@ -82,11 +84,11 @@ class Call extends Component {
                         <Text style={{flex:1,fontSize:16,fontWeight:'bold'}}>{call.entname}</Text>
                     </View>
                     <View style={{marginTop:5,flexDirection:'row'}}>
-                        <Text>{call.describe}</Text>
+                        <Text style={{width:width-100}}>{call.describe}</Text>
                     </View>
                 </View>
                 {call.state===0?<Text style={styles.stated}>已接单</Text>
-                    :<Text style={[styles.stated,{color:'#EE4000'}]}>未接单</Text>}
+                    :<Text style={[styles.stated,{backgroundColor:'#EE4000'}]}>未接单</Text>}
                 <Icon style={{marginRight:5,}} name={'angle-right'} size={20} color={'#ccc'}/>
             </TouchableOpacity>
         )
@@ -124,14 +126,10 @@ const styles = StyleSheet.create({
         position:'absolute',
         top:5,
         right:15,
-        color:'#6959CD',
+        color:'#FFF5EE',
         fontSize:14,
-    },
-    state:{
-        marginRight:10,
-        textAlign:'center',
-        alignSelf:'center',
-        color:'#218868',
+        backgroundColor:'#FF7F24',
+        padding:2,
     },
     row: {
         flex: 1,
