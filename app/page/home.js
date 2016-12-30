@@ -200,16 +200,16 @@ class HomePage extends Component {
             <TouchableOpacity underlayColor={'#EBEBEB'} style={styles.row}
                               onPress={this._onRowPress.bind(this, rowData)}>
 
-                <Image source={{uri:rowData.headpic}}
+                <Image source={{uri:rowData.Headpic}}
                        style={{width:80, height:60, marginRight:5,}}/>
                 <View style={{flex:1,}}>
                     <View style={{flexDirection:'row'}}>
-                        <Text style={{fontSize:16, flex:1,}}>{rowData.entname}</Text>
-                        <Text style={styles.distanceText}>{rowData.distance} km</Text>
+                        <Text style={{fontSize:16, flex:1,}}>{rowData.FullName}</Text>
+                        <Text style={styles.distanceText}>{rowData.Distance} km</Text>
                     </View>
 
-                    <Text><Icon name={'ios-call'} size={14} color={'#999'}/> {rowData.tel}</Text>
-                    <Text><Icon name={'ios-pin'} size={14} color={'#999'}/> {rowData.address}</Text>
+                    <Text><Icon name={'ios-call'} size={14} color={'#999'}/> {rowData.TelPhone}</Text>
+                    <Text><Icon name={'ios-pin'} size={14} color={'#999'}/> {rowData.Address}</Text>
                 </View>
             </TouchableOpacity>
         )

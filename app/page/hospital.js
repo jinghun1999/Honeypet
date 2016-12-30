@@ -43,7 +43,7 @@ class Hospital extends Component {
     _loading() {
         //http://test.tuoruimed.com:802/api/hospital/getdoctors?entid=b8901dabf6ce7d31fd7b835824c99723
         let _this = this;
-        NetUtil.get(CONSTAPI.API_HOST + 'hospital/getdoctors?entid=' + _this.state.entid, null, function (data) {
+        NetUtil.get(CONSTAPI.API_HOST + 'Hospital/GetDoctors?r=' + _this.state.entid, null, function (data) {
             if (data.result) {
                 let dataSource = data.data;
                 _this.setState({
@@ -100,19 +100,19 @@ class Hospital extends Component {
     renderHeader() {
         return (<View>
             <View style={{height:200,}}>
-                <Image source={{uri:this.state.info.headpic}} resizeMode={'stretch'} style={{flex:1,}}/>
+                <Image source={{uri:this.state.info.Headpic}} resizeMode={'stretch'} style={{flex:1,}}/>
             </View>
             <View style={styles.title}>
-                <Text style={{flex:1,fontSize:18}}>{this.state.info.entname}</Text>
+                <Text style={{flex:1,fontSize:18}}>{this.state.info.FullName}</Text>
             </View>
             <View style={{padding:10, marginVertical:10, backgroundColor:'#fff'}}>
-                <Text>{this.state.info.description}</Text>
+                <Text>{this.state.info.Description}</Text>
             </View>
             <View style={{padding:10, backgroundColor:'#fff', borderBottomWidth:1, borderBottomColor:'#EDEDED'}}>
-                <Text><Icon name={'ios-call'} size={18} color={'#FA8072'}/> {this.state.info.tel}</Text>
+                <Text><Icon name={'ios-call'} size={18} color={'#FA8072'}/> {this.state.info.TelPhone}</Text>
             </View>
             <View style={{padding:10, backgroundColor:'#fff', borderBottomWidth:1, borderBottomColor:'#EDEDED'}}>
-                <Text><Icon name={'ios-pin'} size={18} color={'#FA8072'}/> {this.state.info.address}</Text>
+                <Text><Icon name={'ios-pin'} size={18} color={'#FA8072'}/> {this.state.info.Address}</Text>
             </View>
             <View style={[styles.title,{marginTop:5}]}>
                 <Text style={{flex:1}}>医生列表</Text>
