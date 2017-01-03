@@ -35,11 +35,10 @@ class Doctor extends Component {
         return (
             <View style={{height:200, justifyContent:'center', alignItems:'center',backgroundColor:'#FFD700'}}>
                 <View style={{borderWidth:1,borderColor:'#AAAAAA',borderRadius:50}}>
-                    <Image source={{uri: this.state.dataSource.head}} style={{width:100, height:100,borderRadius:50 }}
-                           resizeMode='contain'/>
+                    <Image source={{uri: this.state.dataSource.head}} style={{width:100, height:100,borderRadius:50 }}/>
                 </View>
                 <Text style={{fontSize:16, fontWeight:'bold'}}>{this.state.dataSource.name}</Text>
-                <Text style={{fontSize:16,}}>医生</Text>
+                <Text style={{fontSize:16,}}>{this.state.dataSource.position}</Text>
                 <Text style={{fontSize:16,}}>{this.state.dataSource.entname}</Text>
             </View>
         )

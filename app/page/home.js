@@ -63,6 +63,7 @@ class HomePage extends Component {
             modalVisiable: false,
             imageSource: [],
             dsImage: new ViewPager.DataSource({pageHasChanged: (p1, p2)=>p1 !== p2}),
+            maxDistance:999999999,
         };
         //this.shouldComponentUpdate = PureRenderMixin.shouldComponentUpdate.bind(this);
     }
@@ -98,7 +99,8 @@ class HomePage extends Component {
         const _this = this;
         NetUtil.getAuth(ret=> {
             _this.setState({user: ret});
-            NetUtil.get(CONSTAPI.API_HOST + '/hospital/gethospitals?pageindex='+pageIndex, null, function (data) {
+            let param = "lng="+_this.state.location.longitude+"&lat="+_this.state.location.latitude+"&maxDistance="+_this.state.maxDistance;
+            NetUtil.get(CONSTAPI.API_HOST + '/hospital/Get?'+param, null, function (data) {
                 if (data && data.result && data.data) {
                     _this.setState({
                         hosList: data.data,
@@ -343,7 +345,8 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         backgroundColor: '#FF8247',
         color: '#fff',
-        width: 50
+        padding:1,
+        margin:1,
     },
 });
 export default HomePage;

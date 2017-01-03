@@ -15,6 +15,7 @@ import {
     } from 'react-native';
 //import HomeHead from '../components/header/home';
 import Head from '../components/head';
+import AMapLocation from 'react-native-amap-location';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Toast from 'react-native-root-toast';
 import Navbar from '../components/navbar';
@@ -27,21 +28,61 @@ class Hospital extends Component {
         super(props);
         this.state = {
             info: this.props.hospital,
-            entid: this.props.hospital.id,
+            entid: this.props.hospital.Id,
             loaded: false,
             ds: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2}),
             dataSource: [],
+            location:{
+                accuracy: 29,
+                adCode: "310114",
+                address: "上海市嘉定区嘉三路靠近同济大学嘉定校区华楼",
+                altitude: 0,
+                bearing: 0,
+                city: "上海市",
+                cityCode: "021",
+                country: "中国",
+                district: "嘉定区",
+                latitude: 31.285728,
+                locationDetail: "-1",
+                locationType: 4,
+                longitude: 121.217404,
+                poiName: "同济大学嘉定校区华楼",
+                provider: "lbs",
+                province: "上海市",
+                satellites: 0,
+                speed: 0,
+                street: "嘉松北路",
+                streetNum: "6128号"
+            },
         };
     }
 
     componentDidMount() {
+        let _this =this;
+        this.listener = AMapLocation.addEventListener((data) => {
+            if (data.latitude !== null) {
+                _this.setState({
+                    location: data,
+                });
+            } else {
+                _this.setState({
+                    location: {},
+                })
+            }
+        });
         InteractionManager.runAfterInteractions(() => {
             this._loading();
         });
     }
 
+    componentWillUnmount() {
+        AMapLocation.stopLocation();
+        this.listener.remove();
+    }
+
     _loading() {
-        //http://test.tuoruimed.com:802/api/hospital/getdoctors?entid=b8901dabf6ce7d31fd7b835824c99723
+        //http://test.tuoruimed.com:802/api/Hospital/GetNearDoctors?lng=121.50006&lat=31.239682&maxDistance=999999999
+        //http://test.tuoruimed.com:802/api/Hospital/GetDoctors?r=9A2DA24E-822F-4C94-9E02-6919A4F9C398
         let _this = this;
         NetUtil.get(CONSTAPI.API_HOST + 'Hospital/GetDoctors?r=' + _this.state.entid, null, function (data) {
             if (data.result) {
@@ -73,6 +114,10 @@ class Hospital extends Component {
     }
 
     _renderRow(row) {
+        let isOnLine = row.ConnectionID,onLine="在线";
+        if(isOnLine==null){
+            onLine = "不在线"
+        }
         return (
             <TouchableOpacity style={styles.row} onPress={()=>this._onPress(row)}>
                 <View style={{flexDirection:'column',marginLeft:15,alignSelf:'center',}}>
@@ -81,12 +126,11 @@ class Hospital extends Component {
                     <Text style={{textAlign:'center',fontSize:14,}}>{row.name}</Text>
                 </View>
                 <View style={{flex:1,flexDirection:'column',}}>
-                    <View
-                        style={{flexDirection:'row',margin:10,padding:5,borderBottomColor:'#ccc',borderBottomWidth:1,}}>
+                    <View style={{flexDirection:'row',margin:10,padding:5,borderBottomColor:'#ccc',borderBottomWidth:1,}}>
                         <Icons style={{marginRight:10}} name={'star'} size={20} color={'#87CEFA'}/>
-                        <Text style={{marginRight:30}}>医生</Text>
+                        <Text style={{marginRight:30}}>{row.position}({onLine})</Text>
                         <Icons style={{marginRight:10}} name={'fire'} size={20} color={'#EE4000'}/>
-                        <Text>{row.hot}</Text>
+                        <Text style={{marginRight:30}}>{row.hot}</Text>
                     </View>
                     <View style={{flexDirection:'row',padding:5,marginLeft:10,}}>
                         <Icons style={{marginRight:10}} name={'hospital-o'} size={20} color={'#9BCD9B'}/>
