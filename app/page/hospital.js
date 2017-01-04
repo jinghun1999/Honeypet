@@ -115,7 +115,7 @@ class Hospital extends Component {
 
     _renderRow(row) {
         let isOnLine = row.ConnectionID,onLine="在线";
-        if(isOnLine==null){
+        if(isOnLine==null || isOnLine == ""){
             onLine = "不在线"
         }
         return (
