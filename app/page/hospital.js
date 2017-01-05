@@ -114,9 +114,9 @@ class Hospital extends Component {
     }
 
     _renderRow(row) {
-        let isOnLine = row.ConnectionID,onLine="在线";
+        var isOnLine = row.connectionid,onLine="在线";
         if(isOnLine==null || isOnLine == ""){
-            onLine = "不在线"
+            onLine = "离线";
         }
         return (
             <TouchableOpacity style={styles.row} onPress={()=>this._onPress(row)}>

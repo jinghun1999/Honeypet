@@ -150,9 +150,8 @@ class HomePage extends Component {
                 <View style={{flex:1,}}>
                     <View style={{flexDirection:'row'}}>
                         <Text style={{fontSize:16, flex:1,}}>{rowData.FullName}</Text>
-                        <Text style={styles.distanceText}>{rowData.Distance} km</Text>
+                        <Text style={styles.distanceText}>{rowData.Distance} {rowData.Unit}</Text>
                     </View>
-
                     <Text><Icon name={'ios-call'} size={14} color={'#999'}/> {rowData.TelPhone}</Text>
                     <Text><Icon name={'ios-pin'} size={14} color={'#999'}/> {rowData.Address}</Text>
                 </View>
